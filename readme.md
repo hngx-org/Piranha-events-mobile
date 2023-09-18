@@ -18,4 +18,11 @@ Exact example:
 - Please ensure that you tag team members to review your branch in order to increase development speed and efficiency.
 
 
+#### Project Structure
+
+The project structure is as follows:
+
+- assets - multimedia such as images will be stored here
+- screens - All main screens will be stored here.
+- App.tsx - Screen management and navigation code is here. 
 
