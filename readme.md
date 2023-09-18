@@ -1,5 +1,7 @@
 #### Guide to contributing to this project.
 
+👋🏾 Team Piranha mobile guys.
+
 - In order to ensure quality and error free commits and pushes, kindly make changes in a local branch created by yourself and ensure that you properly test the branch to make sure it is working properly before trying to merge.
 
 - Your branch can only be merged after it has been reviewed and approved by the team lead.
