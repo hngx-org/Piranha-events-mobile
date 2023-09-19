@@ -61,7 +61,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <PaperProvider theme={theme}>
+    <PaperProvider>
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="Home"
