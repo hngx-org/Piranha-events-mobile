@@ -1,8 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
-import {
-  PaperProvider,
-  MD3LightTheme as DefaultTheme,
-} from "react-native-paper";
+import { PaperProvider, MD3LightTheme as DefaultTheme } from "react-native-paper";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screens/Home";
 
@@ -63,10 +60,7 @@ export default function App() {
   return (
     <PaperProvider theme={theme}>
       <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="Home"
-          screenOptions={{ headerShown: false }}
-        >
+        <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Home" component={Home} />
         </Stack.Navigator>
       </NavigationContainer>
