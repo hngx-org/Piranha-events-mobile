@@ -8,9 +8,9 @@ interface LargeTextBoxProps extends ViewProps {
 
 export default function LargeTextBox({title, placeholder, ...props}: LargeTextBoxProps) {
   return (
-    <Surface {...props}>
+    <Surface {...props} theme={{colors: {outline: 'transparent'}}}>
       <Text style={styles.title}>{title}</Text>
-      <TextInput style={styles.textBox} placeholder={placeholder} theme={{roundness: 0}}></TextInput>
+      <TextInput style={styles.textBox} placeholder={placeholder} placeholderTextColor="#757575" theme={{roundness: 0}}></TextInput>
     </Surface>
   );
 }
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     },
 
     title: {
-        color: "black",
+        color: "white",
         fontSize: 18,
         borderRadius: 0,
     }
