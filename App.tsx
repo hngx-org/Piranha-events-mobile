@@ -2,6 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { PaperProvider, MD3LightTheme as DefaultTheme } from "react-native-paper";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screens/Home";
+import MyPeople from "./screens/MyPeople";
 
 //Please note that the authentication workflow will be handled by Dread.
 //See the react navigation authentication workflow for more information on setup
@@ -61,7 +62,8 @@ export default function App() {
     <PaperProvider theme={theme}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Home" component={Home} />
+          {/* <Stack.Screen name="Home" component={Home} /> */}
+          <Stack.Screen name="MyPeople" component={MyPeople} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>

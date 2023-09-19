@@ -1,17 +1,36 @@
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { FlatList, SafeAreaView, ScrollView, StyleSheet, StatusBar, Text, View } from "react-native";
 import React from "react";
 import ScreenHeader from "../component/ScreenHeader";
+import { appImages } from "../assets";
+import MyPeopleItem from "../component/MyPeople/Item";
+import Wrapper from "../component/Wrapper";
 
 const MyPeople = () => {
+  const Groups = [
+    {
+      name: "Tech Buddies",
+      event: [{ name: "Event 1" }],
+      messages: ["one", "two"],
+      image: appImages.myPeople,
+    },
+    {
+      name: "Techies",
+      event: [{ name: "Event 1" }],
+      messages: ["one", "two"],
+      image: appImages.myPeople,
+    },
+  ];
+
   return (
-    <SafeAreaView>
-      <>
-        <ScreenHeader title="My People" />
+    <Wrapper propStyle={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 29, }}>
+      <ScreenHeader title="My People" />
 
-
-        <Text>MyPeople</Text>
-      </>
-    </SafeAreaView>
+      <FlatList
+        data={Groups}
+        numColumns={2}
+        renderItem={({ item, index }) => <MyPeopleItem group={item} index={index} />}
+      />
+    </Wrapper>
   );
 };
 

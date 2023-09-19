@@ -1,13 +1,10 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React from "react";
+import { Text } from "react-native-paper";
 
 const ScreenHeader = ({ title }: { title: string }) => {
   return (
-    <View
-      style={{
-        flexDirection: "row",
-      }}
-    >
+    <View style={styles.container}>
       <Text>{title}</Text>
     </View>
   );
@@ -15,4 +12,9 @@ const ScreenHeader = ({ title }: { title: string }) => {
 
 export default ScreenHeader;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    marginBottom: 69,
+  },
+});
