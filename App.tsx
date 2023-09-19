@@ -5,6 +5,7 @@ import {
 } from "react-native-paper";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screens/Home";
+import Event from "./screens/Event";
 
 //Please note that the authentication workflow will be handled by Dread.
 //See the react navigation authentication workflow for more information on setup
@@ -64,10 +65,12 @@ export default function App() {
     <PaperProvider theme={theme}>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Home"
-          screenOptions={{ headerShown: false }}
+          initialRouteName="Event"
+          screenOptions={{ headerShown: false,  }}
+          
         >
           <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="Event" component={Event} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
