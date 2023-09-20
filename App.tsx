@@ -9,6 +9,7 @@ import Home from "./screens/Home";
 import * as WebBrowser from "expo-web-browser";
 import UserContextProvider from "./contexts/UserContext";
 import SignIn from "./screens/SignIn";
+import Event from "./screens/Event";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -70,8 +71,9 @@ export default function App() {
             initialRouteName="SignIn"
             screenOptions={{ headerShown: false }}
           >
-            <Stack.Screen name="SignIn" component={SignIn} />
+            {/* <Stack.Screen name="SignIn" component={SignIn} /> */}
             <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen name="Event" component={Event} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>

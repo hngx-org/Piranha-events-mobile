@@ -1,25 +1,43 @@
-import { Surface, Text } from "react-native-paper";
-import { StyleSheet } from "react-native";
+import {
+  SafeAreaView,
+  StyleSheet,
+  StatusBar,
+  ImageBackground,
+} from "react-native";
+import {
+  ProfileHighlight,
+  ScreenHeader,
+  SettingsOptions,
+} from "../components/settings";
+import { colors } from "../utils/styles";
 
 export default function Settings() {
+  return (
+    <SafeAreaView style={[styles.wrapper]}>
+      <ImageBackground
+        source={require("../assets/settings/bgImage.png")}
+        resizeMode="stretch"
+        style={styles.image}
+      >
+        <StatusBar backgroundColor={colors.dark} />
 
-     return (
-        <Surface style={styles.container}>
-            <Text>This is the settings area</Text>
-        </Surface>
-     )
+        <ScreenHeader />
+
+        <ProfileHighlight />
+
+        <SettingsOptions />
+      </ImageBackground>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: "#ffffff",
-    },
-  
-    textH: {
-      margin: 20,
-    },
-  });
-  
+  wrapper: {
+    flex: 1,
+    backgroundColor: colors.dark,
+  },
+
+  container: { flex: 1 },
+
+  image: { flex: 1, paddingHorizontal: 26 },
+});
