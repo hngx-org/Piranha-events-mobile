@@ -25,7 +25,9 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "scheme": "piranha event"
-    
+    "scheme": "piranha event",
+    "extra": {
+      
+    }
   }
 }
