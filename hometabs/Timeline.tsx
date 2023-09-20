@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Card, Surface, Text } from "react-native-paper";
 import { StyleSheet, View, Image, FlatList } from "react-native";
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, AntDesign } from "@expo/vector-icons";
 
 interface CardInfo {
   title: string;
@@ -113,6 +113,10 @@ export default function Timeline() {
 
   return (
     <Surface style={styles.container}>
+
+      <View style={{ position: "absolute", bottom: 10, right: 50, zIndex: 1 }}>
+        <AntDesign name="pluscircle" size={50} color="#571FCD" />
+      </View>
       <View>
         <Text style={{ fontWeight: "700", fontSize: 24, paddingLeft: "5%" }}>
           Timeline
@@ -140,7 +144,7 @@ export default function Timeline() {
         <View style={styles.borderLine} />
       </View>
 
-      <View style={{ paddingHorizontal: "5%" }}>
+      <View style={{ flex: 1, paddingHorizontal: "5%" }}>
         <FlatList
           data={cardData}
           renderItem={renderItem}
@@ -148,6 +152,8 @@ export default function Timeline() {
           showsVerticalScrollIndicator={false}
         />
       </View>
+
+
     </Surface>
   );
 }
