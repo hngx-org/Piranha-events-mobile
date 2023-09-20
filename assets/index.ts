@@ -5,4 +5,7 @@ export const appImages = {
   footBall: require("./footBall.png"),
   location: require("./location.png"),
   clock: require("./clock.png"),
+  goBack: require('./goBack.png'),
+  defaultGroupImage: require('./defaultGroupImage.png'),
+  commentArrow: require('./comment-arrow.png')
 };

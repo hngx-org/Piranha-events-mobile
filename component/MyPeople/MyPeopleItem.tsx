@@ -10,7 +10,7 @@ const MyPeopleItem = ({ group, index }: { group: any; index: number }) => {
   return (
     <TouchableOpacity
       onPress={() => navigation.navigate("InsideGroup", {})}
-      style={[styles.container, { marginRight: index % 2 === 0 ? "4%" : 0 }]}
+      style={[styles.container, { marginRight: index % 2 === 0 ? "10%" : 0 }]}
     >
       <View style={styles.imageWrapper}>
         <Image
@@ -37,12 +37,13 @@ export default MyPeopleItem;
 
 const styles = StyleSheet.create({
   container: {
-    width: "48%",
+    width: "45%",
     justifyContent: "flex-start",
+    marginBottom: 57,
   },
   imageWrapper: {
     width: "100%",
-    height: 100,
+    height: 130,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,

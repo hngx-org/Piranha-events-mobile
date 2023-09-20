@@ -1,12 +1,29 @@
 import { FlatList, SafeAreaView, ScrollView, StyleSheet, StatusBar, Text, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import ScreenHeader from "../component/ScreenHeader";
 import { appImages } from "../assets";
 import MyPeopleItem from "../component/MyPeople/MyPeopleItem";
 import Wrapper from "../component/Wrapper";
+import AddNewGroup from "../component/MyPeople/AddNewGroup";
+import { useNavigation } from "@react-navigation/native";
 
 const MyPeople = () => {
+  // const [showAddBox, setShowAddBox] = useState(false);
+  const navigation = useNavigation();
+
   const Groups = [
+    {
+      name: "Tech Buddies",
+      event: [{ name: "Event 1" }],
+      messages: ["one", "two"],
+      image: appImages.myPeople,
+    },
+    {
+      name: "Techies",
+      event: [{ name: "Event 1" }],
+      messages: ["one", "two"],
+      image: appImages.myPeople,
+    },
     {
       name: "Tech Buddies",
       event: [{ name: "Event 1" }],
@@ -22,8 +39,8 @@ const MyPeople = () => {
   ];
 
   return (
-    <Wrapper propStyle={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 29, }}>
-      <ScreenHeader title="My People" />
+    <Wrapper propStyle={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 29 }}>
+      <ScreenHeader title="My People" level={0} onPressTwo={() => navigation.navigate("AddNewGroup")} />
 
       <FlatList
         data={Groups}

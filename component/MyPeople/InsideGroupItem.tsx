@@ -11,10 +11,7 @@ const InsideGroupItem = ({ group, index }: { group: any; index: number }) => {
   const commenters = ["", ""];
 
   return (
-    <TouchableOpacity
-      onPress={() => navigation.navigate("InsideGroup", {})}
-      style={[styles.container, { marginRight: index % 2 === 0 ? "4%" : 0 }]}
-    >
+    <View style={[styles.container, { marginRight: index % 2 === 0 ? "4%" : 0 }]}>
       <View style={styles.top}>
         <Image
           source={appImages.footBall}
@@ -94,6 +91,7 @@ const InsideGroupItem = ({ group, index }: { group: any; index: number }) => {
       </View>
 
       <Button
+        onPress={() => navigation.navigate("InsideGroup", {})}
         buttonColor={appColors.purple}
         style={{
           paddingVertical: 6,
@@ -114,11 +112,13 @@ const InsideGroupItem = ({ group, index }: { group: any; index: number }) => {
         }}
       />
 
-      <View style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginVertical: 5,
-      }}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          marginVertical: 5,
+        }}
+      >
         <View
           style={{
             flexDirection: "row",
@@ -156,10 +156,10 @@ const InsideGroupItem = ({ group, index }: { group: any; index: number }) => {
         </View>
 
         <View>
-            <Text style={{color: appColors.white}}>)</Text>
+          <Text style={{ color: appColors.white }}>)</Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
