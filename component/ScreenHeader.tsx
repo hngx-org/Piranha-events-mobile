@@ -25,7 +25,7 @@ const ScreenHeader = ({
       <Text style={styles.levelZeroTitle}>{title}</Text>
 
       <View style={styles.addGroup}>
-        <TouchableOpacity onPress={() => onPressTwo()}>
+        <TouchableOpacity onPress={() => onPressTwo!()}>
           <Text variant="bodyMedium" style={{ fontWeight: "600", color: appColors.white, fontSize: 20 }}>
             Plus
           </Text>
