@@ -1,13 +1,14 @@
+import { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { PaperProvider, MD3LightTheme as DefaultTheme } from "react-native-paper";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screens/Home";
-import MyPeople from "./screens/MyPeople";
-import MyPeopleStackNavigator from "./navigators/MyPeopleStackNavigator";
+import * as WebBrowser from "expo-web-browser";
+import UserContextProvider from "./contexts/UserContext";
+import SignIn from "./screens/SignIn";
+import Event from "./screens/Event";
 
-//Please note that the authentication workflow will be handled by Dread.
-//See the react navigation authentication workflow for more information on setup
-//Theming will be handled by the group as a whole.
+WebBrowser.maybeCompleteAuthSession();
 
 const theme = {
   // ...DefaultTheme,
@@ -60,17 +61,19 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <PaperProvider theme={theme}>
-      <NavigationContainer
-      
-      >
-        {/* <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="MyPeople" component={MyPeople} />
-        </Stack.Navigator> */}
-
-        <MyPeopleStackNavigator />
-      </NavigationContainer>
-    </PaperProvider>
+    <UserContextProvider>
+      <PaperProvider>
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="SignIn"
+            screenOptions={{ headerShown: false }}
+          >
+            {/* <Stack.Screen name="SignIn" component={SignIn} /> */}
+            <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen name="Event" component={Event} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
+    </UserContextProvider>
   );
 }

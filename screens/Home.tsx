@@ -1,12 +1,82 @@
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Surface, Text, BottomNavigation } from "react-native-paper";
+import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
+import { StyleSheet } from "react-native";
+import { useState } from "react";
+import Timeline from "../hometabs/Timeline";
+import MyPeople from "../hometabs/MyPeople";
+import Calendar from "../hometabs/Calendar";
+import Settings from "../hometabs/Settings";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
-import { Surface, Text } from 'react-native-paper';
-import {StyleSheet} from 'react-native';
+const Tab = createMaterialBottomTabNavigator();
 
 export default function Home() {
   return (
-    <Surface style={styles.container}>
-      <Text variant="headlineMedium">This is the home screen</Text>
-    </Surface>
+    <Tab.Navigator
+      initialRouteName="Timeline"
+      activeColor="#5C3EC8"
+      inactiveColor="white"
+      shifting={false}
+      barStyle={{
+        backgroundColor: "black",
+        borderTopStartRadius: 10,
+        borderTopEndRadius: 10,
+      }}
+    >
+      <Tab.Screen
+        name="Timeline"
+        component={Timeline}
+        options={{
+          tabBarIcon: ({ focused, color }) => (
+            <MaterialCommunityIcons
+              name="chart-timeline-variant"
+              color={focused ? "#5C3EC8" : "white"}
+              size={26}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="My People"
+        component={MyPeople}
+        options={{
+          tabBarIcon: ({ focused, color }) => (
+            <Ionicons
+              name="people"
+              color={focused ? "#5C3EC8" : "white"}
+              size={26}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Calendar"
+        component={Calendar}
+        options={{
+          tabBarIcon: ({ focused, color }) => (
+            <Ionicons
+              name="calendar"
+              color={focused ? "#5C3EC8" : "white"}
+              size={26}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={Settings}
+        options={{
+          tabBarIcon: ({ focused, color }) => (
+            <Ionicons
+              name="settings"
+              color={focused ? "#5C3EC8" : "white"}
+              size={26}
+            />
+          ),
+        }}
+      />
+    </Tab.Navigator>
   );
 }
 
@@ -16,5 +86,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#ffffff",
+  },
+
+  textH: {
+    margin: 20,
   },
 });
