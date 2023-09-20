@@ -143,7 +143,10 @@ export default function SearchEvent({ navigation }: { navigation: any }) {
 
 
             <View style={{ flexDirection: "row", paddingVertical: 10, paddingHorizontal: "5%", alignItems: "center", }}>
-                <Entypo name="chevron-small-left" size={30} color="white" />
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+
+                    <Entypo name="chevron-small-left" size={30} color="white" />
+                </TouchableOpacity>
                 <View style={{ flex: 1, alignItems: "center", }}>
                     <Text style={{ fontWeight: "700", fontSize: 24, paddingLeft: "5%", color: "white" }}>
                         Search Event
