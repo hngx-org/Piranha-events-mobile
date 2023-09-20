@@ -1,10 +1,10 @@
 import { FlatList, SafeAreaView, ScrollView, StyleSheet, StatusBar, Text, View } from "react-native";
 import React, { useState } from "react";
-import ScreenHeader from "../component/ScreenHeader";
+import ScreenHeader from "../components/ScreenHeader";
 import { appImages } from "../assets";
-import MyPeopleItem from "../component/MyPeople/MyPeopleItem";
-import Wrapper from "../component/Wrapper";
-import AddNewGroup from "../component/MyPeople/AddNewGroup";
+import MyPeopleItem from "../components/MyPeople/MyPeopleItem";
+import Wrapper from "../components/Wrapper";
+import AddNewGroup from "../components/MyPeople/AddNewGroup";
 import { useNavigation } from "@react-navigation/native";
 
 const MyPeople = () => {
