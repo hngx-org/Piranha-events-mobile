@@ -1,12 +1,17 @@
-import { Image, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { Text } from "react-native-paper";
 import { appColors } from "../../utils/globalStyles";
+import { useNavigation } from "@react-navigation/native";
 
 const MyPeopleItem = ({ group, index }: { group: any; index: number }) => {
-  console.log(index);
+  const navigation = useNavigation();
+
   return (
-    <View style={[styles.container, { marginRight: index % 2 === 0 ? "4%" : 0 }]}>
+    <TouchableOpacity
+      onPress={() => navigation.navigate("InsideGroup", {})}
+      style={[styles.container, { marginRight: index % 2 === 0 ? "4%" : 0 }]}
+    >
       <View style={styles.imageWrapper}>
         <Image
           source={group.image}
@@ -24,7 +29,7 @@ const MyPeopleItem = ({ group, index }: { group: any; index: number }) => {
       <Text variant="bodySmall" style={styles.info}>
         +{group?.event?.length} events
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -54,6 +59,6 @@ const styles = StyleSheet.create({
     width: "100%",
     textAlign: "center",
     fontWeight: "800",
-    color: appColors.red
+    color: appColors.red,
   },
 });

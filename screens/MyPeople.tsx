@@ -2,7 +2,7 @@ import { FlatList, SafeAreaView, ScrollView, StyleSheet, StatusBar, Text, View }
 import React from "react";
 import ScreenHeader from "../component/ScreenHeader";
 import { appImages } from "../assets";
-import MyPeopleItem from "../component/MyPeople/Item";
+import MyPeopleItem from "../component/MyPeople/MyPeopleItem";
 import Wrapper from "../component/Wrapper";
 
 const MyPeople = () => {
