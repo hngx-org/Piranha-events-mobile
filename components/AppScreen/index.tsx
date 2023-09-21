@@ -3,6 +3,7 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./styles";
 import { StatusBar } from "expo-status-bar";
+import { colors } from "../../utils/styles";
 
 type ScreenProps = {
   children: React.ReactNode;
@@ -27,7 +28,7 @@ const AppScreen = ({ children, style, scrollable }: ScreenProps) => {
       ) : (
         children
       )}
-      <StatusBar style="dark" backgroundColor="white" />
+      <StatusBar style="dark" backgroundColor={colors.dark} />
     </SafeAreaView>
   );
 };

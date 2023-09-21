@@ -4,6 +4,7 @@ import { Calendar } from "react-native-calendars";
 import moment from "moment";
 import { EventData } from "../../static/data";
 import { Events } from "../../static/data";
+import { colors } from "../../utils/styles";
 
 const CalendarComponent: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string | null>(
@@ -19,16 +20,9 @@ const CalendarComponent: React.FC = () => {
     events.forEach((event) => {
       markedDates[event.date] = {
         marked: true,
-        dotColor: "orange",
+        dotColor: colors.purple,
       };
     });
-
-    if (selectedDate) {
-      markedDates[selectedDate] = {
-        marked: true,
-        dotColor: "orange",
-      };
-    }
 
     setMarkedDates(markedDates);
   }, [events, selectedDate]);
@@ -86,11 +80,19 @@ const CalendarComponent: React.FC = () => {
         onDayPress={onDayPress}
         markedDates={markedDates}
         theme={{
-          todayTextColor: "orange",
-          arrowColor: "black",
+          todayTextColor: "#FF3A3A",
+          arrowColor: colors.purple,
           textDayFontWeight: "bold",
-          selectedDayTextColor: "orange",
-          selectedDayBackgroundColor: "none",
+          selectedDayTextColor: colors.purple,
+          selectedDayBackgroundColor: colors.purple,
+          dayTextColor: "#F2EFEA",
+          monthTextColor: "#F2EFEA",
+          arrowWidth: 2,
+          calendarBackground: colors.dark,
+          textDayFontSize: 12,
+          textDisabledColor: "#979797",
+          textMonthFontSize: 16,
+          weekVerticalMargin: 5,
         }}
       />
       <View style={styles.eventView}>
@@ -120,7 +122,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#1B1B1B",
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
-    padding: 25,
+    padding: 20,
     width: "90%",
     flexDirection: "row",
     alignItems: "center",

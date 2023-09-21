@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { PaperProvider, MD3LightTheme as DefaultTheme } from "react-native-paper";
+import {
+  PaperProvider,
+  MD3LightTheme as DefaultTheme,
+} from "react-native-paper";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screens/Home";
 import * as WebBrowser from "expo-web-browser";
@@ -66,7 +69,7 @@ export default function App() {
       <PaperProvider>
         <NavigationContainer>
           <Stack.Navigator
-            initialRouteName="Event"
+            initialRouteName="Home"
             screenOptions={{ headerShown: false }}
           >
             {/* <Stack.Screen name="SignIn" component={SignIn} /> */}

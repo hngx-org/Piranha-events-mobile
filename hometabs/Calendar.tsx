@@ -2,6 +2,7 @@ import { StyleSheet, View, Text } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import AppScreen from "../components/AppScreen";
 import CalendarComponent from "../components/CalendarComponent/Index";
+import { colors } from "../utils/styles";
 
 export default function Calendar() {
   return (
@@ -9,7 +10,7 @@ export default function Calendar() {
       <View style={styles.header}>
         <Text style={styles.headerTxt}>Calendar</Text>
         <View style={styles.headerIcon}>
-          <MaterialIcons name="search" size={17} color={"white"} />
+          <MaterialIcons name="search" size={20} color={"white"} />
         </View>
       </View>
       <View style={{ flex: 1 }}>
@@ -22,12 +23,12 @@ export default function Calendar() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.dark,
   },
 
   header: {
     padding: 20,
-    paddingBottom: 0,
+    marginBottom: 10,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -42,6 +43,7 @@ const styles = StyleSheet.create({
   },
   headerTxt: {
     fontSize: 22,
-    fontWeight: "bold",
+    fontWeight: "700",
+    color: "white",
   },
 });
