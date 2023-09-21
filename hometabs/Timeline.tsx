@@ -6,6 +6,7 @@ import { Entypo, AntDesign, EvilIcons, Ionicons } from "@expo/vector-icons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Timelinecomponent from "../components/timeline/Timelinecomponent";
 import SearchEvent from "../components/timeline/SearchEvent";
+import Event from "../components/timeline/Event";
 
 
 
@@ -23,7 +24,7 @@ export default function Timeline() {
 
       <Stack.Screen name="Home" component={Timelinecomponent} />
       <Stack.Screen name="SearchEvent" component={SearchEvent} />
-
+      <Stack.Screen name="CreateEvent" component={Event} />
 
 
     </Stack.Navigator>
