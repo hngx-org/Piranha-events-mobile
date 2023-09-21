@@ -40,7 +40,7 @@ const InsideGroup = () => {
     <Wrapper propStyle={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 29 }}>
       <ScreenHeader containerStyle={{ marginBottom: 30 }} title="My People" onPressOne={navigation.goBack} />
 
-      <FlatList data={Groups} renderItem={({ item, index }) => <InsideGroupItem group={item} index={index} />} />
+      <FlatList data={Groups} renderItem={({ item, index }) => <InsideGroupItem key={index} group={item} index={index} />} />
     </Wrapper>
   );
 };
