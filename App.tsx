@@ -66,7 +66,7 @@ export default function App() {
       <PaperProvider>
         <NavigationContainer>
           <Stack.Navigator
-            initialRouteName="Event"
+            initialRouteName="Home"
             screenOptions={{ headerShown: false }}
           >
             {/* <Stack.Screen name="SignIn" component={SignIn} /> */}

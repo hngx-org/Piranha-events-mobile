@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Button, Card, Surface, Text } from "react-native-paper";
-import { StyleSheet, View, Image, FlatList, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Image, FlatList, TouchableOpacity, ImageBackground } from "react-native";
 import { Entypo, AntDesign, EvilIcons, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { colors } from "../../utils/styles";
+
 
 interface CardInfo {
     title: string;
@@ -130,82 +132,98 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
     return (
         <Surface style={styles.container}>
 
+            <ImageBackground
+                source={require("../../assets/bg.png")}
+                resizeMode="stretch"
+                style={{ flex: 1, }}
+            >
 
-            <View style={{ flexDirection: "row", justifyContent: "space-between", paddingVertical: 10, }}>
-                <Text style={{ fontWeight: "700", fontSize: 24, paddingLeft: "5%", color: "white" }}>
-                    Timeline
-                </Text>
-                <View style={{ flexDirection: "row", gap: 10 }}>
 
-                    <TouchableOpacity style={{ backgroundColor: "#1B1B1B", width: 37, height: 37, borderRadius: 50, alignItems: "center", justifyContent: "center", }}
-                        onPress={() => navigation.navigate("SearchEvent")
-                        }
-                    >
-                        <EvilIcons name="search" size={35} color="white" />
-                    </TouchableOpacity>
+                <View style={{ flexDirection: "row", justifyContent: "space-between", paddingVertical: 10, }}>
+                    <Text style={{ fontWeight: "700", fontSize: 24, paddingLeft: "5%", color: "white" }}>
+                        Timeline
+                    </Text>
+                    <View style={{ flexDirection: "row", gap: 10 }}>
 
-                    <View style={{ backgroundColor: "#1B1B1B", width: 37, height: 37, borderRadius: 50, alignItems: "center", justifyContent: "center", }}>
-                        <Ionicons name="notifications" size={30} color="white" />
+                        <TouchableOpacity style={{ backgroundColor: "#1B1B1B", width: 37, height: 37, borderRadius: 50, alignItems: "center", justifyContent: "center", }}
+                            onPress={() => navigation.navigate("SearchEvent")
+                            }
+                        >
+                            <EvilIcons name="search" size={35} color="white" />
+                        </TouchableOpacity>
+
+                        <View style={{ backgroundColor: "#1B1B1B", width: 37, height: 37, borderRadius: 50, alignItems: "center", justifyContent: "center", }}>
+                            <Ionicons name="notifications" size={30} color="white" />
+                        </View>
                     </View>
+
                 </View>
 
-            </View>
+
+                <View style={{ flexDirection: "row", justifyContent: "space-between", paddingVertical: 10, }}>
+
+                    <View style={{ flexDirection: "row", gap: 10, paddingLeft: "5%", marginBottom: 10 }}>
+                        <Button
+                            mode={`${activeText === "Everyone" ? "contained" : "outlined"}`}
+
+                            onPress={() => setActiveText("Everyone")}
+                            style={[
+                                {
+                                    borderColor: "#9d7ae8",
+
+                                    backgroundColor: activeText === "Everyone" ? "#9d7ae8" : "transparent", // Set background color based on activeText
+                                },
+                            ]}
+                            labelStyle={{ color: "#FFFFFF" }} // Set text color based on activeText
+
+                        >
+                            Everyone
+                        </Button>
+
+                        <Button
+                            mode={`${activeText === "Friends" ? "contained" : "outlined"}`}
+                            onPress={() => setActiveText("Friends")}
+                            style={[
+                                {
+                                    borderColor: "#9d7ae8",
+                                    backgroundColor: activeText === "Friends" ? "#9d7ae8" : "transparent", // Set background color based on activeText
+                                },
+                            ]}
+                            labelStyle={{ color: "#FFFFFF" }} // Set text color based on activeText
+
+                        >
+                            Friends
+                        </Button>
+                    </View>
+                    <View>
+
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate("Event")}
+                        >
+                            <AntDesign name="pluscircle" size={40} color="#9d7ae8" />
 
 
-            <View style={{ flexDirection: "row", justifyContent: "space-between", paddingVertical: 10, }}>
+                        </TouchableOpacity>
 
-                <View style={{ flexDirection: "row", gap: 10, paddingLeft: "5%", marginBottom: 10 }}>
-                    <Button
-                        mode={`${activeText === "Everyone" ? "contained" : "outlined"}`}
 
-                        onPress={() => setActiveText("Everyone")}
-                        style={[
-                            {
-                                borderColor: "#9d7ae8",
 
-                                backgroundColor: activeText === "Everyone" ? "#9d7ae8" : "transparent", // Set background color based on activeText
-                            },
-                        ]}
-                        labelStyle={{ color: "#FFFFFF" }} // Set text color based on activeText
+                    </View>
 
-                    >
-                        Everyone
-                    </Button>
+                </View >
 
-                    <Button
-                        mode={`${activeText === "Friends" ? "contained" : "outlined"}`}
-                        onPress={() => setActiveText("Friends")}
-                        style={[
-                            {
-                                borderColor: "#9d7ae8",
-                                backgroundColor: activeText === "Friends" ? "#9d7ae8" : "transparent", // Set background color based on activeText
-                            },
-                        ]}
-                        labelStyle={{ color: "#FFFFFF" }} // Set text color based on activeText
 
-                    >
-                        Friends
-                    </Button>
+
+
+                <View style={{ flex: 1, paddingHorizontal: "5%" }}>
+                    <FlatList
+                        data={cardData}
+                        renderItem={renderItem}
+                        keyExtractor={(item, index) => index.toString()}
+                        showsVerticalScrollIndicator={false}
+                    />
                 </View>
-                <View>
-                    <AntDesign name="pluscircle" size={40} color="#9d7ae8" />
-                </View>
 
-            </View >
-
-
-
-
-            <View style={{ flex: 1, paddingHorizontal: "5%" }}>
-                <FlatList
-                    data={cardData}
-                    renderItem={renderItem}
-                    keyExtractor={(item, index) => index.toString()}
-                    showsVerticalScrollIndicator={false}
-                />
-            </View>
-
-
+            </ImageBackground>
         </Surface >
     );
 }
@@ -214,7 +232,10 @@ const styles = StyleSheet.create({
     container: {
         paddingTop: "13%",
         flex: 1,
-        backgroundColor: "#0f0f0f",
+        // backgroundColor: "#0f0f0f",
+        backgroundColor: colors.dark,
+
+
     },
     card: {
 
