@@ -6,6 +6,9 @@ import {
 } from "react-native-paper";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screens/Home";
+<<<<<<< HEAD
+import Comments from "./screens/Comment";
+=======
 import * as WebBrowser from "expo-web-browser";
 
 import UserContextProvider, { UserContext, UserContextProps } from "./contexts/UserContext";
@@ -13,7 +16,11 @@ import SignIn from "./screens/SignIn";
 import GlobalContextProvider from "./contexts/GlobalContextProvider";
 import InsideGroup from "./components/MyPeople/InsideGroup";
 import AddNewGroup from "./components/MyPeople/AddNewGroup";
+<<<<<<< HEAD
+>>>>>>> b9998d5a838430a96f6dafd3b8fae92297f7f0e6
+=======
 import AuthScreen from "./AuthScreen";
+>>>>>>> 6b325e6d2e2b08abb6f14f806cfce8a32f715c04
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -76,10 +83,24 @@ export default function App() {
 
 
   return (
+<<<<<<< HEAD
+    // <PaperProvider>
+    //   <NavigationContainer>
+    //     <Stack.Navigator
+    //       initialRouteName="Home"
+    //       screenOptions={{ headerShown: false }}
+    //     >
+    //       <Stack.Screen name="Home" component={Home} />
+    //     </Stack.Navigator>
+    //   </NavigationContainer>
+    // </PaperProvider>
+    <Comments />
+=======
     <GlobalContextProvider>
       <PaperProvider>
         <AuthScreen />
       </PaperProvider>
     </GlobalContextProvider>
+>>>>>>> b9998d5a838430a96f6dafd3b8fae92297f7f0e6
   );
 }
