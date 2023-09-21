@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Card, Surface, Text } from "react-native-paper";
-import { StyleSheet, View, Image, FlatList, TouchableOpacity, TextInput } from "react-native";
+import { StyleSheet, View, Image, FlatList, TouchableOpacity, TextInput, ImageBackground } from "react-native";
 import { Entypo, AntDesign, EvilIcons, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
@@ -138,63 +138,57 @@ export default function SearchEvent({ navigation }: { navigation: any }) {
     return (
         <Surface style={styles.container}>
 
+            <ImageBackground
+                source={require("../../assets/bg.png")}
+                resizeMode="stretch"
+                style={{ flex: 1, }}
+            >
 
 
 
 
-            <View style={{ flexDirection: "row", paddingVertical: 10, paddingHorizontal: "5%", alignItems: "center", }}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
+                <View style={{ flexDirection: "row", paddingVertical: 10, paddingHorizontal: "5%", alignItems: "center", }}>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
 
-                    <Entypo name="chevron-small-left" size={30} color="white" />
-                </TouchableOpacity>
-                <View style={{ flex: 1, alignItems: "center", }}>
-                    <Text style={{ fontWeight: "700", fontSize: 24, paddingLeft: "5%", color: "white" }}>
-                        Search Event
-                    </Text>
-                </View>
-            </View>
-
-
-
-
-
-
-
-            <View style={{ flexDirection: "row", paddingVertical: 10, backgroundColor: "#1A1A1A", marginHorizontal: "5%", borderRadius: 27, paddingLeft: "5%", marginBottom: 40 }}>
-
-                <View style={{ backgroundColor: "#1B1B1B", width: 37, height: 37, borderRadius: 50, alignItems: "center", justifyContent: "center", }}
-
-                >
-                    <EvilIcons name="search" size={35} color="white" />
+                        <Entypo name="chevron-small-left" size={30} color="white" />
+                    </TouchableOpacity>
+                    <View style={{ flex: 1, alignItems: "center", }}>
+                        <Text style={{ fontWeight: "700", fontSize: 24, paddingLeft: "5%", color: "white" }}>
+                            Search Event
+                        </Text>
+                    </View>
                 </View>
 
-                {/* <TextInput style={{ color: "white", width: "80%", }} placeholder="Search" /> */}
-
-
-                <TextInput
-                    style={{ color: "#B0B0B0", width: "80%" }}
-                    placeholder="Search"
-                    onChangeText={(text) => {
-                        setSearchQuery(text);
-                        filterCardData(text);
-                    }}
-                    placeholderTextColor="#B0B0B0"
-                />
-            </View>
 
 
 
 
 
 
+                <View style={{ flexDirection: "row", paddingVertical: 10, backgroundColor: "#1A1A1A", marginHorizontal: "5%", borderRadius: 27, paddingLeft: "5%", marginBottom: 40 }}>
+
+                    <View style={{ backgroundColor: "#1B1B1B", width: 37, height: 37, borderRadius: 50, alignItems: "center", justifyContent: "center", }}
+
+                    >
+                        <EvilIcons name="search" size={35} color="white" />
+                    </View>
+
+                    {/* <TextInput style={{ color: "white", width: "80%", }} placeholder="Search" /> */}
 
 
-
-            {searchQuery.length === 0 ? (
-                <View style={{ flex: 1, paddingHorizontal: "5%", alignItems: "center", justifyContent: "center" }}>
-                    <Text style={{ color: "white", fontSize: 18 }}>Enter a search query to find events.</Text>
+                    <TextInput
+                        style={{ color: "#B0B0B0", width: "80%" }}
+                        placeholder="Search"
+                        onChangeText={(text) => {
+                            setSearchQuery(text);
+                            filterCardData(text);
+                        }}
+                        placeholderTextColor="#B0B0B0"
+                    />
                 </View>
-            ) : (
+
+
+
                 <View style={{ flex: 1, paddingHorizontal: "5%" }}>
                     <FlatList
                         data={filteredCardData}
@@ -203,9 +197,9 @@ export default function SearchEvent({ navigation }: { navigation: any }) {
                         showsVerticalScrollIndicator={false}
                     />
                 </View>
-            )}
 
 
+            </ImageBackground>
 
 
         </Surface >
