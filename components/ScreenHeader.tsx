@@ -1,4 +1,11 @@
-import { Image, Pressable, StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from "react-native";
 import React from "react";
 import { Text } from "react-native-paper";
 import { appColors } from "../utils/globalStyles";
@@ -16,7 +23,7 @@ const ScreenHeader = ({
   containerStyle?: ViewStyle;
   onPressOne?: () => void;
   onPressTwo?: () => void;
-  level: number;
+  level?: number;
 }) => {
   console.log(level);
 
@@ -26,10 +33,19 @@ const ScreenHeader = ({
 
       <View style={styles.addGroup}>
         <TouchableOpacity onPress={() => onPressTwo!()}>
+          <Text
+            variant="bodyMedium"
+            style={{ fontWeight: "600", color: appColors.white, fontSize: 20 }}
+          >
+            Plus
+          </Text>
           <AntDesign name="plus" size={26} color="white" />
         </TouchableOpacity>
 
-        <Text variant="bodySmall" style={{ fontWeight: "600", color: appColors.white }}>
+        <Text
+          variant="bodySmall"
+          style={{ fontWeight: "600", color: appColors.white }}
+        >
           Add groups
         </Text>
       </View>
@@ -48,8 +64,11 @@ const ScreenHeader = ({
       </Pressable>
 
       <View style={styles.addGroup}>
-        <TouchableOpacity onPress={!!onPressTwo && onPressTwo()}>
-          <Text variant="bodyLarge" style={{ fontWeight: "800", color: appColors.white, fontSize: 20 }}>
+        <TouchableOpacity onPress={() => !!onPressTwo && onPressTwo()}>
+          <Text
+            variant="bodyLarge"
+            style={{ fontWeight: "800", color: appColors.white, fontSize: 20 }}
+          >
             {title}
           </Text>
         </TouchableOpacity>
