@@ -198,7 +198,7 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
                     <View>
 
                         <TouchableOpacity
-                            onPress={() => navigation.navigate("Event")}
+                            onPress={() => navigation.navigate("CreateEvent")}
                         >
                             <AntDesign name="pluscircle" size={40} color="#9d7ae8" />
 
