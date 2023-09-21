@@ -7,6 +7,7 @@ import * as WebBrowser from "expo-web-browser";
 import UserContextProvider from "./contexts/UserContext";
 import SignIn from "./screens/SignIn";
 import Event from "./screens/Event";
+import GlobalContextProvider from "./contexts/GlobalContextProvider";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -61,7 +62,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <UserContextProvider>
+    <GlobalContextProvider>
       <PaperProvider>
         <NavigationContainer>
           <Stack.Navigator
@@ -74,6 +75,6 @@ export default function App() {
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
-    </UserContextProvider>
+    </GlobalContextProvider>
   );
 }
