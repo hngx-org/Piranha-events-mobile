@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Card, Surface, Text } from "react-native-paper";
-import { StyleSheet, View, Image, FlatList } from "react-native";
+import { StyleSheet, View, Image, FlatList, ImageBackground } from "react-native";
 import { Entypo, AntDesign, EvilIcons, Ionicons } from "@expo/vector-icons";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -19,8 +19,12 @@ export default function Timeline() {
       initialRouteName="Home"
       screenOptions={{ headerShown: false }}
     >
+
+
       <Stack.Screen name="Home" component={Timelinecomponent} />
       <Stack.Screen name="SearchEvent" component={SearchEvent} />
+
+
 
     </Stack.Navigator>
   );

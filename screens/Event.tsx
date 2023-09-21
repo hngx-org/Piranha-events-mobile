@@ -105,9 +105,8 @@ export default function Event() {
                 alignItems: "center",
               }}
             >
-              {`${startDate.getUTCDate()} ${
-                months[startDate.getMonth()]
-              } ${startDate.getUTCFullYear()}`}
+              {`${startDate.getUTCDate()} ${months[startDate.getMonth()]
+                } ${startDate.getUTCFullYear()}`}
               {/* <Ionicons name="chevron-down-sharp" size={24} color="white" /> */}
             </Button>
             <Button
@@ -143,9 +142,8 @@ export default function Event() {
                 alignItems: "center",
               }}
             >
-              {`${endDate.getUTCDate()} ${
-                months[endDate.getMonth()]
-              } ${endDate.getUTCFullYear()}`}
+              {`${endDate.getUTCDate()} ${months[endDate.getMonth()]
+                } ${endDate.getUTCFullYear()}`}
             </Button>
             <Button
               icon="chevron-down"
