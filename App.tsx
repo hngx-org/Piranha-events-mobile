@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   PaperProvider,
@@ -7,11 +7,13 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screens/Home";
 import * as WebBrowser from "expo-web-browser";
-import UserContextProvider from "./contexts/UserContext";
+
+import UserContextProvider, { UserContext, UserContextProps } from "./contexts/UserContext";
 import SignIn from "./screens/SignIn";
 import GlobalContextProvider from "./contexts/GlobalContextProvider";
 import InsideGroup from "./components/MyPeople/InsideGroup";
 import AddNewGroup from "./components/MyPeople/AddNewGroup";
+import AuthScreen from "./AuthScreen";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -65,20 +67,18 @@ const theme = {
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+
+  // const {promptAsync} = useContext(UserContext);
+
+
+  // console.log(userInfo);
+  // console.log(promptAsync);
+
+
   return (
     <GlobalContextProvider>
       <PaperProvider>
-        <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName="Home"
-            screenOptions={{ headerShown: false }}
-          >
-            {/* <Stack.Screen name="SignIn" component={SignIn} /> */}
-            <Stack.Screen name="Home" component={Home} />
-            <Stack.Screen name="InsideGroup" component={InsideGroup} />
-            <Stack.Screen name="AddNewGroup" component={AddNewGroup} />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <AuthScreen />
       </PaperProvider>
     </GlobalContextProvider>
   );

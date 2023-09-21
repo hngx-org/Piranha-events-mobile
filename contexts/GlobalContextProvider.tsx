@@ -3,7 +3,7 @@ import UserContextProvider from './UserContext';
 import EventContextProvider from './EventContext';
 
 //All context providers will be parented by this GlobalContextProvider
-export default function ContextProvider(
+export default function GlobalContextProvider(
     {children}: {
         children: ReactNode;
     }
