@@ -10,6 +10,7 @@ import React from "react";
 import { Text } from "react-native-paper";
 import { appColors } from "../utils/globalStyles";
 import { appImages } from "../assets";
+import { AntDesign } from "@expo/vector-icons";
 
 const ScreenHeader = ({
   title,
@@ -22,7 +23,7 @@ const ScreenHeader = ({
   containerStyle?: ViewStyle;
   onPressOne?: () => void;
   onPressTwo?: () => void;
-  level: number;
+  level?: number;
 }) => {
   console.log(level);
 
@@ -38,6 +39,7 @@ const ScreenHeader = ({
           >
             Plus
           </Text>
+          <AntDesign name="plus" size={26} color="white" />
         </TouchableOpacity>
 
         <Text

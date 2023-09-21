@@ -155,8 +155,19 @@ const InsideGroupItem = ({ group, index }: { group: any; index: number }) => {
           </Text>
         </View>
 
-        <View>
-          <Text style={{ color: appColors.white }}>)</Text>
+        <View
+          style={{
+            justifyContent: "center",
+          }}
+        >
+          <Image
+            source={appImages.commentArrow}
+            style={{
+              width: 10,
+              height: 10,
+            }}
+            resizeMode="contain"
+          />
         </View>
       </View>
     </View>

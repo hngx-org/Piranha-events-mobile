@@ -8,6 +8,7 @@ import MyPeople from "../hometabs/MyPeople";
 import Calendar from "../hometabs/Calendar";
 import Settings from "../hometabs/Settings";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import InsideGroup from "../components/MyPeople/InsideGroup";
 
 const Tab = createMaterialBottomTabNavigator();
 
