@@ -1,24 +1,62 @@
-import { Surface, Text } from "react-native-paper";
-import { StyleSheet } from "react-native";
+import { FlatList, SafeAreaView, ScrollView, StyleSheet, StatusBar, Text, View } from "react-native";
+import React, { useState } from "react";
+import ScreenHeader from "../components/ScreenHeader";
+import { appImages } from "../assets";
+import MyPeopleItem from "../components/MyPeople/MyPeopleItem";
+import Wrapper from "../components/Wrapper";
+import AddNewGroup from "../components/MyPeople/AddNewGroup";
+import { useNavigation } from "@react-navigation/native";
+import { AntDesign } from '@expo/vector-icons'; 
 
-export default function MyPeople() {
+
+const MyPeople = () => {
+  // const [showAddBox, setShowAddBox] = useState(false);
+  const navigation = useNavigation();
+
+  const Groups = [
+    {
+      id: 1,
+      name: "Tech Buddies",
+      event: [{ name: "Event 1" }],
+      messages: ["one", "two"],
+      image: appImages.myPeople,
+    },
+    {
+      id: 2,
+      name: "Techies",
+      event: [{ name: "Event 1" }],
+      messages: ["one", "two"],
+      image: appImages.myPeople,
+    },
+    {
+      id: 3,
+      name: "Tech Buddies",
+      event: [{ name: "Event 1" }],
+      messages: ["one", "two"],
+      image: appImages.myPeople,
+    },
+    {
+      id: 4,
+      name: "Techies",
+      event: [{ name: "Event 1" }],
+      messages: ["one", "two"],
+      image: appImages.myPeople,
+    },
+  ];
 
   return (
-    <Surface style={styles.container}>
-      <Text>This is the MyPeople area</Text>
-    </Surface>
-  )
-}
+    <Wrapper propStyle={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 29 }}>
+      <ScreenHeader title="My People" level={0} onPressTwo={() => navigation.navigate("AddNewGroup")} />
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#ffffff",
-  },
+      <FlatList
+        data={Groups}
+        numColumns={2}
+        renderItem={({ item, index }) => <MyPeopleItem group={item} index={index} id={item.id} />}
+      />
+    </Wrapper>
+  );
+};
 
-  textH: {
-    margin: 20,
-  },
-});
+export default MyPeople;
+
+const styles = StyleSheet.create({});
