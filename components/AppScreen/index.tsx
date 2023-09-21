@@ -28,7 +28,7 @@ const AppScreen = ({ children, style, scrollable }: ScreenProps) => {
       ) : (
         children
       )}
-      <StatusBar style="dark" backgroundColor={colors.dark} />
+      <StatusBar style="light" backgroundColor={colors.dark} />
     </SafeAreaView>
   );
 };

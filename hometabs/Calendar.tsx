@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, ImageBackground } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import AppScreen from "../components/AppScreen";
 import CalendarComponent from "../components/CalendarComponent/Index";
@@ -7,15 +7,20 @@ import { colors } from "../utils/styles";
 export default function Calendar() {
   return (
     <AppScreen style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTxt}>Calendar</Text>
-        <View style={styles.headerIcon}>
-          <MaterialIcons name="search" size={20} color={"white"} />
+      <ImageBackground
+        style={styles.imgBck}
+        source={require("../assets/bg.png")}
+      >
+        <View style={styles.header}>
+          <Text style={styles.headerTxt}>Calendar</Text>
+          <View style={styles.headerIcon}>
+            <MaterialIcons name="search" size={20} color={"white"} />
+          </View>
         </View>
-      </View>
-      <View style={{ flex: 1 }}>
-        <CalendarComponent />
-      </View>
+        <View style={{ flex: 1 }}>
+          <CalendarComponent />
+        </View>
+      </ImageBackground>
     </AppScreen>
   );
 }
@@ -24,6 +29,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.dark,
+  },
+
+  imgBck: {
+    flex: 1,
   },
 
   header: {

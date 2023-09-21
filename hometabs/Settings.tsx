@@ -10,24 +10,23 @@ import {
   SettingsOptions,
 } from "../components/settings";
 import { colors } from "../utils/styles";
+import AppScreen from "../components/AppScreen";
 
 export default function Settings() {
   return (
-    <SafeAreaView style={[styles.wrapper]}>
+    <AppScreen>
       <ImageBackground
         source={require("../assets/settings/bgImage.png")}
         resizeMode="stretch"
         style={styles.image}
       >
-        <StatusBar backgroundColor={colors.dark} />
-
         <ScreenHeader />
 
         <ProfileHighlight />
 
         <SettingsOptions />
       </ImageBackground>
-    </SafeAreaView>
+    </AppScreen>
   );
 }
 
