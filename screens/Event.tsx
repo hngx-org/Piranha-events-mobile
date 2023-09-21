@@ -8,12 +8,15 @@ import {
 } from "@react-native-community/datetimepicker";
 import { months } from "../libs/dateHandler";
 import { Ionicons } from "@expo/vector-icons";
+import useEventContext from "../hooks/useEventContext";
 
 const background = require("../assets/images/background_image.jpg");
 export default function Event() {
+
+  const context = useEventContext();
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-
+  console.log(context?.eventState.events);
   const startOnChange = (
     event: DateTimePickerEvent,
     selectedDate: Date | undefined
