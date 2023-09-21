@@ -1,18 +1,20 @@
 import { Surface, Text, Button } from "react-native-paper";
 import { StyleSheet, ImageBackground, View } from "react-native";
-import LargeTextBox from "../components/LargeTextBox";
+import LargeTextBox from "../LargeTextBox";
 import { useState } from "react";
 import {
   DateTimePickerAndroid,
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
-import { months } from "../libs/dateHandler";
+import { months } from "../../libs/dateHandler";
 import { Ionicons } from "@expo/vector-icons";
-import useEventContext from "../hooks/useEventContext";
+import { Entypo } from "@expo/vector-icons";
+import useEventContext from "../../hooks/useEventContext";
+// import Wrapper from "../components/Wrapper";
 
-const background = require("../assets/images/background_image.jpg");
-export default function Event() {
-
+// const background = require("../assets/images/background_image.jpg");
+// const otherBackground = require("../assets/settings/bgImage.png");
+export default function Event({navigation}) {
   const context = useEventContext();
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -42,7 +44,6 @@ export default function Event() {
     startShowMode("time");
   };
 
-
   const endOnChange = (
     event: DateTimePickerEvent,
     selectedDate: Date | undefined
@@ -68,17 +69,27 @@ export default function Event() {
     endShowMode("time");
   };
 
+  const handleTimelineNavigation = () => {
+      
+    navigation.navigate('Timeline', {screen: "Home"});
+      
+  }
+
   return (
     <Surface style={styles.container}>
       <ImageBackground
-        source={background}
+        source={require("../../assets/bgImage.png")}
         resizeMode="cover"
         style={styles.backImage}
       >
-        <View style={styles.overlay} />
-        <Text variant="headlineMedium" style={styles.screenTitle}>
-          Create Event
-        </Text>
+        {/* <View style={styles.overlay} /> */}
+
+        <Surface style={styles.screenBar} elevation={0}>
+          <Entypo name="chevron-left" size={30} color="white" onPress={handleTimelineNavigation}/>
+          <Text variant="headlineMedium" style={styles.screenTitle}>
+            Create Event
+          </Text>
+        </Surface>
 
         <LargeTextBox
           title="Description"
@@ -105,8 +116,9 @@ export default function Event() {
                 alignItems: "center",
               }}
             >
-              {`${startDate.getUTCDate()} ${months[startDate.getMonth()]
-                } ${startDate.getUTCFullYear()}`}
+              {`${startDate.getUTCDate()} ${
+                months[startDate.getMonth()]
+              } ${startDate.getUTCFullYear()}`}
               {/* <Ionicons name="chevron-down-sharp" size={24} color="white" /> */}
             </Button>
             <Button
@@ -142,8 +154,9 @@ export default function Event() {
                 alignItems: "center",
               }}
             >
-              {`${endDate.getUTCDate()} ${months[endDate.getMonth()]
-                } ${endDate.getUTCFullYear()}`}
+              {`${endDate.getUTCDate()} ${
+                months[endDate.getMonth()]
+              } ${endDate.getUTCFullYear()}`}
             </Button>
             <Button
               icon="chevron-down"
@@ -169,7 +182,7 @@ export default function Event() {
           elevation={0}
         >
           <Text style={styles.title}>Location</Text>
-          <Ionicons name="location" size={24} />
+          <Ionicons name="location" size={24} color="#5C3EC8" />
         </Surface>
 
         <Button
@@ -206,12 +219,15 @@ export default function Event() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    background: "black",
+    backgroundColor: "black",
+    opacity: 0.9,
+    // paddingTop: 40,
+    // paddingHorizontal: 10,
+    // gap: 20,
   },
 
   backImage: {
     flex: 1,
-    background: "orange",
     paddingTop: 40,
     paddingHorizontal: 10,
     gap: 20,
@@ -228,6 +244,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     textAlign: "center",
     color: "white",
+    flex: 1,
   },
 
   textBox: {
@@ -260,5 +277,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     height: 50,
+  },
+
+  screenBar: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
   },
 });

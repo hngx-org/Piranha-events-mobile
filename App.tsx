@@ -9,7 +9,7 @@ import Home from "./screens/Home";
 import * as WebBrowser from "expo-web-browser";
 import UserContextProvider from "./contexts/UserContext";
 import SignIn from "./screens/SignIn";
-import Event from "./screens/Event";
+import Event from "./components/timeline/Event";
 import GlobalContextProvider from "./contexts/GlobalContextProvider";
 import InsideGroup from "./components/MyPeople/InsideGroup";
 import AddNewGroup from "./components/MyPeople/AddNewGroup";
