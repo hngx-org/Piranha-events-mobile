@@ -11,31 +11,58 @@ import { Ionicons } from "@expo/vector-icons";
 
 const background = require("../assets/images/background_image.jpg");
 export default function Event() {
-  const [date, setDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
 
-  const onChange = (
+  const startOnChange = (
     event: DateTimePickerEvent,
     selectedDate: Date | undefined
   ) => {
     const currentDate = selectedDate;
-    setDate(currentDate!);
+    setStartDate(currentDate!);
   };
 
-  const showMode = (currentMode: any) => {
+  const startShowMode = (currentMode: any) => {
     DateTimePickerAndroid.open({
-      value: date,
-      onChange: onChange,
+      value: startDate,
+      onChange: startOnChange,
       mode: currentMode,
       is24Hour: true,
     });
   };
 
-  const showDatepicker = () => {
-    showMode("date");
+  const showDatepicker1 = () => {
+    startShowMode("date");
   };
 
-  const showTimepicker = () => {
-    showMode("time");
+  const showTimepicker1 = () => {
+    startShowMode("time");
+  };
+
+
+  const endOnChange = (
+    event: DateTimePickerEvent,
+    selectedDate: Date | undefined
+  ) => {
+    const currentDate = selectedDate;
+    setEndDate(currentDate!);
+  };
+
+  const endShowMode = (currentMode: any) => {
+    DateTimePickerAndroid.open({
+      value: endDate,
+      onChange: endOnChange,
+      mode: currentMode,
+      is24Hour: true,
+    });
+  };
+
+  const showDatepicker2 = () => {
+    endShowMode("date");
+  };
+
+  const showTimepicker2 = () => {
+    endShowMode("time");
   };
 
   return (
@@ -66,7 +93,7 @@ export default function Event() {
           <Surface style={[styles.rowContainer, { flex: 3, gap: 2 }]}>
             <Button
               icon="chevron-down"
-              onPress={showDatepicker}
+              onPress={showDatepicker1}
               mode="contained"
               style={styles.buttonStyle}
               theme={{ roundness: 3 }}
@@ -75,14 +102,14 @@ export default function Event() {
                 alignItems: "center",
               }}
             >
-              {`${date.getUTCDate()} ${
-                months[date.getMonth()]
-              } ${date.getUTCFullYear()}`}
+              {`${startDate.getUTCDate()} ${
+                months[startDate.getMonth()]
+              } ${startDate.getUTCFullYear()}`}
               {/* <Ionicons name="chevron-down-sharp" size={24} color="white" /> */}
             </Button>
             <Button
               icon="chevron-down"
-              onPress={showTimepicker}
+              onPress={showTimepicker1}
               mode="contained"
               style={styles.buttonStyle}
               theme={{ roundness: 3 }}
@@ -91,7 +118,7 @@ export default function Event() {
                 alignItems: "center",
               }}
             >
-              {`${date.getUTCHours()}:${date.getUTCMinutes()}PM`}
+              {`${startDate.getUTCHours()}:${startDate.getUTCMinutes()}PM`}
             </Button>
           </Surface>
         </Surface>
@@ -104,7 +131,7 @@ export default function Event() {
           <Surface style={[styles.rowContainer, { flex: 3, gap: 2 }]}>
             <Button
               icon="chevron-down"
-              onPress={showDatepicker}
+              onPress={showDatepicker2}
               mode="contained"
               style={styles.buttonStyle}
               theme={{ roundness: 3 }}
@@ -113,13 +140,13 @@ export default function Event() {
                 alignItems: "center",
               }}
             >
-              {`${date.getUTCDate()} ${
-                months[date.getMonth()]
-              } ${date.getUTCFullYear()}`}
+              {`${endDate.getUTCDate()} ${
+                months[endDate.getMonth()]
+              } ${endDate.getUTCFullYear()}`}
             </Button>
             <Button
               icon="chevron-down"
-              onPress={showTimepicker}
+              onPress={showTimepicker2}
               mode="contained"
               style={styles.buttonStyle}
               theme={{ roundness: 3 }}
@@ -128,7 +155,7 @@ export default function Event() {
                 alignItems: "center",
               }}
             >
-              {`${date.getUTCHours()}:${date.getUTCMinutes()}PM`}
+              {`${endDate.getUTCHours()}:${endDate.getUTCMinutes()}PM`}
             </Button>
           </Surface>
         </Surface>
@@ -192,7 +219,7 @@ const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "#0F0F0F",
-    opacity: 0.8,
+    opacity: 0.7,
     pointerEvents: "none",
   },
 
