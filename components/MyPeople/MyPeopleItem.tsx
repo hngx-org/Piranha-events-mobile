@@ -4,12 +4,12 @@ import { Text } from "react-native-paper";
 import { appColors } from "../../utils/globalStyles";
 import { useNavigation } from "@react-navigation/native";
 
-const MyPeopleItem = ({ group, index }: { group: any; index: number }) => {
+const MyPeopleItem = ({ group, index, id }: { group: any; index: number; id: string | number }) => {
   const navigation = useNavigation();
 
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate("InsideGroup", {})}
+      onPress={() => navigation.navigate("InsideGroup", { id })}
       style={[styles.container, { marginRight: index % 2 === 0 ? "10%" : 0 }]}
     >
       <View style={styles.imageWrapper}>

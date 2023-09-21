@@ -3,6 +3,7 @@ import React from "react";
 import { Text } from "react-native-paper";
 import { appColors } from "../utils/globalStyles";
 import { appImages } from "../assets";
+import { AntDesign } from "@expo/vector-icons";
 
 const ScreenHeader = ({
   title,
@@ -17,7 +18,6 @@ const ScreenHeader = ({
   onPressTwo?: () => void;
   level: number;
 }) => {
-
   console.log(level);
 
   return level === 0 ? (
@@ -26,9 +26,7 @@ const ScreenHeader = ({
 
       <View style={styles.addGroup}>
         <TouchableOpacity onPress={() => onPressTwo!()}>
-          <Text variant="bodyMedium" style={{ fontWeight: "600", color: appColors.white, fontSize: 20 }}>
-            Plus
-          </Text>
+          <AntDesign name="plus" size={26} color="white" />
         </TouchableOpacity>
 
         <Text variant="bodySmall" style={{ fontWeight: "600", color: appColors.white }}>
