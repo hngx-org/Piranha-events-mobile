@@ -45,7 +45,7 @@ const MyPeople = () => {
       <FlatList
         data={Groups}
         numColumns={2}
-        renderItem={({ item, index }) => <MyPeopleItem group={item} index={index} />}
+        renderItem={({ item, index }) => <MyPeopleItem id={index} group={item} index={index} />}
       />
     </Wrapper>
   );

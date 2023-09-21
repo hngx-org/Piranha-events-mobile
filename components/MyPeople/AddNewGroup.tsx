@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { appImages } from "../../assets";
 import { appColors } from "../../utils/globalStyles";
 
-const AddNewGroup = ({ showAddBox }: { showAddBox: boolean }) => {
+const AddNewGroup = () => {
   const navigation = useNavigation();
 
   const [newGroupInfo, setNewGroupInfo] = useState({
