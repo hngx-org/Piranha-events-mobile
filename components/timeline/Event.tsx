@@ -14,7 +14,7 @@ import useEventContext from "../../hooks/useEventContext";
 
 // const background = require("../assets/images/background_image.jpg");
 // const otherBackground = require("../assets/settings/bgImage.png");
-export default function Event({navigation}) {
+export default function Event({navigation}: {navigation: any}) {
   const context = useEventContext();
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -196,6 +196,7 @@ export default function Event({navigation}) {
         </Button>
 
         <Button
+          rippleColor="green"
           mode="contained"
           style={[
             styles.buttonStyle,
