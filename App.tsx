@@ -5,6 +5,7 @@ import {
 } from "react-native-paper";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screens/Home";
+import Comments from "./screens/Comment";
 
 //Please note that the authentication workflow will be handled by Dread.
 //See the react navigation authentication workflow for more information on setup
@@ -61,15 +62,16 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <PaperProvider>
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="Home"
-          screenOptions={{ headerShown: false }}
-        >
-          <Stack.Screen name="Home" component={Home} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
+    // <PaperProvider>
+    //   <NavigationContainer>
+    //     <Stack.Navigator
+    //       initialRouteName="Home"
+    //       screenOptions={{ headerShown: false }}
+    //     >
+    //       <Stack.Screen name="Home" component={Home} />
+    //     </Stack.Navigator>
+    //   </NavigationContainer>
+    // </PaperProvider>
+    <Comments />
   );
 }
