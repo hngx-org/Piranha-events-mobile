@@ -16,6 +16,9 @@ import {
   MaterialCommunityIcons,
   SimpleLineIcons,
 } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { useUserContext } from "../../contexts/UserContext";
+import { Portal, Snackbar } from "react-native-paper";
 
 interface IOption {
   title: string;
@@ -28,6 +31,22 @@ interface IOption {
 }
 
 const SettingsOptions = () => {
+  const navigation = useNavigation<any>();
+
+  const { handleSignOut } = useUserContext();
+
+  const [visible, setVisible] = React.useState(false);
+
+  const onShowSnackBar = () => setVisible(true);
+
+  const onDismissSnackBar = () => setVisible(false);
+
+  const logoutHandler = async () => {
+    handleSignOut(() => {
+      navigation.replace("SignIn");
+    });
+  };
+
   const settingsOptions: IOption[] = [
     {
       title: "Account Settings",
@@ -133,7 +152,12 @@ const SettingsOptions = () => {
           <Text style={styles.sectionHeader}>{title}</Text>
         )}
         renderItem={({ item }) => (
-          <TouchableOpacity style={styles.optionContainer}>
+          <TouchableOpacity
+            style={styles.optionContainer}
+            onPress={() =>
+              item?.isLogout ? logoutHandler() : onShowSnackBar()
+            }
+          >
             <View style={styles.optionContainerLeft}>
               {item.icon}
 
@@ -155,6 +179,20 @@ const SettingsOptions = () => {
           </TouchableOpacity>
         )}
       />
+
+      {/* Coming soon snackbar */}
+      <Portal>
+        <Snackbar
+          visible={visible}
+          onDismiss={onDismissSnackBar}
+          action={{
+            label: "close",
+            onPress: () => onDismissSnackBar(),
+          }}
+        >
+          Coming soon
+        </Snackbar>
+      </Portal>
     </View>
   );
 };
