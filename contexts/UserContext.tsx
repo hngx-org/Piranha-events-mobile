@@ -1,4 +1,10 @@
-import React, { createContext, useState, ReactNode, useEffect } from "react";
+import React, {
+  createContext,
+  useState,
+  ReactNode,
+  useEffect,
+  useContext,
+} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Google from "expo-auth-session/providers/google";
 import { AuthSessionResult } from "expo-auth-session";
@@ -6,15 +12,16 @@ import { AuthSessionResult } from "expo-auth-session";
 export interface UserContextProps {
   userInfo: any | null;
   promptAsync: () => Promise<AuthSessionResult>;
+  handleSignOut: (onSuccess: () => void) => Promise<void>;
 }
 
 interface UserContextProviderProps {
   children: ReactNode;
 }
 
-export const UserContext = createContext<UserContextProps | null>(
-  null
-);
+export const UserContext = createContext<UserContextProps | null>(null);
+
+export const useUserContext = () => useContext(UserContext) as UserContextProps;
 
 const UserContextProvider = ({ children }: UserContextProviderProps) => {
   const [userInfo, setUserInfo] = useState(null);
@@ -63,7 +70,15 @@ const UserContextProvider = ({ children }: UserContextProviderProps) => {
       setError("Something went wrong");
     }
   };
-  const value = { userInfo, promptAsync };
+
+  const handleSignOut = async (onSuccess: () => void) => {
+    await AsyncStorage.removeItem("@user");
+    setUserInfo(null);
+
+    onSuccess();
+  };
+
+  const value = { userInfo, promptAsync, handleSignOut };
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
 
