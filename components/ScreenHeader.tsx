@@ -33,12 +33,12 @@ const ScreenHeader = ({
 
       <View style={styles.addGroup}>
         <TouchableOpacity onPress={() => onPressTwo!()}>
-          <Text
+          {/* <Text
             variant="bodyMedium"
             style={{ fontWeight: "600", color: appColors.white, fontSize: 20 }}
           >
             Plus
-          </Text>
+          </Text> */}
           <AntDesign name="plus" size={26} color="white" />
         </TouchableOpacity>
 
