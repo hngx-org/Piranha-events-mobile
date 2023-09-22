@@ -7,11 +7,11 @@ import Wrapper from "../components/Wrapper";
 import AddNewGroup from "../components/MyPeople/AddNewGroup";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from '@expo/vector-icons'; 
+import { StackNavigationType } from "../AuthScreen";
 
 
 const MyPeople = () => {
-  // const [showAddBox, setShowAddBox] = useState(false);
-  const navigation = useNavigation();
+  const navigation: StackNavigationType = useNavigation();
 
   const Groups = [
     {
