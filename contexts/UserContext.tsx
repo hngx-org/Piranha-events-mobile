@@ -12,8 +12,8 @@ interface UserContextProviderProps {
   children: ReactNode;
 }
 
-export const UserContext = createContext<UserContextProps | undefined>(
-  undefined
+export const UserContext = createContext<UserContextProps | null>(
+  null
 );
 
 const UserContextProvider = ({ children }: UserContextProviderProps) => {
