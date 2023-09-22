@@ -6,10 +6,14 @@ import Calendar from "../hometabs/Calendar";
 import Settings from "../hometabs/Settings";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { colors } from "../utils/styles";
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { StackParamsList1 } from "../AuthScreen";
+type Props = NativeStackScreenProps<StackParamsList1, 'Home'>;
+
 
 const Tab = createMaterialBottomTabNavigator();
 
-export default function Home() {
+export default function Home({route, navigation}: Props) {
   return (
     <Tab.Navigator
       initialRouteName="Timeline"
