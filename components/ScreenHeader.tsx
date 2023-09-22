@@ -25,7 +25,6 @@ const ScreenHeader = ({
   onPressTwo?: () => void;
   level?: number;
 }) => {
-
   return level === 0 ? (
     <View style={[styles.container, containerStyle]}>
       <Text style={styles.levelZeroTitle}>{title}</Text>

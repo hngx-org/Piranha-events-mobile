@@ -1,14 +1,11 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Surface, Text, BottomNavigation } from "react-native-paper";
 import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
 import { StyleSheet } from "react-native";
-import { useState } from "react";
 import Timeline from "../hometabs/Timeline";
 import MyPeople from "../hometabs/MyPeople";
 import Calendar from "../hometabs/Calendar";
 import Settings from "../hometabs/Settings";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import InsideGroup from "../components/MyPeople/InsideGroup";
+import { colors } from "../utils/styles";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -17,13 +14,16 @@ export default function Home() {
     <Tab.Navigator
       initialRouteName="Timeline"
       activeColor="#5C3EC8"
-      inactiveColor="white"
+      inactiveColor="#F2EFEA"
       shifting={false}
+      style={{ backgroundColor: colors.dark }}
       barStyle={{
         backgroundColor: "black",
-        borderTopStartRadius: 10,
-        borderTopEndRadius: 10,
+        borderTopStartRadius: 32,
+        borderTopEndRadius: 32,
+        overflow: "hidden",
       }}
+      theme={{ colors: { secondaryContainer: "transparent" } }}
     >
       <Tab.Screen
         name="Timeline"
@@ -32,7 +32,7 @@ export default function Home() {
           tabBarIcon: ({ focused, color }) => (
             <MaterialCommunityIcons
               name="chart-timeline-variant"
-              color={focused ? "#5C3EC8" : "white"}
+              color={focused ? "#5C3EC8" : "#F2EFEA"}
               size={26}
             />
           ),
@@ -44,8 +44,8 @@ export default function Home() {
         options={{
           tabBarIcon: ({ focused, color }) => (
             <Ionicons
-              name="people"
-              color={focused ? "#5C3EC8" : "white"}
+              name="people-outline"
+              color={focused ? "#5C3EC8" : "#F2EFEA"}
               size={26}
             />
           ),
@@ -57,8 +57,8 @@ export default function Home() {
         options={{
           tabBarIcon: ({ focused, color }) => (
             <Ionicons
-              name="calendar"
-              color={focused ? "#5C3EC8" : "white"}
+              name="calendar-outline"
+              color={focused ? "#5C3EC8" : "#F2EFEA"}
               size={26}
             />
           ),
@@ -70,8 +70,8 @@ export default function Home() {
         options={{
           tabBarIcon: ({ focused, color }) => (
             <Ionicons
-              name="settings"
-              color={focused ? "#5C3EC8" : "white"}
+              name="ios-settings-outline"
+              color={focused ? "#5C3EC8" : "#F2EFEA"}
               size={26}
             />
           ),
