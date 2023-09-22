@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Button, Card, Surface, Text } from "react-native-paper";
 import {
   StyleSheet,
@@ -11,6 +11,8 @@ import {
 import { Entypo, AntDesign, EvilIcons, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { colors } from "../../utils/styles";
+import { EventContext, IEventProp } from "../../contexts/EventContext";
+import axios from "axios";
 
 interface CardInfo {
   title: string;
@@ -22,6 +24,34 @@ interface CardInfo {
 
 export default function Timelinecomponent({ navigation }: { navigation: any }) {
   const [activeText, setActiveText] = useState("Everyone");
+  // const { eventState, eventDispatch } = useContext(EventContext) as IEventProp
+
+  const contextValue = useContext(EventContext);
+  const { eventState, eventDispatch } = contextValue !== null ? contextValue : { eventState: null, eventDispatch: null };
+
+  const fetchAllEventsFromAPI = async () => {
+    try {
+      const response = await axios.get('https://team-piranha.onrender.com/api/events');
+      const events = response.data; // Assuming your API returns event data as JSON
+
+      console.log({ events });
+
+      eventDispatch({ type: 'FETCH_ALL_EVENTS', payload: events });
+    } catch (error) {
+      // Handle errors here
+      console.error('Error fetching all events:', error);
+
+      throw error;
+    }
+  };
+
+  // Use useEffect to fetch all events when the component mounts
+  useEffect(() => {
+    fetchAllEventsFromAPI();
+  }, []); // The empty dependency array ensures this effect runs once when the component mounts
+
+
+
 
   const cardData: CardInfo[] = [
     {
@@ -311,12 +341,16 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
 const styles = StyleSheet.create({
   container: {
     paddingTop: "13%",
-    paddingHorizontal: "5%",
     flex: 1,
+    // backgroundColor: "#0f0f0f",
     backgroundColor: colors.dark,
+
+
   },
   card: {
+
     backgroundColor: "#1B1B1B",
+
     borderRadius: 10,
     marginBottom: 10,
   },

@@ -20,6 +20,9 @@ const Stack = createNativeStackNavigator<StackParamsList>();
 export default function AuthScreen() {
   const { userInfo } = useContext(UserContext) as UserContextProps;
 
+  console.log({ userInfo });
+
+
   return (
     <NavigationContainer>
       {!userInfo ? (
