@@ -9,7 +9,6 @@ const ProfileHighlight = () => {
   if (!isLoaded || !isSignedIn) {
     return null;
   }
-  console.log("user here", user);
 
   return (
     <View style={styles.container}>
