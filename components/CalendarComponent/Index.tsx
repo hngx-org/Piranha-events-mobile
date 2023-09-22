@@ -149,12 +149,13 @@ const styles = StyleSheet.create({
   },
   eventDetails: {
     padding: 25,
+    paddingBottom: 55,
     borderRadius: 20,
     backgroundColor: "#5C3EC8",
   },
   eventView: {
     position: "absolute",
-    bottom: -10,
+    bottom: -40,
     left: 0,
     right: 0,
     flex: 1,

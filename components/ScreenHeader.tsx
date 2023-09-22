@@ -25,20 +25,12 @@ const ScreenHeader = ({
   onPressTwo?: () => void;
   level?: number;
 }) => {
-  console.log(level);
-
   return level === 0 ? (
     <View style={[styles.container, containerStyle]}>
       <Text style={styles.levelZeroTitle}>{title}</Text>
 
       <View style={styles.addGroup}>
         <TouchableOpacity onPress={() => onPressTwo!()}>
-          <Text
-            variant="bodyMedium"
-            style={{ fontWeight: "600", color: appColors.white, fontSize: 20 }}
-          >
-            Plus
-          </Text>
           <AntDesign name="plus" size={26} color="white" />
         </TouchableOpacity>
 

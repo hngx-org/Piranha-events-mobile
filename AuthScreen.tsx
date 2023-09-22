@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, NavigationProp } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screens/Home";
 import AddNewGroup from "./components/MyPeople/AddNewGroup";
@@ -7,7 +7,15 @@ import InsideGroup from "./components/MyPeople/InsideGroup";
 import { UserContext, UserContextProps } from "./contexts/UserContext";
 import SignIn from "./screens/SignIn";
 
-const Stack = createNativeStackNavigator();
+
+export type StackParamsList = {
+  Home: undefined;
+  InsideGroup: undefined;
+  AddNewGroup: undefined
+}
+
+export type StackNavigationType = NavigationProp<StackParamsList>
+const Stack = createNativeStackNavigator<StackParamsList>();
 
 export default function AuthScreen() {
   const { userInfo } = useContext(UserContext) as UserContextProps;
@@ -17,7 +25,7 @@ export default function AuthScreen() {
 
   return (
     <NavigationContainer>
-      {userInfo ? (
+      {!userInfo ? (
         <Stack.Navigator
           initialRouteName="Home"
           screenOptions={{ headerShown: false }}
