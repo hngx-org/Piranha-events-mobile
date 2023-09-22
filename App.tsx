@@ -9,7 +9,6 @@ import GlobalContextProvider from "./contexts/GlobalContextProvider";
 
 import AuthScreen from "./AuthScreen";
 
-
 WebBrowser.maybeCompleteAuthSession();
 
 const theme = {
