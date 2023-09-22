@@ -5,7 +5,7 @@ export const SERVER_URL = "https://team-piranha.onrender.com/api";
 export const axiosInstance = axios.create({
   baseURL: SERVER_URL,
   timeout: 2000,
-  headers: {},
+  headers: {"content-type": "application/json"},
 });
 
 export const endPoints = {
@@ -26,9 +26,10 @@ export const endPoints = {
 
   groups: {
     getById: (groupId: string) => `/groups/${groupId}`,
+    getForUser: (userId: string) => `/groups/${userId}`,
     addMember: (groupId: string, memberId: string) =>
       `/groups/${groupId}/members/${memberId}`,
-    create: "/groups",
+    create: "/group/",
     getMembers: (groupId: string) => `/groups/${groupId}/members/`,
   },
 
