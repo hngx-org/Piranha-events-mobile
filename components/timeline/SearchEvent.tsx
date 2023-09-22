@@ -33,20 +33,8 @@ export default function SearchEvent({ navigation }: { navigation: any }) {
 
 
   const cardData: CardInfo[] = [
-    {
-      title: "Football game",
-      date: "May 20, 2023",
-      time: " 4 - 6 PM",
-      location: "Teslim Balogun Stadium",
-      timeInfo: "Today",
-    },
-    {
-      title: "Concert",
-      date: "June 5, 2023",
-      time: " 7 PM - 10 PM",
-      location: "City Arena",
-      timeInfo: " 3 weeks",
-    },
+
+
     {
       title: "Birthday Party",
       date: "July 10, 2023",
