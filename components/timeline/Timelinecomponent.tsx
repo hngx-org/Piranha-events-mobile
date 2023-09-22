@@ -24,9 +24,10 @@ interface CardInfo {
 
 export default function Timelinecomponent({ navigation }: { navigation: any }) {
   const [activeText, setActiveText] = useState("Everyone");
-  const { eventState, eventDispatch } = useContext(EventContext) as IEventProp
+  // const { eventState, eventDispatch } = useContext(EventContext) as IEventProp
 
-
+  const contextValue = useContext(EventContext);
+  const { eventState, eventDispatch } = contextValue !== null ? contextValue : { eventState: null, eventDispatch: null };
 
   const fetchAllEventsFromAPI = async () => {
     try {
