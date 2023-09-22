@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Card, Surface, Text } from "react-native-paper";
 import {
   StyleSheet,
@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import { Entypo, AntDesign, EvilIcons, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+
 
 interface CardInfo {
   title: string;
@@ -22,6 +24,12 @@ interface CardInfo {
 
 export default function SearchEvent({ navigation }: { navigation: any }) {
   const [activeText, setActiveText] = useState("Everyone");
+  const [eventmain, setEventmain] = useState(null)
+
+
+  const SERVER_URL = "https://team-piranha.onrender.com";
+
+
 
   const cardData: CardInfo[] = [
     {
@@ -84,13 +92,41 @@ export default function SearchEvent({ navigation }: { navigation: any }) {
     // Add more card objects as needed
   ];
 
+  console.log({ eventmain });
+
+
+  const fetchAllEventsFromAPI = async () => {
+    try {
+      const response = await axios.get(
+        "https://team-piranha.onrender.com/api/events"
+      );
+      const events = response.data?.data; // Assuming your API returns event data as JSON
+
+
+      setEventmain(events)
+
+      // eventDispatch({ type: "FETCH_ALL_EVENTS", payload: events });
+    } catch (error) {
+      // Handle errors here
+
+      throw error;
+    }
+  };
+
+  // Use useEffect to fetch all events when the component mounts
+  useEffect(() => {
+    fetchAllEventsFromAPI();
+  }, []); // The empty dependency array ensures this effect runs once when the component mounts
+
+
+
   const [searchQuery, setSearchQuery] = useState("");
 
   const [filteredCardData, setFilteredCardData] =
-    useState<CardInfo[]>(cardData);
+    useState<CardInfo[]>(eventmain);
 
   const filterCardData = (query: string) => {
-    const filteredData = cardData.filter((item) =>
+    const filteredData = eventmain.filter((item) =>
       item.title.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredCardData(filteredData);
@@ -111,9 +147,11 @@ export default function SearchEvent({ navigation }: { navigation: any }) {
           }}
         >
           <Image
+
             source={{
-              uri: "https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/bltca46ddd15559987a/635906e3b9100310ea900b42/Nike-2022-23-winter-premier-league-ball.png",
+              uri: `${SERVER_URL}${item?.thumbnail}`
             }}
+
             style={{ width: 84, height: 84, borderRadius: 50 }}
           />
           <View>
