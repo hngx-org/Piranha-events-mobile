@@ -16,6 +16,12 @@ export const postRequest = async (endPoint: string, payload: any) => {
 
     return { result, isSuccess: true };
   } catch (error) {
+
+    // console.log(Object.keys(error?.response))
+    console.log(error?.response?.data, 'dataaa')
+    console.log(endPoint)
+    // console.log(error?.message)
+    
     return { result: error, isSuccess: false };
   }
 };

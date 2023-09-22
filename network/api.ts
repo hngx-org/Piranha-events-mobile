@@ -5,7 +5,7 @@ export const SERVER_URL = "https://team-piranha.onrender.com/api";
 export const axiosInstance = axios.create({
   baseURL: SERVER_URL,
   timeout: 2000,
-  headers: {},
+  headers: {"content-type": "application/json"},
 });
 
 export const endPoints = {

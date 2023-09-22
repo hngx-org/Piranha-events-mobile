@@ -9,6 +9,7 @@ import { appImages } from "../../assets";
 import { appColors } from "../../utils/globalStyles";
 import { postRequest } from "../../network/requests";
 import { endPoints } from "../../network/api";
+import { ToastMessage } from "./ToastMessage";
 
 type RequestResponse = {
   result: any;
@@ -19,6 +20,12 @@ const AddNewGroup = () => {
   const navigation = useNavigation();
 
   const [response, setResponse] = useState<RequestResponse>({ result: null, isSuccess: null });
+  const [showToast, setShowToast] = useState<boolean>(false);
+  const [toastObj, setToastObj] = useState<{ message: string; type: string; text1: string }>({
+    message: "",
+    type: "",
+    text1: "",
+  });
 
   const [newGroupInfo, setNewGroupInfo] = useState({
     name: "",
@@ -53,12 +60,22 @@ const AddNewGroup = () => {
   };
 
   const onSendInvite = async () => {
-    const res = await postRequest(endPoints.groups.create, { newGroupInfo });
+    const res = await postRequest(endPoints.groups.create, { newGroupInfo, user: "sample" });
 
     setResponse(res);
   };
 
   useEffect(() => {
+    if (!response.isSuccess) {
+      setToastObj({ message: "", type: "error", text1: "Not successfull" });
+      setShowToast(true);
+    }
+
+    if (response.isSuccess) {
+      setToastObj({ message: "", type: "error", text1: "Success" });
+      setShowToast(true);
+    }
+
     if (response?.result !== null) {
       console.log(response);
     }
@@ -141,6 +158,8 @@ const AddNewGroup = () => {
           Send Invitation
         </Button>
       </ScrollView>
+
+      {showToast ? <ToastMessage showToast={showToast} setShowToast={setShowToast} toastObj={toastObj} /> : null}
     </Wrapper>
   );
 };
