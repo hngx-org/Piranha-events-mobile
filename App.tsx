@@ -2,14 +2,8 @@ import {
   PaperProvider,
   MD3LightTheme as DefaultTheme,
 } from "react-native-paper";
-
-import * as WebBrowser from "expo-web-browser";
-
 import GlobalContextProvider from "./contexts/GlobalContextProvider";
-
 import AuthScreen from "./AuthScreen";
-
-WebBrowser.maybeCompleteAuthSession();
 
 const theme = {
   // ...DefaultTheme,
