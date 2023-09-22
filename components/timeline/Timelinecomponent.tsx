@@ -13,7 +13,11 @@ import { useNavigation } from "@react-navigation/native";
 import { colors } from "../../utils/styles";
 import { EventContext, IEventProp } from "../../contexts/EventContext";
 import axios from "axios";
+import { postRequest } from "../../network/requests";
+import { endPoints } from "../../network/api";
 import { useUser } from "@clerk/clerk-expo";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import useEventContext from "../../hooks/useEventContext";
 
 interface CardInfo {
   title: string;
@@ -26,11 +30,20 @@ interface CardInfo {
 export default function Timelinecomponent({ navigation }: { navigation: any }) {
   const [activeText, setActiveText] = useState("Everyone");
   // const { eventState, eventDispatch } = useContext(EventContext) as IEventProp
-  const {user} = useUser();
+  const { user } = useUser();
 
+  const GetToken = async () => {
+    const res = await postRequest(endPoints.auth.login, {
+      email: user?.emailAddresses[0].emailAddress,
+      pass_id: user?.id,
+    });
+    await AsyncStorage.setItem("token", res?.result?.data.data.token);
+  };
 
-  console.log(32, user?.emailAddresses[0].id);
-  const contextValue = useContext(EventContext);
+  useEffect(() => {
+    GetToken();
+  }, []);
+  const contextValue = useEventContext() as any;
   const { eventState, eventDispatch } =
     contextValue !== null
       ? contextValue
@@ -229,7 +242,7 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
       <ImageBackground
         source={require("../../assets/bg.png")}
         resizeMode="stretch"
-        style={{ flex: 1 }}
+        style={{ flex: 1, marginHorizontal: 15 }}
       >
         <View
           style={{
@@ -355,7 +368,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#1B1B1B",
 
     borderRadius: 10,
-    marginBottom: 10,
+    marginBottom: 15,
   },
   activeButton: {
     borderBottomColor: "#571FCD",

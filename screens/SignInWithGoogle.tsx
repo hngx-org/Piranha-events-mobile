@@ -12,17 +12,13 @@ import {
   Image,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { useOAuth, useUser } from "@clerk/clerk-expo";
+import { useOAuth } from "@clerk/clerk-expo";
 import { useWarmUpBrowser } from "../hooks/warmUpBrowser";
-import { postRequest } from "../network/requests";
-import { endPoints } from "../network/api";
 WebBrowser.maybeCompleteAuthSession();
 
 const SignInWithGoogle = () => {
   // Warm up the android browser to improve UX
   useWarmUpBrowser();
-  const { user } = useUser();
-  
   const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
 
   const onPress = React.useCallback(async () => {
@@ -32,11 +28,6 @@ const SignInWithGoogle = () => {
 
       if (createdSessionId) {
         setActive?.({ session: createdSessionId });
-        const res = await postRequest(endPoints.auth.login, {
-          email: user?.emailAddresses,
-          password: user?.id,
-        });
-        console.log("res log", res);
       } else {
         // Use signIn or signUp for next steps such as MFA
       }

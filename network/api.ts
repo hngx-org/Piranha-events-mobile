@@ -49,6 +49,6 @@ export const endPoints = {
   },
 
   auth: {
-    login: "",
+    login: "/login/",
   },
 };
