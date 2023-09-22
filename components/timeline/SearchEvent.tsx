@@ -35,13 +35,6 @@ export default function SearchEvent({ navigation }: { navigation: any }) {
   const cardData: CardInfo[] = [
 
 
-    {
-      title: "Birthday Party",
-      date: "July 10, 2023",
-      time: " 2 PM - 6 PM",
-      location: "123 Main Street",
-      timeInfo: " 2 months",
-    },
 
     {
       title: "Birthday Party",
@@ -50,38 +43,10 @@ export default function SearchEvent({ navigation }: { navigation: any }) {
       location: "123 Main Street",
       timeInfo: " 2 months",
     },
-    {
-      title: "Birthday Party",
-      date: "July 10, 2023",
-      time: " 2 PM - 6 PM",
-      location: "123 Main Street",
-      timeInfo: " 2 months",
-    },
-    {
-      title: "Birthday Party",
-      date: "July 10, 2023",
-      time: " 2 PM - 6 PM",
-      location: "123 Main Street",
-      timeInfo: " 2 months",
-    },
-    {
-      title: "Birthday Party",
-      date: "July 10, 2023",
-      time: " 2 PM - 6 PM",
-      location: "123 Main Street",
-      timeInfo: "2 months",
-    },
-    {
-      title: "Birthday Party",
-      date: "July 10, 2023",
-      time: " 2 PM - 6 PM",
-      location: "123 Main Street",
-      timeInfo: " 2 months",
-    },
-    // Add more card objects as needed
+
+
   ];
 
-  console.log({ eventmain });
 
 
   const fetchAllEventsFromAPI = async () => {

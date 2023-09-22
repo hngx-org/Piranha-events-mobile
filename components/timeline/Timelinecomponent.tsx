@@ -85,18 +85,7 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
 
   const cardData: CardInfo[] = [
 
-    {
-      title: "Concert",
-      date: "June 5, 2023",
-      time: " 7 PM - 10 PM",
-      location: "City Arena",
-    },
-    {
-      title: "Birthday Party",
-      date: "July 10, 2023",
-      location: "123 Main Street",
-      timeInfo: " 2 months",
-    },
+
 
     {
       title: "Birthday Party",
@@ -104,35 +93,7 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
       time: " 2 PM - 6 PM",
       location: "123 Main Street",
       timeInfo: " 2 months",
-    },
-    {
-      title: "Birthday Party",
-      date: "July 10, 2023",
-      time: " 2 PM - 6 PM",
-      location: "123 Main Street",
-      timeInfo: " 2 months",
-    },
-    {
-      title: "Birthday Party",
-      date: "July 10, 2023",
-      time: " 2 PM - 6 PM",
-      location: "123 Main Street",
-      timeInfo: " 2 months",
-    },
-    {
-      title: "Birthday Party",
-      date: "July 10, 2023",
-      time: " 2 PM - 6 PM",
-      location: "123 Main Street",
-      timeInfo: "2 months",
-    },
-    {
-      title: "Birthday Party",
-      date: "July 10, 2023",
-      time: " 2 PM - 6 PM",
-      location: "123 Main Street",
-      timeInfo: " 2 months",
-    },
+    }
     // Add more card objects as needed
   ];
 
