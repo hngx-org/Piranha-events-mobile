@@ -1,12 +1,45 @@
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const SERVER_URL = "https://team-piranha.onrender.com/api";
+let token;
+
+
+const getToken = async () => {
+  try {
+    const value = await AsyncStorage.getItem('token');
+    if (value !== null) {
+      console.log(12, value);
+      return value.toString();
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 
 export const axiosInstance = axios.create({
   baseURL: SERVER_URL,
   timeout: 2000,
-  headers: {},
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${getToken().then((data) => data)}`
+  },
 });
+
+
+// export const axiosInstance2 = axios.create({
+//   baseURL: SERVER_URL,
+//   timeout: 2000,
+//   headers: {
+//     "Content-Type": "multipart/form-data",
+//     Authorization: `Bearer ${getToken().then((data) => data)}`
+//   },
+// });
+
+
+
+
 
 export const endPoints = {
   comments: {
@@ -16,7 +49,7 @@ export const endPoints = {
 
   events: {
     eventsList: "/events",
-    createEvent: "/events",
+    createEvent: "/event/",
     createComment: (eventId: string) => `/events/${eventId}/comments`,
     getEventById: (eventId: string) => `/events/${eventId}`,
     updateEvent: (eventId: string) => `/events/${eventId}`,
