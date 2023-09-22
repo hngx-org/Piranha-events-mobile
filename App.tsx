@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   PaperProvider,
@@ -5,11 +6,18 @@ import {
 } from "react-native-paper";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screens/Home";
+<<<<<<< HEAD
 import Comments from "./screens/Comment";
+=======
+import * as WebBrowser from "expo-web-browser";
+import UserContextProvider from "./contexts/UserContext";
+import SignIn from "./screens/SignIn";
+import GlobalContextProvider from "./contexts/GlobalContextProvider";
+import InsideGroup from "./components/MyPeople/InsideGroup";
+import AddNewGroup from "./components/MyPeople/AddNewGroup";
+>>>>>>> b9998d5a838430a96f6dafd3b8fae92297f7f0e6
 
-//Please note that the authentication workflow will be handled by Dread.
-//See the react navigation authentication workflow for more information on setup
-//Theming will be handled by the group as a whole.
+WebBrowser.maybeCompleteAuthSession();
 
 const theme = {
   // ...DefaultTheme,
@@ -62,6 +70,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
+<<<<<<< HEAD
     // <PaperProvider>
     //   <NavigationContainer>
     //     <Stack.Navigator
@@ -73,5 +82,22 @@ export default function App() {
     //   </NavigationContainer>
     // </PaperProvider>
     <Comments />
+=======
+    <GlobalContextProvider>
+      <PaperProvider>
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="Home"
+            screenOptions={{ headerShown: false }}
+          >
+            {/* <Stack.Screen name="SignIn" component={SignIn} /> */}
+            <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen name="InsideGroup" component={InsideGroup} />
+            <Stack.Screen name="AddNewGroup" component={AddNewGroup} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
+    </GlobalContextProvider>
+>>>>>>> b9998d5a838430a96f6dafd3b8fae92297f7f0e6
   );
 }

@@ -6,8 +6,6 @@ import MyPeopleItem from "../components/MyPeople/MyPeopleItem";
 import Wrapper from "../components/Wrapper";
 import AddNewGroup from "../components/MyPeople/AddNewGroup";
 import { useNavigation } from "@react-navigation/native";
-import { AntDesign } from '@expo/vector-icons'; 
-
 
 const MyPeople = () => {
   // const [showAddBox, setShowAddBox] = useState(false);
@@ -15,28 +13,24 @@ const MyPeople = () => {
 
   const Groups = [
     {
-      id: 1,
       name: "Tech Buddies",
       event: [{ name: "Event 1" }],
       messages: ["one", "two"],
       image: appImages.myPeople,
     },
     {
-      id: 2,
       name: "Techies",
       event: [{ name: "Event 1" }],
       messages: ["one", "two"],
       image: appImages.myPeople,
     },
     {
-      id: 3,
       name: "Tech Buddies",
       event: [{ name: "Event 1" }],
       messages: ["one", "two"],
       image: appImages.myPeople,
     },
     {
-      id: 4,
       name: "Techies",
       event: [{ name: "Event 1" }],
       messages: ["one", "two"],
@@ -51,7 +45,7 @@ const MyPeople = () => {
       <FlatList
         data={Groups}
         numColumns={2}
-        renderItem={({ item, index }) => <MyPeopleItem group={item} index={index} id={item.id} />}
+        renderItem={({ item, index }) => <MyPeopleItem group={item} index={index} />}
       />
     </Wrapper>
   );

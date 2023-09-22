@@ -7,7 +7,8 @@ import Timeline from "../hometabs/Timeline";
 import MyPeople from "../hometabs/MyPeople";
 import Calendar from "../hometabs/Calendar";
 import Settings from "../hometabs/Settings";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import InsideGroup from "../components/MyPeople/InsideGroup";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -29,8 +30,8 @@ export default function Home() {
         component={Timeline}
         options={{
           tabBarIcon: ({ focused, color }) => (
-            <Ionicons
-              name="add-sharp"
+            <MaterialCommunityIcons
+              name="chart-timeline-variant"
               color={focused ? "#5C3EC8" : "white"}
               size={26}
             />

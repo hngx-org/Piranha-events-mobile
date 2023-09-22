@@ -1,42 +1,34 @@
 import { FlatList, SafeAreaView, ScrollView, StyleSheet, StatusBar, Text, View } from "react-native";
-import React, { useState } from "react";
-import ScreenHeader from "../components/ScreenHeader";
-import { appImages } from "../assets";
-import MyPeopleItem from "../components/MyPeople/MyPeopleItem";
-import Wrapper from "../components/Wrapper";
-import AddNewGroup from "../components/MyPeople/AddNewGroup";
+import React from "react";
+import ScreenHeader from "../ScreenHeader";
+import { appImages } from "../../assets";
+import InsideGroupItem from "./InsideGroupItem";
+import Wrapper from "../Wrapper";
 import { useNavigation } from "@react-navigation/native";
-import { AntDesign } from '@expo/vector-icons'; 
 
-
-const MyPeople = () => {
-  // const [showAddBox, setShowAddBox] = useState(false);
+const InsideGroup = () => {
   const navigation = useNavigation();
 
   const Groups = [
     {
-      id: 1,
       name: "Tech Buddies",
       event: [{ name: "Event 1" }],
       messages: ["one", "two"],
       image: appImages.myPeople,
     },
     {
-      id: 2,
       name: "Techies",
       event: [{ name: "Event 1" }],
       messages: ["one", "two"],
       image: appImages.myPeople,
     },
     {
-      id: 3,
       name: "Tech Buddies",
       event: [{ name: "Event 1" }],
       messages: ["one", "two"],
       image: appImages.myPeople,
     },
     {
-      id: 4,
       name: "Techies",
       event: [{ name: "Event 1" }],
       messages: ["one", "two"],
@@ -46,17 +38,13 @@ const MyPeople = () => {
 
   return (
     <Wrapper propStyle={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 29 }}>
-      <ScreenHeader title="My People" level={0} onPressTwo={() => navigation.navigate("AddNewGroup")} />
+      <ScreenHeader containerStyle={{ marginBottom: 30 }} title="My People" onPressOne={navigation.goBack} />
 
-      <FlatList
-        data={Groups}
-        numColumns={2}
-        renderItem={({ item, index }) => <MyPeopleItem group={item} index={index} id={item.id} />}
-      />
+      <FlatList data={Groups} renderItem={({ item, index }) => <InsideGroupItem group={item} index={index} />} />
     </Wrapper>
   );
 };
 
-export default MyPeople;
+export default InsideGroup;
 
 const styles = StyleSheet.create({});
