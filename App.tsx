@@ -61,12 +61,10 @@ const theme = {
 
 export default function App() {
   return (
-
     <GlobalContextProvider>
       <PaperProvider>
         <AuthScreen />
       </PaperProvider>
     </GlobalContextProvider>
-
   );
 }
