@@ -32,6 +32,7 @@ const AddNewGroup = () => {
     description: "",
     inviteMessage: "",
     image: "",
+    user: 1,
   });
 
   const onHandleChange = (newValue: string, key: string) => {
@@ -54,25 +55,38 @@ const AddNewGroup = () => {
     });
 
     if (!result.canceled) {
-      // setImage(result?.assets[0]?.uri);
-      onHandleChange(result?.assets[0]?.uri, "image");
+      const imageObj = {
+        name: result?.assets[0]?.uri.split("/")[newGroupInfo.image?.uri?.split("/").length - 1],
+        uri: result?.assets[0]?.uri,
+        type: `${result?.assets[0]?.type}/jpeg`,
+      };
+      onHandleChange(imageObj, "image");
     }
   };
 
   const onSendInvite = async () => {
-    const res = await postRequest(endPoints.groups.create, { newGroupInfo, user: "sample" });
+    const formData = new FormData();
 
+    Object.keys(newGroupInfo).map((key) => {
+      return formData.append(key, newGroupInfo[key as keyof typeof newGroupInfo]);
+    });
+
+    const res = await postRequest(endPoints.groups.create, formData, {
+      "content-type": "multipart/form-data",
+    });
+
+    console.log(res?.result)
     setResponse(res);
   };
 
   useEffect(() => {
-    if (!response.isSuccess) {
-      setToastObj({ message: "", type: "error", text1: "Not successfull" });
+    if (response.isSuccess !== null && !response.isSuccess) {
+      setToastObj({ message: "", type: "error", text1: "Request not successful" });
       setShowToast(true);
     }
 
-    if (response.isSuccess) {
-      setToastObj({ message: "", type: "error", text1: "Success" });
+    if (response.isSuccess !== null && response.isSuccess) {
+      setToastObj({ message: "", type: "error", text1: "Group Created Successfully" });
       setShowToast(true);
     }
 
@@ -94,7 +108,9 @@ const AddNewGroup = () => {
         <View style={styles.formWrapper}>
           <TouchableOpacity onPress={() => pickImage()} style={styles.imageWrapper}>
             <Image
-              source={newGroupInfo?.image?.length === 0 ? appImages.defaultGroupImage : { uri: newGroupInfo.image }}
+              source={
+                newGroupInfo?.image?.length === 0 ? appImages.defaultGroupImage : { uri: newGroupInfo.image?.uri }
+              }
               style={{
                 width: 150,
                 height: 150,
