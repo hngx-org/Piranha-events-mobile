@@ -1,32 +1,41 @@
 import { FlatList, SafeAreaView, ScrollView, StyleSheet, StatusBar, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ScreenHeader from "../components/ScreenHeader";
 import { appImages } from "../assets";
 import MyPeopleItem from "../components/MyPeople/MyPeopleItem";
 import Wrapper from "../components/Wrapper";
 import AddNewGroup from "../components/MyPeople/AddNewGroup";
 import { useNavigation } from "@react-navigation/native";
-import { AntDesign } from '@expo/vector-icons'; 
+import { AntDesign } from "@expo/vector-icons";
 import { StackNavigationType } from "../AuthScreen";
 import { getRequest, postRequest } from "../network/requests";
 import { endPoints } from "../network/api";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { UserContext, UserContextProps } from "../contexts/UserContext";
 
 const MyPeople = () => {
   const navigation: StackNavigationType = useNavigation();
 
 
-  const getGroups = async () => {
-    const res = await getRequest(endPoints.groups, { });
+  const user = useContext<UserContextProps | null>(UserContext);
 
-    console.log(res)
+  const userInfo = user?.userInfo;
+
+  console.log(userInfo?.id, userInfo?.token);
+
+  const getGroups = async () => {
+    console.log(endPoints.groups.getForUser(userInfo?.id))
+    const res = await getRequest(endPoints.groups.getForUser(userInfo?.id), {
+      Authorization: `Bearer ${userInfo?.token}`,
+    });
+
+    console.log(res?.isSuccess);
+    console.log(res);
   };
 
   useEffect(() => {
-    getGroups()
-  }, [])
-
-
+    getGroups();
+  }, []);
 
   const Groups = [
     {

@@ -1,13 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Button, Card, Surface, Text } from "react-native-paper";
-import {
-  StyleSheet,
-  View,
-  Image,
-  FlatList,
-  TouchableOpacity,
-  ImageBackground,
-} from "react-native";
+import { StyleSheet, View, Image, FlatList, TouchableOpacity, ImageBackground } from "react-native";
 import { Entypo, AntDesign, EvilIcons, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { colors } from "../../utils/styles";
@@ -18,6 +11,7 @@ import { endPoints } from "../../network/api";
 import { useUser } from "@clerk/clerk-expo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useEventContext from "../../hooks/useEventContext";
+import { UserContext, UserContextProps } from "../../contexts/UserContext";
 
 interface CardInfo {
   title: string;
@@ -29,31 +23,15 @@ interface CardInfo {
 
 export default function Timelinecomponent({ navigation }: { navigation: any }) {
   const [activeText, setActiveText] = useState("Everyone");
-  // const { eventState, eventDispatch } = useContext(EventContext) as IEventProp
-  const { user } = useUser();
+  const user = useContext<UserContextProps | null>(UserContext);
 
-  const GetToken = async () => {
-    const res = await postRequest(endPoints.auth.login, {
-      email: user?.emailAddresses[0].emailAddress,
-      pass_id: user?.id,
-    });
-    await AsyncStorage.setItem("token", res?.result?.data.data.token);
-  };
-
-  useEffect(() => {
-    GetToken();
-  }, []);
   const contextValue = useEventContext() as any;
   const { eventState, eventDispatch } =
-    contextValue !== null
-      ? contextValue
-      : { eventState: null, eventDispatch: null };
+    contextValue !== null ? contextValue : { eventState: null, eventDispatch: null };
 
   const fetchAllEventsFromAPI = async () => {
     try {
-      const response = await axios.get(
-        "https://team-piranha.onrender.com/api/events"
-      );
+      const response = await axios.get("https://team-piranha.onrender.com/api/events");
       const events = response.data; // Assuming your API returns event data as JSON
 
       console.log({ events });
@@ -135,9 +113,7 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
 
   const renderItem = ({ item }: { item: CardInfo }) => (
     <Card style={styles.card}>
-      <Card.Content
-        style={{ flexDirection: "row", justifyContent: "space-between" }}
-      >
+      <Card.Content style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <View
           style={{
             flexDirection: "row",
@@ -185,13 +161,8 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
               {item.date}
             </Text>
 
-            <View
-              style={{ flexDirection: "row", alignItems: "center", gap: 5 }}
-            >
-              <Image
-                source={require("../../assets/clock.png")}
-                style={{ width: 10, height: 10 }}
-              />
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
+              <Image source={require("../../assets/clock.png")} style={{ width: 10, height: 10 }} />
 
               <Text
                 style={{
@@ -212,24 +183,13 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
           {item.timeInfo === "Today" ? (
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Entypo name="dot-single" size={24} color="green" />
-              <Text
-                style={{ color: "#571FCD", fontWeight: "700", fontSize: 12 }}
-              >
-                LIVE
-              </Text>
+              <Text style={{ color: "#571FCD", fontWeight: "700", fontSize: 12 }}>LIVE</Text>
             </View>
           ) : (
             <View style={{ alignItems: "center" }}>
-              <Image
-                source={require("../../assets/clock.png")}
-                style={{ width: 10, height: 10 }}
-              />
+              <Image source={require("../../assets/clock.png")} style={{ width: 10, height: 10 }} />
 
-              <Text
-                style={{ color: "#7B7B7B", fontWeight: "700", fontSize: 12 }}
-              >
-                {item.timeInfo}
-              </Text>
+              <Text style={{ color: "#7B7B7B", fontWeight: "700", fontSize: 12 }}>{item.timeInfo}</Text>
             </View>
           )}
         </View>
@@ -311,8 +271,7 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
                 {
                   borderColor: "#9d7ae8",
 
-                  backgroundColor:
-                    activeText === "Everyone" ? "#9d7ae8" : "transparent", // Set background color based on activeText
+                  backgroundColor: activeText === "Everyone" ? "#9d7ae8" : "transparent", // Set background color based on activeText
                 },
               ]}
               labelStyle={{ color: "#FFFFFF" }} // Set text color based on activeText
@@ -326,8 +285,7 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
               style={[
                 {
                   borderColor: "#9d7ae8",
-                  backgroundColor:
-                    activeText === "Friends" ? "#9d7ae8" : "transparent", // Set background color based on activeText
+                  backgroundColor: activeText === "Friends" ? "#9d7ae8" : "transparent", // Set background color based on activeText
                 },
               ]}
               labelStyle={{ color: "#FFFFFF" }} // Set text color based on activeText
@@ -336,9 +294,7 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
             </Button>
           </View>
           <View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("CreateEvent")}
-            >
+            <TouchableOpacity onPress={() => navigation.navigate("CreateEvent")}>
               <AntDesign name="pluscircle" size={40} color="#9d7ae8" />
             </TouchableOpacity>
           </View>

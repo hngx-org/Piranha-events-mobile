@@ -10,43 +10,43 @@ export const axiosInstance = axios.create({
 
 export const endPoints = {
   comments: {
-    createCommentImage: (commentId: string) => `/comments/${commentId}/images`,
-    likeComment: (commentId: string) => `/comments/${commentId}/likes`,
+    createCommentImage: (commentId: string) => `/comments/${commentId}/images/`,
+    likeComment: (commentId: string) => `/comments/${commentId}/likes/`,
   },
 
   events: {
-    eventsList: "/events",
-    createEvent: "/events",
-    createComment: (eventId: string) => `/events/${eventId}/comments`,
-    getEventById: (eventId: string) => `/events/${eventId}`,
-    updateEvent: (eventId: string) => `/events/${eventId}`,
-    patchEvent: (eventId: string) => `/events/${eventId}`,
-    deleteEvent: (eventId: string) => `/events/${eventId}`,
+    eventsList: "/events/",
+    createEvent: "/events/",
+    createComment: (eventId: string) => `/events/${eventId}/comments/`,
+    getEventById: (eventId: string) => `/events/${eventId}/`,
+    updateEvent: (eventId: string) => `/events/${eventId}/`,
+    patchEvent: (eventId: string) => `/events/${eventId}/`,
+    deleteEvent: (eventId: string) => `/events/${eventId}/`,
   },
 
   groups: {
-    getById: (groupId: string) => `/groups/${groupId}`,
-    getForUser: (userId: string) => `/groups/${userId}`,
+    getById: (groupId: string) => `/groups/${groupId}/`,
+    getForUser: (userId: number) => `/group/user/${userId}/`,
     addMember: (groupId: string, memberId: string) =>
-      `/groups/${groupId}/members/${memberId}`,
+      `/groups/${groupId}/members/${memberId}/`,
     create: "/group/",
     getMembers: (groupId: string) => `/groups/${groupId}/members/`,
   },
 
   images: {
-    getImages: "/images",
-    createImage: "/images",
-    getImageById: (imageId: string) => `/images/${imageId}`,
-    putImage: (imageId: string) => `/images/${imageId}`,
-    patchImage: (imageId: string) => `/images/${imageId}`,
-    deleteImage: (imageId: string) => `/images/${imageId}`,
+    getImages: "/images/",
+    createImage: "/images/",
+    getImageById: (imageId: string) => `/images/${imageId}/`,
+    putImage: (imageId: string) => `/images/${imageId}/`,
+    patchImage: (imageId: string) => `/images/${imageId}/`,
+    deleteImage: (imageId: string) => `/images/${imageId}/`,
   },
 
   users: {
-    getUserById: (userId: string) => `/users/${userId}`,
+    getUserById: (userId: string) => `/users/${userId}/`,
     putUserById: (userId: string) => `/users/${userId}/update`,
     addUserToEvent: (userId: string, eventId: string) =>
-      `/users/${userId}/interests/${eventId}`,
+      `/users/${userId}/interests/${eventId}/`,
   },
 
   auth: {

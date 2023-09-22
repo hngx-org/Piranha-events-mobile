@@ -22,18 +22,13 @@ export const tokenCache = {
 };
 
 //All context providers will be parented by this GlobalContextProvider
-export default function GlobalContextProvider({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function GlobalContextProvider({ children }: { children: ReactNode }) {
   return (
     <>
-      <ClerkProvider
-        tokenCache={tokenCache}
-        publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY as string}
-      >
-        <EventContextProvider>{children}</EventContextProvider>
+      <ClerkProvider tokenCache={tokenCache} publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY as string}>
+        <UserContextProvider>
+          <EventContextProvider>{children}</EventContextProvider>
+        </UserContextProvider>
       </ClerkProvider>
     </>
   );

@@ -4,9 +4,9 @@ let globalHeaders = {
   "content-type": "application/json",
 };
 
-export const getRequest = async (endPoint: string) => {
+export const getRequest = async (endPoint: string, headers: any = globalHeaders) => {
   try {
-    const result = await axiosInstance.get(endPoint);
+    const result = await axiosInstance.get(endPoint, { headers });
 
     return { result, isSuccess: true };
   } catch (error) {

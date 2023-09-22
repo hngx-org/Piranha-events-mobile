@@ -1,5 +1,5 @@
 import { Image, ScrollView, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal, Portal, Text, TextInput } from "react-native-paper";
 import Wrapper from "../Wrapper";
 import * as ImagePicker from "expo-image-picker";
@@ -10,6 +10,7 @@ import { appColors } from "../../utils/globalStyles";
 import { postRequest } from "../../network/requests";
 import { endPoints } from "../../network/api";
 import { ToastMessage } from "./ToastMessage";
+import { UserContext, UserContextProps } from "../../contexts/UserContext";
 
 type RequestResponse = {
   result: any;
@@ -18,6 +19,9 @@ type RequestResponse = {
 
 const AddNewGroup = () => {
   const navigation = useNavigation();
+
+  const user = useContext<UserContextProps | null>(UserContext);
+  const userInfo = user?.userInfo;
 
   const [response, setResponse] = useState<RequestResponse>({ result: null, isSuccess: null });
   const [showToast, setShowToast] = useState<boolean>(false);
@@ -32,7 +36,7 @@ const AddNewGroup = () => {
     description: "",
     inviteMessage: "",
     image: "",
-    user: 1,
+    user: userInfo?.id,
   });
 
   const onHandleChange = (newValue: string, key: string) => {
@@ -73,9 +77,10 @@ const AddNewGroup = () => {
 
     const res = await postRequest(endPoints.groups.create, formData, {
       "content-type": "multipart/form-data",
+      Authorization: `Bearer ${userInfo?.token}`,
     });
 
-    console.log(res?.result)
+    console.log(res?.result);
     setResponse(res);
   };
 
@@ -88,6 +93,7 @@ const AddNewGroup = () => {
     if (response.isSuccess !== null && response.isSuccess) {
       setToastObj({ message: "", type: "error", text1: "Group Created Successfully" });
       setShowToast(true);
+      navigation.goBack()
     }
 
     if (response?.result !== null) {
