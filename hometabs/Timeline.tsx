@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Entypo, AntDesign, EvilIcons, Ionicons } from "@expo/vector-icons";
 
+
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Timelinecomponent from "../components/timeline/Timelinecomponent";
 import SearchEvent from "../components/timeline/SearchEvent";
