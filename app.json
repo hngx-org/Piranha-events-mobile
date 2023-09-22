@@ -40,9 +40,7 @@
     },
     "scheme": "piranha event",
     "extra": {
-      "eas": {
-        "projectId": "b75df17a-04ce-4801-86e3-a8484f4fb993"
-      }
+     
     }
   }
 }
