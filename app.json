@@ -19,7 +19,9 @@
         }
       ]
     ],
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -28,14 +30,19 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.dread557.stage3mobile"
+      "package": "com.dread557.stage3mobile",
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "scheme": "piranha event",
     "extra": {
-      
+      "eas": {
+        "projectId": "b75df17a-04ce-4801-86e3-a8484f4fb993"
+      }
     }
   }
 }

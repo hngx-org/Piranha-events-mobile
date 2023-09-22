@@ -22,7 +22,7 @@ const SignInWithGoogle = () => {
   // Warm up the android browser to improve UX
   useWarmUpBrowser();
   const { user } = useUser();
-
+  
   const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
 
   const onPress = React.useCallback(async () => {

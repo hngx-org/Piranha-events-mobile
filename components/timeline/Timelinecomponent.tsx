@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import { colors } from "../../utils/styles";
 import { EventContext, IEventProp } from "../../contexts/EventContext";
 import axios from "axios";
+import { useUser } from "@clerk/clerk-expo";
 
 interface CardInfo {
   title: string;
@@ -25,7 +26,10 @@ interface CardInfo {
 export default function Timelinecomponent({ navigation }: { navigation: any }) {
   const [activeText, setActiveText] = useState("Everyone");
   // const { eventState, eventDispatch } = useContext(EventContext) as IEventProp
+  const {user} = useUser();
 
+
+  console.log(32, user?.emailAddresses[0].id);
   const contextValue = useContext(EventContext);
   const { eventState, eventDispatch } =
     contextValue !== null
