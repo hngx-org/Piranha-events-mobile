@@ -1,5 +1,5 @@
 import { Surface, Text, Button } from "react-native-paper";
-import { StyleSheet, ImageBackground, View } from "react-native";
+import { StyleSheet, ImageBackground, View, ScrollView } from "react-native";
 import LargeTextBox from "../LargeTextBox";
 import { useState } from "react";
 import {
@@ -10,15 +10,17 @@ import { months } from "../../libs/dateHandler";
 import { Ionicons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import useEventContext from "../../hooks/useEventContext";
-// import Wrapper from "../components/Wrapper";
 
 // const background = require("../assets/images/background_image.jpg");
 // const otherBackground = require("../assets/settings/bgImage.png");
-export default function Event({navigation}: {navigation: any}) {
+export default function Event({ navigation }: { navigation: any }) {
   const context = useEventContext();
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   console.log(context?.eventState.events);
+  
   const startOnChange = (
     event: DateTimePickerEvent,
     selectedDate: Date | undefined
@@ -70,10 +72,8 @@ export default function Event({navigation}: {navigation: any}) {
   };
 
   const handleTimelineNavigation = () => {
-      
-    navigation.navigate('Timeline', {screen: "Home"});
-      
-  }
+    navigation.navigate("Timeline", { screen: "Home" });
+  };
 
   return (
     <Surface style={styles.container}>
@@ -82,136 +82,163 @@ export default function Event({navigation}: {navigation: any}) {
         resizeMode="cover"
         style={styles.backImage}
       >
-        {/* <View style={styles.overlay} /> */}
-
         <Surface style={styles.screenBar} elevation={0}>
-          <Entypo name="chevron-left" size={30} color="white" onPress={handleTimelineNavigation}/>
+          <Entypo
+            name="chevron-left"
+            size={30}
+            color="white"
+            onPress={handleTimelineNavigation}
+          />
           <Text variant="headlineMedium" style={styles.screenTitle}>
             Create Event
           </Text>
         </Surface>
-
-        <LargeTextBox
-          title="Description"
-          placeholder="Type event description here"
-          style={styles.textBox}
-        />
-
-        <Text style={[styles.title, styles.underlined]}>Time Duration</Text>
-
-        <Surface
-          style={[styles.rowContainer, styles.underlined, { height: 61 }]}
-          elevation={0}
+        <ScrollView
+          scrollEnabled={true}
+          contentContainerStyle={{
+            flexGrow: 1,
+            gap: 20,
+            paddingHorizontal: 10,
+            paddingTop: 40,
+            paddingBottom: 40,
+          }}
         >
-          <Text style={[styles.title, { flex: 1 }]}>Starts</Text>
-          <Surface style={[styles.rowContainer, { flex: 3, gap: 2 }]}>
-            <Button
-              icon="chevron-down"
-              onPress={showDatepicker1}
-              mode="contained"
-              style={styles.buttonStyle}
-              theme={{ roundness: 3 }}
-              contentStyle={{
-                flexDirection: "row-reverse",
-                alignItems: "center",
-              }}
-            >
-              {`${startDate.getUTCDate()} ${
-                months[startDate.getMonth()]
-              } ${startDate.getUTCFullYear()}`}
-              {/* <Ionicons name="chevron-down-sharp" size={24} color="white" /> */}
-            </Button>
-            <Button
-              icon="chevron-down"
-              onPress={showTimepicker1}
-              mode="contained"
-              style={styles.buttonStyle}
-              theme={{ roundness: 3 }}
-              contentStyle={{
-                flexDirection: "row-reverse",
-                alignItems: "center",
-              }}
-            >
-              {`${startDate.getUTCHours()}:${startDate.getUTCMinutes()}PM`}
-            </Button>
+          <LargeTextBox
+            value={title}
+            textBoxHeight={50}
+            title="Title"
+            placeholder="Type event title here"
+            style={styles.textBox}
+            onChangeText={setTitle}
+          />
+
+          <LargeTextBox
+            value={description}
+            textBoxHeight={114}
+            title="Description"
+            placeholder="Type event description here"
+            style={styles.textBox}
+            onChangeText={setDescription}
+          />
+
+          <Text style={[styles.title, styles.underlined]}>Time Duration</Text>
+
+          <Surface
+            style={[styles.rowContainer, styles.underlined, { height: 61 }]}
+            elevation={0}
+          >
+            <Text style={[styles.title, { flex: 1 }]}>Starts</Text>
+            <Surface style={[styles.rowContainer, { flex: 3, gap: 2 }]}>
+              <Button
+                icon="chevron-down"
+                onPress={showDatepicker1}
+                mode="contained"
+                style={styles.buttonStyle}
+                theme={{ roundness: 3 }}
+                contentStyle={{
+                  flexDirection: "row-reverse",
+                  alignItems: "center",
+                }}
+              >
+                {`${startDate.getUTCDate()} ${
+                  months[startDate.getMonth()]
+                } ${startDate.getUTCFullYear()}`}
+              </Button>
+              <Button
+                icon="chevron-down"
+                onPress={showTimepicker1}
+                mode="contained"
+                style={styles.buttonStyle}
+                theme={{ roundness: 3 }}
+                contentStyle={{
+                  flexDirection: "row-reverse",
+                  alignItems: "center",
+                }}
+              >
+                {`${startDate.getUTCHours()}:${startDate.getUTCMinutes()}PM`}
+              </Button>
+            </Surface>
           </Surface>
-        </Surface>
 
-        <Surface
-          style={[styles.rowContainer, styles.underlined, { height: 61 }]}
-          elevation={0}
-        >
-          <Text style={[styles.title, { flex: 1 }]}>Ends</Text>
-          <Surface style={[styles.rowContainer, { flex: 3, gap: 2 }]}>
-            <Button
-              icon="chevron-down"
-              onPress={showDatepicker2}
-              mode="contained"
-              style={styles.buttonStyle}
-              theme={{ roundness: 3 }}
-              contentStyle={{
-                flexDirection: "row-reverse",
-                alignItems: "center",
-              }}
-            >
-              {`${endDate.getUTCDate()} ${
-                months[endDate.getMonth()]
-              } ${endDate.getUTCFullYear()}`}
-            </Button>
-            <Button
-              icon="chevron-down"
-              onPress={showTimepicker2}
-              mode="contained"
-              style={styles.buttonStyle}
-              theme={{ roundness: 3 }}
-              contentStyle={{
-                flexDirection: "row-reverse",
-                alignItems: "center",
-              }}
-            >
-              {`${endDate.getUTCHours()}:${endDate.getUTCMinutes()}PM`}
-            </Button>
+          <Surface
+            style={[styles.rowContainer, styles.underlined, { height: 61 }]}
+            elevation={0}
+          >
+            <Text style={[styles.title, { flex: 1 }]}>Ends</Text>
+            <Surface style={[styles.rowContainer, { flex: 3, gap: 2 }]}>
+              <Button
+                icon="chevron-down"
+                onPress={showDatepicker2}
+                mode="contained"
+                style={styles.buttonStyle}
+                theme={{ roundness: 3 }}
+                contentStyle={{
+                  flexDirection: "row-reverse",
+                  alignItems: "center",
+                }}
+              >
+                {`${endDate.getUTCDate()} ${
+                  months[endDate.getMonth()]
+                } ${endDate.getUTCFullYear()}`}
+              </Button>
+              <Button
+                icon="chevron-down"
+                onPress={showTimepicker2}
+                mode="contained"
+                style={styles.buttonStyle}
+                theme={{ roundness: 3 }}
+                contentStyle={{
+                  flexDirection: "row-reverse",
+                  alignItems: "center",
+                }}
+              >
+                {`${endDate.getUTCHours()}:${endDate.getUTCMinutes()}PM`}
+              </Button>
+            </Surface>
           </Surface>
-        </Surface>
 
-        <Surface
-          style={[
-            styles.rowContainer,
-            { justifyContent: "flex-start", gap: 4 },
-          ]}
-          elevation={0}
-        >
-          <Text style={styles.title}>Location</Text>
-          <Ionicons name="location" size={24} color="#5C3EC8" />
-        </Surface>
+          <Surface
+            style={[
+              styles.rowContainer,
+              { justifyContent: "flex-start", gap: 4 },
+            ]}
+            elevation={0}
+          >
+            <Text style={styles.title}>Location</Text>
+            <Ionicons name="location" size={24} color="#5C3EC8" />
+          </Surface>
 
-        <Button
-          icon="chevron-right"
-          mode="contained"
-          style={[styles.buttonStyle, { width: 180, height: 60 }]}
-          theme={{ roundness: 3 }}
-          contentStyle={{ flexDirection: "row-reverse", alignItems: "center" }}
-        >
-          Choose on Map
-        </Button>
+          <Button
+            icon="chevron-right"
+            mode="contained"
+            style={[styles.buttonStyle, { width: 180, height: 60 }]}
+            theme={{ roundness: 3 }}
+            contentStyle={{
+              flexDirection: "row-reverse",
+              alignItems: "center",
+            }}
+          >
+            Choose on Map
+          </Button>
 
-        <Button
-          rippleColor="green"
-          mode="contained"
-          style={[
-            styles.buttonStyle,
-            {
-              height: 60,
-              backgroundColor: "#5C3EC8",
-              justifyContent: "center",
-              borderRadius: 5,
-              marginTop: 30,
-            },
-          ]}
-          theme={{ roundness: 0 }}
-        >
-          Create event
-        </Button>
+          <Button
+            rippleColor="green"
+            mode="contained"
+            style={[
+              styles.buttonStyle,
+              {
+                height: 50,
+                backgroundColor: "#5C3EC8",
+                justifyContent: "center",
+                borderRadius: 5,
+                marginTop: 30,
+              },
+            ]}
+            theme={{ roundness: 0 }}
+          >
+            Create event
+          </Button>
+        </ScrollView>
       </ImageBackground>
     </Surface>
   );
@@ -222,23 +249,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "black",
     opacity: 0.9,
-    // paddingTop: 40,
+    paddingTop: 40,
     // paddingHorizontal: 10,
     // gap: 20,
   },
 
   backImage: {
     flex: 1,
-    paddingTop: 40,
-    paddingHorizontal: 10,
-    gap: 20,
-  },
-
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "#0F0F0F",
-    opacity: 0.7,
-    pointerEvents: "none",
+    // paddingTop: 40,
+    // paddingHorizontal: 10,
+    // gap: 20,
   },
 
   screenTitle: {
@@ -284,5 +304,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
+    marginHorizontal: 10,
   },
 });

@@ -2,7 +2,7 @@ import { Dispatch, ReactNode, createContext, useReducer } from "react";
 
 //This type is subject to change
 export interface IEvent {
-  id: string;
+  id: number;
   title: string;
   description: string;
   startDate: Date;
@@ -20,10 +20,10 @@ export interface IEventProp {
 
 type EventAction =
   | { type: "ADD_NEW_EVENT"; payload: IEvent }
-  | { type: "REMOVE_EVENT"; payload: string };
+  | { type: "REMOVE_EVENT"; payload: number };
 
 const initialEventState: IEvent = {
-  id: "",
+  id: 0,
   title: "",
   description: "",
   startDate: new Date(),

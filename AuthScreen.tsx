@@ -14,7 +14,7 @@ export default function AuthScreen() {
 
   return (
     <NavigationContainer>
-      {userInfo ? (
+      {/* {userInfo ? ( */}
         <Stack.Navigator
           initialRouteName="Home"
           screenOptions={{ headerShown: false }}
@@ -23,14 +23,14 @@ export default function AuthScreen() {
           <Stack.Screen name="InsideGroup" component={InsideGroup} />
           <Stack.Screen name="AddNewGroup" component={AddNewGroup} />
         </Stack.Navigator>
-      ) : (
+      {/* ) : (
         <Stack.Navigator
           initialRouteName="SignIn"
           screenOptions={{ headerShown: false }}
         >
           <Stack.Screen name="SignIn" component={SignIn} />
         </Stack.Navigator>
-      )}
+      )} */}
     </NavigationContainer>
   );
 }
