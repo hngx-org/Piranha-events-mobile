@@ -2,16 +2,25 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Avatar } from "react-native-paper";
 import { colors } from "../../utils/styles";
+import { useUser } from "@clerk/clerk-expo";
 
 const ProfileHighlight = () => {
+  const { isLoaded, isSignedIn, user } = useUser();
+  if (!isLoaded || !isSignedIn) {
+    return null;
+  }
+  console.log("user here", user);
+
   return (
     <View style={styles.container}>
       <Avatar.Image
         size={116}
-        source={require("../../assets/settings/avatar.png")}
+        source={{
+          uri: user.imageUrl,
+        }}
       />
 
-      <Text style={styles.userName}>Victoria</Text>
+      <Text style={styles.userName}>{user.fullName}</Text>
     </View>
   );
 };
