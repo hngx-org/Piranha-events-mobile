@@ -1,4 +1,5 @@
-import { Dispatch, ReactNode, createContext, useReducer } from "react";
+import axios from "axios";
+import { Dispatch, ReactNode, createContext, useEffect, useReducer } from "react";
 
 //This type is subject to change
 export interface IEvent {
@@ -20,7 +21,8 @@ export interface IEventProp {
 
 type EventAction =
   | { type: "ADD_NEW_EVENT"; payload: IEvent }
-  | { type: "REMOVE_EVENT"; payload: number };
+  | { type: "REMOVE_EVENT"; payload: number }
+  | { type: "FETCH_ALL_EVENTS"; payload: IEvent[] };
 
 const initialEventState: IEvent = {
   id: 0,
@@ -36,6 +38,7 @@ const initialEventState: IEvent = {
 
 const initialState: IEventProp = {
   events: []
+
 };
 
 const eventReducer = (state: IEventProp, action: EventAction) => {
@@ -54,14 +57,22 @@ const eventReducer = (state: IEventProp, action: EventAction) => {
         ),
       };
 
+    case 'FETCH_ALL_EVENTS':
+      return {
+        ...state,
+        events: action.payload, // Replace existing events with fetched events
+      };
+
+
+
     default:
       return state;
   }
 };
 
 export const EventContext = createContext<{
-    eventState: IEventProp,
-    eventDispatch: Dispatch<EventAction>
+  eventState: IEventProp,
+  eventDispatch: Dispatch<EventAction>
 } | null>(null);
 
 export default function EventContextProvider({
@@ -70,7 +81,14 @@ export default function EventContextProvider({
   children: ReactNode;
 }) {
 
-  const [eventState, eventDispatch]  = useReducer(eventReducer, initialState);
+  const [eventState, eventDispatch] = useReducer(eventReducer, initialState);
 
-  return <EventContext.Provider value={{eventState, eventDispatch}}>{children}</EventContext.Provider>;
+  // Function to fetch all events from the API
+
+
+
+
+
+
+  return <EventContext.Provider value={{ eventState, eventDispatch }}>{children}</EventContext.Provider>;
 }
