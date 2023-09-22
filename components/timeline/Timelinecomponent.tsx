@@ -27,19 +27,24 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
   // const { eventState, eventDispatch } = useContext(EventContext) as IEventProp
 
   const contextValue = useContext(EventContext);
-  const { eventState, eventDispatch } = contextValue !== null ? contextValue : { eventState: null, eventDispatch: null };
+  const { eventState, eventDispatch } =
+    contextValue !== null
+      ? contextValue
+      : { eventState: null, eventDispatch: null };
 
   const fetchAllEventsFromAPI = async () => {
     try {
-      const response = await axios.get('https://team-piranha.onrender.com/api/events');
+      const response = await axios.get(
+        "https://team-piranha.onrender.com/api/events"
+      );
       const events = response.data; // Assuming your API returns event data as JSON
 
       console.log({ events });
 
-      eventDispatch({ type: 'FETCH_ALL_EVENTS', payload: events });
+      eventDispatch({ type: "FETCH_ALL_EVENTS", payload: events });
     } catch (error) {
       // Handle errors here
-      console.error('Error fetching all events:', error);
+      console.error("Error fetching all events:", error);
 
       throw error;
     }
@@ -49,9 +54,6 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
   useEffect(() => {
     fetchAllEventsFromAPI();
   }, []); // The empty dependency array ensures this effect runs once when the component mounts
-
-
-
 
   const cardData: CardInfo[] = [
     {
@@ -344,11 +346,8 @@ const styles = StyleSheet.create({
     flex: 1,
     // backgroundColor: "#0f0f0f",
     backgroundColor: colors.dark,
-
-
   },
   card: {
-
     backgroundColor: "#1B1B1B",
 
     borderRadius: 10,

@@ -19,6 +19,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { useUserContext } from "../../contexts/UserContext";
 import { Portal, Snackbar } from "react-native-paper";
+import { useAuth } from "@clerk/clerk-expo";
 
 interface IOption {
   title: string;
@@ -33,7 +34,7 @@ interface IOption {
 const SettingsOptions = () => {
   const navigation = useNavigation<any>();
 
-  const { handleSignOut } = useUserContext();
+  // const { handleSignOut } = useUserContext();
 
   const [visible, setVisible] = React.useState(false);
 
@@ -41,11 +42,11 @@ const SettingsOptions = () => {
 
   const onDismissSnackBar = () => setVisible(false);
 
-  const logoutHandler = async () => {
-    handleSignOut(() => {
-      navigation.replace("SignIn");
-    });
-  };
+  // const logoutHandler = async () => {
+  //   handleSignOut(() => {
+  //     navigation.replace("");
+  //   });
+  // };
 
   const settingsOptions: IOption[] = [
     {
@@ -143,6 +144,11 @@ const SettingsOptions = () => {
     },
   ];
 
+  const { isLoaded, signOut } = useAuth();
+  if (!isLoaded) {
+    return null;
+  }
+
   return (
     <View style={styles.container}>
       <SectionList
@@ -154,9 +160,7 @@ const SettingsOptions = () => {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.optionContainer}
-            onPress={() =>
-              item?.isLogout ? logoutHandler() : onShowSnackBar()
-            }
+            onPress={() => (item?.isLogout ? signOut() : onShowSnackBar())}
           >
             <View style={styles.optionContainerLeft}>
               {item.icon}

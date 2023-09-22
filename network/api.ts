@@ -26,7 +26,8 @@ export const endPoints = {
 
   groups: {
     getById: (groupId: string) => `/groups/${groupId}`,
-    addMember: (groupId: string, memberId: string) => `/groups/${groupId}/members/${memberId}`,
+    addMember: (groupId: string, memberId: string) =>
+      `/groups/${groupId}/members/${memberId}`,
     create: "/groups",
     getMembers: (groupId: string) => `/groups/${groupId}/members/`,
   },
@@ -43,6 +44,11 @@ export const endPoints = {
   users: {
     getUserById: (userId: string) => `/users/${userId}`,
     putUserById: (userId: string) => `/users/${userId}/update`,
-    addUserToEvent: (userId: string, eventId: string) => `/users/${userId}/interests/${eventId}`,
+    addUserToEvent: (userId: string, eventId: string) =>
+      `/users/${userId}/interests/${eventId}`,
+  },
+
+  auth: {
+    login: "",
   },
 };
