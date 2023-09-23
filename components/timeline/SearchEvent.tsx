@@ -36,6 +36,7 @@ export default function SearchEvent({
   navigation: any;
 }) {
   const [activeText, setActiveText] = useState("Everyone");
+  const [isSearching, setIsSearching] = useState(false);
 
   const [eventmain, setEventmain] = useState<CardInfo[] | null>(null);
   const [statusData, setstatusData] = useState("");
@@ -84,18 +85,26 @@ export default function SearchEvent({
     eventmain
   );
 
-  // const filterCardData = (query: string) => {
-  //   const filteredData = eventmain?.filter((item) =>
-  //     item.title.toLowerCase().includes(query.toLowerCase())
-  //   );
-  //   setFilteredCardData(filteredData);
-  // };
 
+
+
+  // const filterCardData = (query: string) => {
+  //   if (query.trim() === "") {
+  //     setFilteredCardData(eventmain);
+  //   } else {
+  //     const filteredData = eventmain?.filter((item) =>
+  //       item.title.toLowerCase().includes(query.toLowerCase())
+  //     );
+  //     setFilteredCardData(filteredData);
+  //   }
+  // };
 
   const filterCardData = (query: string) => {
     if (query.trim() === "") {
+      setIsSearching(false); // Not searching, show all items
       setFilteredCardData(eventmain);
     } else {
+      setIsSearching(true); // Searching, show filtered items
       const filteredData = eventmain?.filter((item) =>
         item.title.toLowerCase().includes(query.toLowerCase())
       );
@@ -283,7 +292,7 @@ export default function SearchEvent({
           />
         </View>
 
-
+        {/* 
         <View style={{ flex: 1, paddingHorizontal: "5%" }}>
           {filteredCardData && filteredCardData.length > 0 ? (
             <FlatList
@@ -303,17 +312,75 @@ export default function SearchEvent({
             >
               {statusData === "success" ? (
                 <View style={{ justifyContent: "center", alignItems: "center" }}>
-                  <MaterialCommunityIcons
-                    name="flask-empty-minus-outline"
-                    size={24}
-                    color="white"
-                  />
+
+                  <TouchableOpacity onPress={handleRefresh}>
+
+                    <MaterialCommunityIcons
+                      name="flask-empty-minus-outline"
+                      size={24}
+                      color="white"
+                    />
+
+                  </TouchableOpacity>
+
                   <Text style={{ color: "white" }}>No events found</Text>
                 </View>
               ) : (
                 <Text style={{ color: "white" }}>Loading</Text>
               )}
             </View>
+          )}
+        </View> */}
+
+        <View style={{ flex: 1, paddingHorizontal: "5%" }}>
+          {isSearching ? ( // Display filtered items when searching
+            filteredCardData && filteredCardData.length > 0 ? (
+              <FlatList
+                data={filteredCardData}
+                renderItem={renderItem}
+                keyExtractor={(item, index) => index.toString()}
+                showsVerticalScrollIndicator={false}
+                refreshControl={
+                  <RefreshControl refreshing={false} onRefresh={handleRefresh} />
+                }
+              />
+            ) : (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {statusData === "success" ? (
+                  <View
+                    style={{ justifyContent: "center", alignItems: "center" }}
+                  >
+                    <TouchableOpacity onPress={handleRefresh}>
+                      <MaterialCommunityIcons
+                        name="flask-empty-minus-outline"
+                        size={24}
+                        color="white"
+                      />
+                    </TouchableOpacity>
+                    <Text style={{ color: "white" }}>No events found click to refresh</Text>
+                  </View>
+                ) : (
+                  <Text style={{ color: "white" }}>Loading</Text>
+                )}
+              </View>
+            )
+          ) : (
+            // Display all items initially
+            <FlatList
+              data={eventmain}
+              renderItem={renderItem}
+              keyExtractor={(item, index) => index.toString()}
+              showsVerticalScrollIndicator={false}
+              refreshControl={
+                <RefreshControl refreshing={false} onRefresh={handleRefresh} />
+              }
+            />
           )}
         </View>
       </ImageBackground>
