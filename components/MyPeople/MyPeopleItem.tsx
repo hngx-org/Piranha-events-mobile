@@ -5,14 +5,24 @@ import { appColors } from "../../utils/globalStyles";
 import { useNavigation } from "@react-navigation/native";
 import { SERVER_URL } from "../timeline/Timelinecomponent";
 
-const MyPeopleItem = ({ group, index, id }: { group: any; index: number; id: string | number }) => {
+const MyPeopleItem = ({
+  group,
+  index,
+  id,
+  userAuth,
+}: {
+  group: any;
+  index: number;
+  id: string | number;
+  userAuth: any;
+}) => {
   const navigation = useNavigation();
 
   const imageUrl = `${SERVER_URL}${group.image}`;
 
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate("InsideGroup", { id })}
+      onPress={() => navigation.navigate("InsideGroup", { id: group.name, userAuth })}
       style={[styles.container, { marginRight: index % 2 === 0 ? "10%" : 0 }]}
     >
       <View style={styles.imageWrapper}>
@@ -36,7 +46,7 @@ const MyPeopleItem = ({ group, index, id }: { group: any; index: number; id: str
         </Text>
       ) : null}
       {group?.members_count ? (
-        <Text variant="bodySmall" style={[styles.info, {color: appColors.purple}]}>
+        <Text variant="bodySmall" style={[styles.info, { color: appColors.purple }]}>
           {group?.members_count} member(s)
         </Text>
       ) : null}

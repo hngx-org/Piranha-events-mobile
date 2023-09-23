@@ -5,26 +5,45 @@ import { appColors } from "../../utils/globalStyles";
 import { useNavigation } from "@react-navigation/native";
 import { appImages } from "../../assets";
 
-const InsideGroupItem = ({ group, index }: { group: any; index: number }) => {
+const InsideGroupItem = ({ event, index }: { event: any; index: number }) => {
   const navigation = useNavigation();
 
   const commenters = ["", ""];
 
+  const startTime = new Date(event?.start_time);
+  const endTime = new Date(event?.start_time);
+
+  console.log(event?.start_time);
+  console.log(startTime.getHours());
+
+  function format12Hour(hour) {
+    // Determine AM or PM
+    const ampm = hour >= 12 ? "PM" : "AM";
+
+    // Convert to 12-hour format
+    const hour12 = hour % 12 || 12;
+
+    return `${hour12} ${ampm}`;
+  }
+
   return (
     <View style={[styles.container, { marginRight: index % 2 === 0 ? "4%" : 0 }]}>
       <View style={styles.top}>
-        <Image
-          source={appImages.footBall}
-          style={{
-            width: 50,
-            height: 50,
-          }}
-          resizeMode="contain"
-        />
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Image
+            source={appImages.footBall}
+            style={{
+              width: 50,
+              height: 50,
+              marginRight: 20,
+            }}
+            resizeMode="contain"
+          />
 
-        <Text variant="bodySmall" style={{ fontWeight: "800", fontSize: 13, color: appColors.purple }}>
-          Football Game
-        </Text>
+          <Text variant="bodySmall" style={{ fontWeight: "800", fontSize: 13, color: appColors.purple }}>
+            {event?.title}
+          </Text>
+        </View>
 
         <Text
           variant="bodySmall"
@@ -64,8 +83,11 @@ const InsideGroupItem = ({ group, index }: { group: any; index: number }) => {
             }}
             resizeMode="contain"
           />
-          <Text variant="bodySmall" style={{ fontWeight: "800", fontSize: 13, color: appColors.white }}>
-            Teslim Balogun Stadium
+          <Text
+            variant="bodySmall"
+            style={{ fontWeight: "800", fontSize: 13, color: appColors.white, textTransform: "capitalize" }}
+          >
+            {event?.location}
           </Text>
         </View>
 
@@ -85,7 +107,7 @@ const InsideGroupItem = ({ group, index }: { group: any; index: number }) => {
             resizeMode="contain"
           />
           <Text variant="bodySmall" style={{ fontWeight: "800", fontSize: 13, color: appColors.white }}>
-            4 - 6 PM
+            {format12Hour(startTime.getHours())}
           </Text>
         </View>
       </View>

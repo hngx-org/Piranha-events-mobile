@@ -85,7 +85,7 @@ const AddNewGroup = () => {
       Authorization: `Bearer ${userInfo?.token}`,
     });
 
-    console.log(res?.result);
+    console.log(res?.result, userInfo?.token);
     setResponse(res);
   };
 
@@ -96,7 +96,7 @@ const AddNewGroup = () => {
     }
 
     if (response.isSuccess !== null && response.isSuccess) {
-      setToastObj({ message: "", type: "error", text1: "Group Created Successfully" });
+      setToastObj({ message: "", type: "success", text1: "Group Created Successfully" });
       setShowToast(true);
       setTimeout(() => {
         navigation.goBack();

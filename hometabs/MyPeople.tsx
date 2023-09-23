@@ -21,6 +21,8 @@ const MyPeople = () => {
   const user = useContext<UserContextProps | null>(UserContext);
   const userInfo = user?.userInfo;
 
+  console.log(userInfo?.id)
+
   const [refreshing, setRefreshing] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -50,6 +52,8 @@ const MyPeople = () => {
     const res = await getRequest(endPoints.groups.getForUser(userInfo?.id), {
       Authorization: `Bearer ${userInfo?.token}`,
     });
+
+    console.log(res?.result)
 
     setResponse(res);
   };
@@ -85,7 +89,7 @@ const MyPeople = () => {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         data={groups}
         numColumns={2}
-        renderItem={({ item, index }) => <MyPeopleItem key={item?.name} group={item} index={index} id={item.id} />}
+        renderItem={({ item, index }) => <MyPeopleItem key={item?.name} group={item} index={index} id={item?.id} userAuth={{id: userInfo?.id, token: userInfo?.token}} />}
         ListEmptyComponent={<EmptyList isLoading={isLoading} emptyMesage="No Group found" />}
       />
 

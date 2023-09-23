@@ -38,7 +38,9 @@ const UserContextProvider = ({ children }: UserContextProviderProps) => {
   };
 
   useEffect(() => {
-    GetUser();
+    if(!userInfo?.id){
+      GetUser();
+    }
   }, []);
 
   const value = { user, GetUser, userInfo };
