@@ -21,10 +21,9 @@ const getToken = async () => {
 export const axiosInstance = axios.create({
   baseURL: SERVER_URL,
   timeout: 2000,
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${getToken().then((data) => data)}`
-  },
+
+  headers: {"content-type": "application/json"},
+
 });
 
 
@@ -59,9 +58,10 @@ export const endPoints = {
 
   groups: {
     getById: (groupId: string) => `/groups/${groupId}`,
+    getForUser: (userId: string) => `/groups/${userId}`,
     addMember: (groupId: string, memberId: string) =>
       `/groups/${groupId}/members/${memberId}`,
-    create: "/groups",
+    create: "/group/",
     getMembers: (groupId: string) => `/groups/${groupId}/members/`,
   },
 

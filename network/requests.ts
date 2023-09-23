@@ -16,9 +16,8 @@ export const getRequest = async (endPoint: string) => {
 };
 
 
-
-
 export const postRequest = async (endPoint: string, payload: any, headers: any = globalHeaders) => {
+
   try {
     const result = await axiosInstance.post(endPoint, payload, { headers });
 
@@ -35,17 +34,6 @@ export const postRequest = async (endPoint: string, payload: any, headers: any =
     };
 
     return { result: extractError(error), isSuccess: false };
-  }
-};
-
-
-export const postRequestWithFiles = async (endPoint: string, payload: any) => {
-  try {
-    const result: any = await axiosInstance.post(endPoint, payload);
-
-    return { result, isSuccess: true };
-  } catch (error) {
-    return { result: error, isSuccess: false };
   }
 };
 
