@@ -1,17 +1,17 @@
 import axios from "axios";
 import { Dispatch, ReactNode, createContext, useEffect, useReducer } from "react";
+import { Event } from "react-native-calendars/src/timeline/EventBlock";
 
 //This type is subject to change
 export interface IEvent {
-  id: number;
+  id?: number;
   title: string;
   description: string;
-  startDate: Date;
-  startTime: string;
-  endDate: Date;
-  endTime: string;
+  start_time: string;
+  end_time: string;
   location: string;
-  group: string;
+  owner: number;
+  group: number;
   image?: string;
 }
 
@@ -24,17 +24,17 @@ type EventAction =
   | { type: "REMOVE_EVENT"; payload: number }
   | { type: "FETCH_ALL_EVENTS"; payload: IEvent[] };
 
-const initialEventState: IEvent = {
-  id: 0,
-  title: "",
-  description: "",
-  startDate: new Date(),
-  startTime: `${new Date().getUTCHours()} : ${new Date().getUTCMinutes()}`,
-  endDate: new Date(),
-  endTime: `${new Date().getUTCHours()} : ${new Date().getUTCMinutes()}`,
-  location: "",
-  group: "",
-};
+// const initialEventState: IEvent = {
+//   id: 0,
+//   title: "",
+//   description: "",
+//   start_time: new Date(),
+//   startTi: `${new Date().getUTCHours()} : ${new Date().getUTCMinutes()}`,
+//   endDate: new Date(),
+//   endTime: `${new Date().getUTCHours()} : ${new Date().getUTCMinutes()}`,
+//   location: "",
+//   group: "",
+// };
 
 const initialState: IEventProp = {
   events: []
@@ -69,6 +69,12 @@ const eventReducer = (state: IEventProp, action: EventAction) => {
       return state;
   }
 };
+
+export interface EventContextType {
+
+  eventState: IEventProp;
+  eventDispatch: Dispatch<EventAction>
+}
 
 export const EventContext = createContext<{
   eventState: IEventProp,

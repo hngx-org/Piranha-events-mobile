@@ -11,7 +11,7 @@ import {
 import { Entypo, AntDesign, EvilIcons, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { colors } from "../../utils/styles";
-import { EventContext, IEventProp } from "../../contexts/EventContext";
+import { EventContext, EventContextType, IEventProp } from "../../contexts/EventContext";
 import axios from "axios";
 import { postRequest } from "../../network/requests";
 import { endPoints } from "../../network/api";
@@ -30,12 +30,15 @@ interface CardInfo {
   time: string;
   location: string;
   timeInfo: string;
+  thumbnail: string;
 }
 
 export default function Timelinecomponent({ navigation }: { navigation: any }) {
   const [activeText, setActiveText] = useState("Everyone");
-  // const { eventState, eventDispatch } = useContext(EventContext) as IEventProp
+  const { eventState, eventDispatch } = useEventContext() as EventContextType;
   const { user } = useUser();
+
+  console.log(user?.id)
 
   const [eventmain, setEventmain] = useState(null)
 
@@ -46,17 +49,19 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
       email: user?.emailAddresses[0].emailAddress,
       pass_id: user?.id,
     });
+
+
     await AsyncStorage.setItem("token", res?.result?.data.data.token);
   };
 
   useEffect(() => {
     GetToken();
   }, []);
-  const contextValue = useEventContext() as any;
-  const { eventState, eventDispatch } =
-    contextValue !== null
-      ? contextValue
-      : { eventState: null, eventDispatch: null };
+  // const contextValue = useEventContext() as any;
+  // const { eventState, eventDispatch } =
+  //   contextValue !== null
+  //     ? contextValue
+  //     : { eventState: null, eventDispatch: null };
 
   const fetchAllEventsFromAPI = async () => {
     try {
@@ -68,7 +73,7 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
 
       setEventmain(events)
 
-      // eventDispatch({ type: "FETCH_ALL_EVENTS", payload: events });
+      eventDispatch({ type: "FETCH_ALL_EVENTS", payload: events });
     } catch (error) {
       // Handle errors here
 
@@ -81,23 +86,23 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
     fetchAllEventsFromAPI();
   }, []); // The empty dependency array ensures this effect runs once when the component mounts
 
+  console.log(eventState)
+
+  // const cardData: CardInfo[] = [
 
 
-  const cardData: CardInfo[] = [
 
+  //   {
+  //     title: "Birthday Party",
+  //     date: "July 10, 2023",
+  //     time: " 2 PM - 6 PM",
+  //     location: "123 Main Street",
+  //     timeInfo: " 2 months",
+  //   }
+  //   // Add more card objects as needed
+  // ];
 
-
-    {
-      title: "Birthday Party",
-      date: "July 10, 2023",
-      time: " 2 PM - 6 PM",
-      location: "123 Main Street",
-      timeInfo: " 2 months",
-    }
-    // Add more card objects as needed
-  ];
-
-  const renderItem = ({ item }: { item: CardInfo }) => {
+  const renderItem = ({ item }: { item: any }) => {
 
 
 
@@ -316,8 +321,10 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
         <View style={{ flex: 1 }}>
 
 
-          {eventmain && <FlatList
-            data={eventmain}
+          {eventState && <FlatList
+            data={eventState.events}
+            onRefresh={fetchAllEventsFromAPI}
+            refreshing={true}
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
             showsVerticalScrollIndicator={false}
