@@ -8,7 +8,10 @@ import { endPoints } from "../network/api";
 
 export interface UserContextProps {
   user: any | null;
-  userInfo: any | null
+
+  userInfo: any | null;
+
+  GetUser: () => any;
 }
 
 interface UserContextProviderProps {
@@ -37,13 +40,14 @@ const UserContextProvider = ({ children }: UserContextProviderProps) => {
     setUserInfo(res?.result?.data.data);
   };
 
-  useEffect(() => {
-    if(!userInfo?.id){
-      GetUser();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if(!userInfo?.id){
+  //     GetUser();
+  //   }
+  // }, []);
 
   const value = { user, GetUser, userInfo };
+  // const value = { user, GetUser };
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
 

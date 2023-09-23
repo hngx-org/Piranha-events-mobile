@@ -7,7 +7,7 @@ import {
   Image,
 } from "react-native";
 import LargeTextBox from "../LargeTextBox";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   DateTimePickerAndroid,
   DateTimePickerEvent,
@@ -21,6 +21,7 @@ import { endPoints } from "../../network/api";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { EventContextType } from "../../contexts/EventContext";
+import { UserContext, UserContextProps } from "../../contexts/UserContext";
 
 let token: any;
 
@@ -39,6 +40,8 @@ const getToken = async () => {
 // const background = require("../assets/images/background_image.jpg");
 // const otherBackground = require("../assets/settings/bgImage.png");
 export default function Event({ navigation }: { navigation: any }) {
+
+  const value = useContext(UserContext);
   const [image, setImage] = useState<any>(null);
   const [imageObj1, setImageObj1] = useState<any>(null);
   const {eventDispatch} = useEventContext() as EventContextType;
@@ -136,7 +139,7 @@ export default function Event({ navigation }: { navigation: any }) {
       location: map,
       start_time: startDate.toISOString(),
       end_time: endDate.toISOString(),
-      owner: 1,
+      owner: userInfo?.id,
       group: 1,
       thumbnail: imageObj1,
     });
@@ -161,18 +164,7 @@ export default function Event({ navigation }: { navigation: any }) {
     
   };
 
-  // const createFormData = (uri) => {
-  //   const fileName = uri.split('/').pop();
-  //   const fileType = fileName.split('.').pop();
-  //   const formData = new FormData();
-  //   formData.append('file', {
-  //     uri,
-  //     name: fileName,
-  //     type: `image/${fileType}`
-  //   });
-
-  //   return formData;
-  // }
+  
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -199,8 +191,25 @@ export default function Event({ navigation }: { navigation: any }) {
     }
   };
 
+
+  console.log(206, value?.user.emailAddresses[0].id);
+
   // console.log(image?.substring(104));
   console.log(184, imageObj1);
+
+
+  const {userInfo, GetUser} = useContext(UserContext) as UserContextProps;
+  
+
+  useEffect(() => {
+    if(!userInfo?.id){
+      GetUser();
+    }
+  }, []);
+
+
+  console.log(userInfo?.id);
+
 
   return (
     <Surface style={styles.container}>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Card, Surface, Text } from "react-native-paper";
 import {
   StyleSheet,
@@ -8,7 +8,7 @@ import {
   ImageBackground,
 } from "react-native";
 import { Entypo, AntDesign, EvilIcons, Ionicons } from "@expo/vector-icons";
-
+import { UserContext, UserContextProps } from "../contexts/UserContext";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Timelinecomponent from "../components/timeline/Timelinecomponent";
@@ -17,6 +17,19 @@ import Event from "../components/timeline/Event";
 
 const Stack = createNativeStackNavigator();
 export default function Timeline() {
+
+  const {userInfo, GetUser} = useContext(UserContext) as UserContextProps;
+  
+
+  useEffect(() => {
+    if(!userInfo?.id){
+      GetUser();
+    }
+  }, []);
+
+
+  console.log(userInfo?.id);
+
   return (
     <Stack.Navigator
       initialRouteName="Home"
