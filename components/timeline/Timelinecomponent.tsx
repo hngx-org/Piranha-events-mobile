@@ -10,12 +10,23 @@ import {
   TouchableOpacity,
   ImageBackground,
   ScrollView,
-  RefreshControl
+  RefreshControl,
 } from "react-native";
-import { Entypo, AntDesign, EvilIcons, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  Entypo,
+  AntDesign,
+  EvilIcons,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { colors } from "../../utils/styles";
-import { EventContext, EventContextType, IEventProp } from "../../contexts/EventContext";
+import {
+  EventContext,
+  EventContextType,
+  IEvent,
+  IEventProp,
+} from "../../contexts/EventContext";
 import axios from "axios";
 import { postRequest } from "../../network/requests";
 import { endPoints } from "../../network/api";
@@ -25,7 +36,6 @@ import useEventContext from "../../hooks/useEventContext";
 
 export const SERVER_URL = "https://team-piranha.onrender.com";
 // uri: 'https://team-piranha.onrender.com/images/heendeflogo.jpg'
-
 
 interface CardInfo {
   title: string;
@@ -39,18 +49,13 @@ interface CardInfo {
 export default function Timelinecomponent({ navigation }: { navigation: any }) {
   const [activeText, setActiveText] = useState("Everyone");
 
-  // const { eventState, eventDispatch } = useEventContext() as EventContextType;
   const { eventState, eventDispatch } = useEventContext() as EventContextType;
   const [refreshing, setRefreshing] = useState(false);
 
-  // const { eventState, eventDispatch } = useContext(EventContext) as IEventProp
   const { user } = useUser();
 
   const [eventmain, setEventmain] = useState<CardInfo[] | null>(null);
-  const [statusData, setstatusData] = useState("")
-
-
-
+  const [statusData, setstatusData] = useState("");
 
   const GetToken = async () => {
     const res = await postRequest(endPoints.auth.login, {
@@ -58,48 +63,12 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
       pass_id: user?.id,
     });
 
-
     await AsyncStorage.setItem("token", res?.result?.data.data.token);
   };
 
   useEffect(() => {
     GetToken();
   }, []);
-
-
-
-  // const fetchAllEventsFromAPI = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       "https://team-piranha.onrender.com/api/events"
-  //     );
-
-
-  //     const events = response.data?.data;
-  //     const status = response.data?.status; // Assuming your API returns event data as JSON
-  //     // Assuming your API returns event data as JSON
-  //     if (events) {
-  //       // Sort events by created_at in descending order
-  //       events.sort((a, b) => {
-  //         const dateA = new Date(a.created_at);
-  //         const dateB = new Date(b.created_at);
-  //         return dateB - dateA;
-  //       });
-
-  //       setEventmain(events);
-  //     }
-  //     setstatusData(status)
-
-
-
-  //     // eventDispatch({ type: "FETCH_ALL_EVENTS", payload: events });
-  //   } catch (error) {
-  //     // Handle errors here
-
-  //     throw error;
-  //   }
-  // };
-
 
   const fetchAllEventsFromAPI = async () => {
     try {
@@ -113,19 +82,16 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
 
       if (events) {
         // Sort events by created_at in descending order
-        events.sort((a, b) => {
-          const dateA = new Date(a.created_at);
-          const dateB = new Date(b.created_at);
+        events.sort((a: any, b: any) => {
+          const dateA: any = new Date(a.created_at);
+          const dateB: any = new Date(b.created_at);
           return dateB - dateA;
         });
 
-        setEventmain(events)
-
-
+        setEventmain(events);
       }
 
-      setstatusData(status)
-
+      setstatusData(status);
 
       eventDispatch({ type: "FETCH_ALL_EVENTS", payload: events });
     } catch (error) {
@@ -148,26 +114,9 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
     fetchAllEventsFromAPI();
   }, []); // The empty dependency array ensures this effect runs once when the component mounts
 
-  console.log(eventState)
+  console.log(eventState);
 
-  // const cardData: CardInfo[] = [
-
-
-
-  //   {
-  //     title: "Birthday Party",
-  //     date: "July 10, 2023",
-  //     time: " 2 PM - 6 PM",
-  //     location: "123 Main Street",
-  //     timeInfo: " 2 months",
-  //   }
-  //   // Add more card objects as needed
-  // ];
-
-
-  const renderItem = ({ item }: { item: any }) => {
-
-  function getEventStatus(start_time, end_time) {
+  function getEventStatus(start_time: string, end_time: string) {
     const currentTime = moment();
     const startTime = moment(start_time);
     const endTime = moment(end_time);
@@ -176,30 +125,17 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
       return "Live";
     } else if (currentTime.isBefore(startTime)) {
       const daysUntilStart = startTime.diff(currentTime, "days");
-      return `Starts in ${daysUntilStart} day${daysUntilStart === 1 ? "" : "s"}`;
+      return `Starts in ${daysUntilStart} day${
+        daysUntilStart === 1 ? "" : "s"
+      }`;
     } else if (currentTime.isAfter(endTime)) {
       return "Ended";
     } else {
       return "Upcoming";
     }
   }
-  const cardData: CardInfo[] = [
-
-
-    {
-      title: "Birthday Party",
-      date: "July 10, 2023",
-      time: " 2 PM - 6 PM",
-      location: "123 Main Street",
-      timeInfo: " 2 months",
-    }
-    // Add more card objects as needed
-  ];
 
   const renderItem = ({ item }: { item: any }) => {
-
-
-
     const startTime = moment(item.time).tz("Africa/Lagos");
     const endTime = moment(startTime).add(4, "hours"); // Assuming the event duration is 4 hours
 
@@ -220,12 +156,11 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
               marginBottom: 3,
               alignItems: "center",
               width: "80%",
-
             }}
           >
             <Image
               source={{
-                uri: `${SERVER_URL}${item?.thumbnail}`
+                uri: `${SERVER_URL}${item?.thumbnail}`,
               }}
               style={{ width: 84, height: 84, borderRadius: 50 }}
             />
@@ -239,7 +174,6 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
                 }}
                 numberOfLines={1}
               >
-
                 {item.title.charAt(0).toUpperCase() + item.title.slice(1)}
               </Text>
 
@@ -252,9 +186,7 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
                 }}
                 numberOfLines={1}
               >
-                {/* {item.location} */}
                 {item.location.charAt(0).toUpperCase() + item.location.slice(1)}
-
               </Text>
 
               <Text
@@ -266,8 +198,6 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
                 }}
                 numberOfLines={1}
               >
-                {/* {item.start_time} */}
-
                 {moment(item.start_time).format("MMMM DD, YYYY")}
               </Text>
 
@@ -288,7 +218,6 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
                   }}
                   numberOfLines={1}
                 >
-
                   {formattedTimeRange}
                 </Text>
               </View>
@@ -296,8 +225,6 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
           </View>
           <View style={{ gap: 65, alignItems: "flex-end", width: "20%" }}>
             <Entypo name="dots-three-horizontal" size={20} color="white" />
-
-
 
             {eventStatus === "Live" ? (
               <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -325,8 +252,8 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
           </View>
         </Card.Content>
       </Card>
-    )
-  }
+    );
+  };
 
   return (
     <Surface style={styles.container}>
@@ -380,10 +307,6 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
             </View>
           </View>
         </View>
-
-        {/* <ScrollView
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
-        > */}
 
         <View
           style={{
@@ -439,35 +362,6 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
           </View>
         </View>
 
-        {/* <View style={{ flex: 1 }}>
-            {eventmain && eventmain.length > 0 ? (
-              <FlatList
-                data={eventmain}
-                renderItem={renderItem}
-                keyExtractor={(item, index) => index.toString()}
-                showsVerticalScrollIndicator={false}
-              />
-            ) : (
-              <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                {statusData === "success" ? (
-                  <View style={{ justifyContent: "center", alignItems: "center" }}>
-                    <MaterialCommunityIcons
-                      name="flask-empty-minus-outline"
-                      size={24}
-                      color="white"
-                    />
-                    <Text style={{ color: "white" }}>No events found</Text>
-                  </View>
-                ) : (
-                  <Text style={{ color: "white" }}>Loading</Text>
-                )}
-              </View>
-            )}
-          </View> */}
-
-
-
-
         <View style={{ flex: 1 }}>
           {eventState.events && eventState.events.length > 0 ? (
             <FlatList
@@ -475,15 +369,29 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
               renderItem={renderItem}
               keyExtractor={(item, index) => index.toString()}
               showsVerticalScrollIndicator={false}
-              refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
-
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={handleRefresh}
+                />
+              }
             />
           ) : (
             <View
-              style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
             >
               {statusData === "success" ? (
-                <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
                   <MaterialCommunityIcons
                     name="flask-empty-minus-outline"
                     size={24}
@@ -497,12 +405,8 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
             </View>
           )}
         </View>
-
-
-        {/* </ScrollView> */}
-
       </ImageBackground>
-    </Surface >
+    </Surface>
   );
 }
 
