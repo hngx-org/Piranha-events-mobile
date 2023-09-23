@@ -21,6 +21,8 @@ import { Entypo, AntDesign, EvilIcons, Ionicons, MaterialCommunityIcons } from "
 
 import axios from "axios";
 import moment from "moment-timezone";
+import { EventContextType } from "../../contexts/EventContext";
+import useEventContext from "../../hooks/useEventContext";
 
 interface CardInfo {
   title: string;
@@ -36,6 +38,15 @@ export default function SearchEvent({
   navigation: any;
 }) {
   const [activeText, setActiveText] = useState("Everyone");
+
+  const { eventState, eventDispatch } = useEventContext() as EventContextType;
+
+  console.log({ www: eventState });
+
+  console.log("this is me ");
+
+
+
   const [isSearching, setIsSearching] = useState(false);
 
   const [eventmain, setEventmain] = useState<CardInfo[] | null>(null);
@@ -53,59 +64,28 @@ export default function SearchEvent({
     },
   ];
 
-  const fetchAllEventsFromAPI = async () => {
-    try {
-      const response = await axios.get(
-        "https://team-piranha.onrender.com/api/events"
-      );
 
-      console.log({ name: response.data });
 
-      const events = response.data?.data;
-      const status = response.data?.status;
 
-      setstatusData(status);
-      setEventmain(events);
-    } catch (error) {
-      console.error("Error fetching events: ", error);
-    }
-  };
-
-  const handleRefresh = () => {
-    fetchAllEventsFromAPI();
-  };
-
-  useEffect(() => {
-    fetchAllEventsFromAPI();
-  }, []);
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [filteredCardData, setFilteredCardData] = useState<CardInfo[] | null>(
-    eventmain
+  const [filteredCardData, setFilteredCardData] = useState<any | null>(
+    eventState?.events
   );
 
 
 
 
-  // const filterCardData = (query: string) => {
-  //   if (query.trim() === "") {
-  //     setFilteredCardData(eventmain);
-  //   } else {
-  //     const filteredData = eventmain?.filter((item) =>
-  //       item.title.toLowerCase().includes(query.toLowerCase())
-  //     );
-  //     setFilteredCardData(filteredData);
-  //   }
-  // };
+
 
   const filterCardData = (query: string) => {
     if (query.trim() === "") {
       setIsSearching(false); // Not searching, show all items
-      setFilteredCardData(eventmain);
+      setFilteredCardData(eventState?.events);
     } else {
       setIsSearching(true); // Searching, show filtered items
-      const filteredData = eventmain?.filter((item) =>
+      const filteredData = eventState?.events?.filter((item) =>
         item.title.toLowerCase().includes(query.toLowerCase())
       );
       setFilteredCardData(filteredData);
@@ -226,6 +206,59 @@ export default function SearchEvent({
     );
   };
 
+  const [refreshing, setRefreshing] = useState(false);
+
+
+
+  const fetchAllEventsFromAPI = async () => {
+    try {
+      const response = await axios.get(
+        "https://team-piranha.onrender.com/api/events"
+      );
+      const status = response.data?.status;
+      const events = response.data?.data; // Assuming your API returns event data as JSON
+
+      console.log({ events });
+
+      if (events) {
+        // Sort events by created_at in descending order
+        events.sort((a, b) => {
+          const dateA = new Date(a.created_at);
+          const dateB = new Date(b.created_at);
+          return dateB - dateA;
+        });
+
+        setEventmain(events)
+
+      }
+
+      setstatusData(status)
+
+      eventDispatch({ type: "FETCH_ALL_EVENTS", payload: events });
+    } catch (error) {
+      // Handle errors here
+
+      throw error;
+    }
+  };
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    fetchAllEventsFromAPI();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000); // Simulate a delay
+  };
+
+  // Use useEffect to fetch all events when the component mounts
+  useEffect(() => {
+    fetchAllEventsFromAPI();
+  }, []); // The empty dependency array ensures this effect runs once when the component mounts
+
+
+
+
+
   return (
     <Surface style={styles.container}>
       <ImageBackground
@@ -340,9 +373,9 @@ export default function SearchEvent({
                 renderItem={renderItem}
                 keyExtractor={(item, index) => index.toString()}
                 showsVerticalScrollIndicator={false}
-                refreshControl={
-                  <RefreshControl refreshing={false} onRefresh={handleRefresh} />
-                }
+              // refreshControl={
+              //   <RefreshControl refreshing={false} onRefresh={handleRefresh} />
+              // }
               />
             ) : (
               <View
@@ -373,13 +406,11 @@ export default function SearchEvent({
           ) : (
             // Display all items initially
             <FlatList
-              data={eventmain}
+              data={eventState?.events}
               renderItem={renderItem}
               keyExtractor={(item, index) => index.toString()}
               showsVerticalScrollIndicator={false}
-              refreshControl={
-                <RefreshControl refreshing={false} onRefresh={handleRefresh} />
-              }
+              refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
             />
           )}
         </View>

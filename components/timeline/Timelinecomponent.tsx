@@ -24,7 +24,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import useEventContext from "../../hooks/useEventContext";
 
 export const SERVER_URL = "https://team-piranha.onrender.com";
-// uri: 'https://team-piranha.onrender.com/images/heendeflogo.jpg'
 
 
 interface CardInfo {
@@ -37,11 +36,9 @@ interface CardInfo {
 
 export default function Timelinecomponent({ navigation }: { navigation: any }) {
   const [activeText, setActiveText] = useState("Everyone");
-  // const { eventState, eventDispatch } = useEventContext() as EventContextType;
   const { eventState, eventDispatch } = useEventContext() as EventContextType;
   const [refreshing, setRefreshing] = useState(false);
 
-  // const { eventState, eventDispatch } = useContext(EventContext) as IEventProp
   const { user } = useUser();
 
   const [eventmain, setEventmain] = useState<CardInfo[] | null>(null);
@@ -61,42 +58,6 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
     GetToken();
   }, []);
   const contextValue = useEventContext() as any;
-  // const { eventState, eventDispatch } =
-  //   contextValue !== null
-  //     ? contextValue
-  //     : { eventState: null, eventDispatch: null };
-
-  // const fetchAllEventsFromAPI = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       "https://team-piranha.onrender.com/api/events"
-  //     );
-
-
-  //     const events = response.data?.data;
-  //     const status = response.data?.status; // Assuming your API returns event data as JSON
-  //     // Assuming your API returns event data as JSON
-  //     if (events) {
-  //       // Sort events by created_at in descending order
-  //       events.sort((a, b) => {
-  //         const dateA = new Date(a.created_at);
-  //         const dateB = new Date(b.created_at);
-  //         return dateB - dateA;
-  //       });
-
-  //       setEventmain(events);
-  //     }
-  //     setstatusData(status)
-
-
-
-  //     // eventDispatch({ type: "FETCH_ALL_EVENTS", payload: events });
-  //   } catch (error) {
-  //     // Handle errors here
-
-  //     throw error;
-  //   }
-  // };
 
   const fetchAllEventsFromAPI = async () => {
     try {
@@ -138,10 +99,10 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
     }, 2000); // Simulate a delay
   };
 
-  // Use useEffect to fetch all events when the component mounts
   useEffect(() => {
     fetchAllEventsFromAPI();
-  }, []); // The empty dependency array ensures this effect runs once when the component mounts
+  }, []);
+
 
 
 
@@ -164,18 +125,7 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
       return "Upcoming";
     }
   }
-  const cardData: CardInfo[] = [
 
-
-    {
-      title: "Birthday Party",
-      date: "July 10, 2023",
-      time: " 2 PM - 6 PM",
-      location: "123 Main Street",
-      timeInfo: " 2 months",
-    }
-    // Add more card objects as needed
-  ];
 
   const renderItem = ({ item }: { item: any }) => {
 
@@ -488,7 +438,6 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: "13%",
     flex: 1,
-    // backgroundColor: "#0f0f0f",
     backgroundColor: colors.dark,
   },
   card: {
