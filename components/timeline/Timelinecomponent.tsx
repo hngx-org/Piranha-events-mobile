@@ -321,7 +321,7 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
         <View style={{ flex: 1 }}>
 
 
-          {eventState && <FlatList
+          {eventState.events && <FlatList
             data={eventState.events}
             onRefresh={fetchAllEventsFromAPI}
             refreshing={true}
