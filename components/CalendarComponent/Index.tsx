@@ -3,43 +3,27 @@ import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { Calendar } from "react-native-calendars";
 import moment from "moment";
 import { colors } from "../../utils/styles";
-import { getRequest } from "../../network/requests";
-import { endPoints } from "../../network/api";
-import { IEvent } from "../../contexts/EventContext";
+import { EventContextType } from "../../contexts/EventContext";
+import useEventContext from "../../hooks/useEventContext";
 
 const CalendarComponent: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string | null>(
     moment().format("YYYY-MM-DD")
   );
 
-  const [events, setEvents] = useState<IEvent[]>([]);
-
-  useEffect(() => {
-    const loadEvents = async () => {
-      try {
-        const response: any = await getRequest(endPoints.events.eventsList);
-        const fetchedEvents = response.result.data.data;
-        console.log("Fetched Events:", fetchedEvents);
-        setEvents(fetchedEvents);
-      } catch (error) {
-        console.error("Error fetching events:", error);
-      }
-    };
-
-    loadEvents();
-  }, []);
+  const { eventState, eventDispatch } = useEventContext() as EventContextType;
 
   const [markedDates, setMarkedDates] = useState<{
     [date: string]: { marked: boolean; dotColor?: string };
   }>({});
 
   useEffect(() => {
-    if (events && events.length > 0) {
+    if (eventState.events && eventState.events.length > 0) {
       const markedDate: {
         [date: string]: { marked: boolean; dotColor?: string };
       } = {};
 
-      events.forEach((event) => {
+      eventState.events.forEach((event) => {
         const eventDate = moment(event.start_time).format("YYYY-MM-DD");
         markedDate[eventDate] = {
           marked: true,
@@ -50,7 +34,7 @@ const CalendarComponent: React.FC = () => {
     } else {
       console.log("No Dates:", "none at all");
     }
-  }, [events]);
+  }, [eventState.events]);
 
   const onDayPress = (day: { dateString: string }) => {
     setSelectedDate(day.dateString);
@@ -61,7 +45,7 @@ const CalendarComponent: React.FC = () => {
     : "";
 
   const renderEventsForDate = () => {
-    if (!Array.isArray(events)) {
+    if (!Array.isArray(eventState.events)) {
       return (
         <View style={styles.eventDetails}>
           <Text style={styles.detailsTxt}>No events for this date.</Text>
@@ -69,7 +53,7 @@ const CalendarComponent: React.FC = () => {
       );
     }
 
-    const eventsForSelectedDate = events.filter(
+    const eventsForSelectedDate = eventState.events.filter(
       (event) => moment(event.start_time).format("YYYY-MM-DD") === selectedDate
     );
 

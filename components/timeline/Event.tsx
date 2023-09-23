@@ -41,7 +41,7 @@ const getToken = async () => {
 export default function Event({ navigation }: { navigation: any }) {
   const [image, setImage] = useState<any>(null);
   const [imageObj1, setImageObj1] = useState<any>(null);
-  const {eventDispatch} = useEventContext() as EventContextType;
+  const { eventDispatch } = useEventContext() as EventContextType;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [map, setMap] = useState("");
@@ -141,9 +141,10 @@ export default function Event({ navigation }: { navigation: any }) {
       thumbnail: imageObj1,
     });
 
-    if(res.isSuccess){
-       eventDispatch({type: "ADD_NEW_EVENT", payload: 
-        {
+    if (res.isSuccess) {
+      eventDispatch({
+        type: "ADD_NEW_EVENT",
+        payload: {
           title,
           description,
           location: map,
@@ -152,13 +153,12 @@ export default function Event({ navigation }: { navigation: any }) {
           owner: 1,
           group: 1,
           image: image,
-        }
-       })
-       handleTimelineNavigation();
+        },
+      });
+      handleTimelineNavigation();
     }
-    
+
     console.log(142, res.result, res.isSuccess);
-    
   };
 
   // const createFormData = (uri) => {
@@ -343,8 +343,6 @@ export default function Event({ navigation }: { navigation: any }) {
             <Text style={styles.title}>Location</Text>
             <Ionicons name="location" size={24} color="#5C3EC8" />
           </Surface>
-
-        
 
           <TextInput
             value={map}
