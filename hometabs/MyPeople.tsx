@@ -81,6 +81,7 @@ const MyPeople = () => {
     }
   }, [response?.isSuccess]);
 
+  
   return (
     <Wrapper propStyle={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 29 }}>
       <ScreenHeader title="My People" level={0} onPressTwo={() => navigation.navigate("AddNewGroup")} />

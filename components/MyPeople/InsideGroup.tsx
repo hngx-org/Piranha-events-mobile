@@ -54,7 +54,7 @@ const InsideGroup = ({ route }) => {
 
   return (
     <Wrapper propStyle={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 29 }}>
-      <ScreenHeader containerStyle={{ marginBottom: 30 }} title="My People" onPressOne={navigation.goBack} />
+      <ScreenHeader containerStyle={{ marginBottom: 30 }} title={groupName} onPressOne={navigation.goBack} />
 
       <FlatList
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}

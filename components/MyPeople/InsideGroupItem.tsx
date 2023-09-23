@@ -10,11 +10,19 @@ const InsideGroupItem = ({ event, index }: { event: any; index: number }) => {
 
   const commenters = ["", ""];
 
+  console.log(event)
+
   const startTime = new Date(event?.start_time);
   const endTime = new Date(event?.start_time);
 
-  console.log(event?.start_time);
-  console.log(startTime.getHours());
+
+  const formattedDateTime = startTime.toLocaleString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+
+  console.log(formattedDateTime)
 
   function format12Hour(hour) {
     // Determine AM or PM
@@ -58,7 +66,7 @@ const InsideGroupItem = ({ event, index }: { event: any; index: number }) => {
             borderColor: appColors.purple,
           }}
         >
-          May 20, 2023
+          {formattedDateTime}
         </Text>
       </View>
 
@@ -107,7 +115,9 @@ const InsideGroupItem = ({ event, index }: { event: any; index: number }) => {
             resizeMode="contain"
           />
           <Text variant="bodySmall" style={{ fontWeight: "800", fontSize: 13, color: appColors.white }}>
-            {format12Hour(startTime.getHours())}
+            {format12Hour(startTime.getHours()) === format12Hour(endTime.getHours())
+              ? format12Hour(startTime.getHours())
+              : `${format12Hour(startTime.getHours())} - ${format12Hour(endTime.getHours())}`}
           </Text>
         </View>
       </View>
