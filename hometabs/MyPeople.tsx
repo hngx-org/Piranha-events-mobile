@@ -21,7 +21,7 @@ const MyPeople = () => {
   const user = useContext<UserContextProps | null>(UserContext);
   const userInfo = user?.userInfo;
 
-  console.log(userInfo?.id)
+  console.log(userInfo,' -----')
 
   const [refreshing, setRefreshing] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);

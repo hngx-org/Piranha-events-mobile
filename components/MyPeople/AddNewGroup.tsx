@@ -23,6 +23,8 @@ const AddNewGroup = () => {
   const user = useContext<UserContextProps | null>(UserContext);
   const userInfo = user?.userInfo;
 
+  console.log(userInfo, '++++++++++=')
+
   const [response, setResponse] = useState<RequestResponse>({ result: null, isSuccess: null });
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastObj, setToastObj] = useState<{ message: string; type: string; text1: string }>({
@@ -39,7 +41,7 @@ const AddNewGroup = () => {
     user: userInfo?.id,
   });
 
-  const onHandleChange = (newValue: string, key: string) => {
+  const onHandleChange = (newValue: string | {name: string, uri: string, token: string, id: Number}, key: string) => {
     console.log(key);
     setNewGroupInfo((prev) => {
       return {
