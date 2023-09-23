@@ -22,7 +22,8 @@ export interface IEventProp {
 type EventAction =
   | { type: "ADD_NEW_EVENT"; payload: IEvent }
   | { type: "REMOVE_EVENT"; payload: number }
-  | { type: "FETCH_ALL_EVENTS"; payload: IEvent[] };
+  | { type: "FETCH_ALL_EVENTS"; payload: IEvent[] }
+
 
 // const initialEventState: IEvent = {
 //   id: 0,
@@ -62,8 +63,6 @@ const eventReducer = (state: IEventProp, action: EventAction) => {
         ...state,
         events: action.payload, // Replace existing events with fetched events
       };
-
-
 
     default:
       return state;
