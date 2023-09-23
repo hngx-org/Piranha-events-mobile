@@ -47,10 +47,11 @@ interface CardInfo {
 
 export default function Timelinecomponent({ navigation }: { navigation: any }) {
   const [activeText, setActiveText] = useState("Everyone");
-  const user = useContext<UserContextProps | null>(UserContext);
-  
+  const { eventState, eventDispatch } = useEventContext() as EventContextType;
   const [refreshing, setRefreshing] = useState(false);
-  
+
+  const { user } = useUser();
+
   const [eventmain, setEventmain] = useState<CardInfo[] | null>(null);
   const [statusData, setstatusData] = useState("");
 
@@ -65,9 +66,6 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
   useEffect(() => {
     GetToken();
   }, []);
-  const contextValue = useEventContext() as any;
-  const { eventState, eventDispatch } =
-    contextValue !== null ? contextValue : { eventState: null, eventDispatch: null };
 
   const fetchAllEventsFromAPI = async () => {
     try {
