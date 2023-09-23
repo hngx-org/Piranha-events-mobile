@@ -1,5 +1,5 @@
-import { Surface, Text, Button } from "react-native-paper";
-import { StyleSheet, ImageBackground, View, ScrollView } from "react-native";
+import { Surface, Text, Button, TextInput } from "react-native-paper";
+import { StyleSheet, ImageBackground, View, ScrollView, Image } from "react-native";
 import LargeTextBox from "../LargeTextBox";
 import { useState } from "react";
 import {
@@ -10,17 +10,42 @@ import { months } from "../../libs/dateHandler";
 import { Ionicons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import useEventContext from "../../hooks/useEventContext";
+import { postRequest } from "../../network/requests";
+import { endPoints } from "../../network/api";
+import * as ImagePicker from "expo-image-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+
+let token: any;
+
+
+const getToken = async () => {
+  try {
+    const value = await AsyncStorage.getItem('token');
+    if (value !== null) {
+      console.log(12, value);
+      return value.toString();
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+
 
 // const background = require("../assets/images/background_image.jpg");
 // const otherBackground = require("../assets/settings/bgImage.png");
 export default function Event({ navigation }: { navigation: any }) {
+  const [image, setImage] = useState<any>(null);
+  const [imageObj1, setImageObj1] = useState<any>(null);
   const context = useEventContext();
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [map, setMap] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   console.log(context?.eventState.events);
-  
+
   const startOnChange = (
     event: DateTimePickerEvent,
     selectedDate: Date | undefined
@@ -75,6 +100,77 @@ export default function Event({ navigation }: { navigation: any }) {
     navigation.navigate("Timeline", { screen: "Home" });
   };
 
+  const handleEventCreation = async () => {
+
+
+    
+    const res = await postRequest(endPoints.events.createEvent, {
+      title,
+      description,
+      location: map,
+      start_time: startDate.toISOString(),
+      end_time: endDate.toISOString(),
+      owner: 1,
+      group: 2,
+      thumbnail: imageObj1,
+    },  {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${getToken().then((data) => data)}`
+        
+    });
+
+    console.log({
+      title,
+      description,
+      location: map,
+      start_time: startDate.toISOString(),
+      end_time: endDate.toISOString(),
+      owner: 1,
+      group: 2,
+      thumbnail: imageObj1,
+    })
+
+    console.log(res.result, res.isSuccess);
+  };
+
+  // const createFormData = (uri) => {
+  //   const fileName = uri.split('/').pop();
+  //   const fileType = fileName.split('.').pop();
+  //   const formData = new FormData();
+  //   formData.append('file', { 
+  //     uri, 
+  //     name: fileName, 
+  //     type: `image/${fileType}` 
+  //   });
+    
+  //   return formData;
+  // }
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+      const imageObj = {
+        name: result?.assets[0]?.uri.split("/").pop(),
+        uri: result?.assets[0]?.uri,
+        type: `image/${name.split('.').pop()}`,
+      };
+      setImageObj1(imageObj)
+    }
+  };
+
+  console.log(image?.substring(104));
+  console.log(imageObj1);
+
   return (
     <Surface style={styles.container}>
       <ImageBackground
@@ -98,11 +194,20 @@ export default function Event({ navigation }: { navigation: any }) {
           contentContainerStyle={{
             flexGrow: 1,
             gap: 20,
-            paddingHorizontal: 10,
+            paddingHorizontal: 20,
             paddingTop: 40,
             paddingBottom: 40,
           }}
         >
+          <Button onPress={pickImage} icon="camera">
+               Pick Image
+            </Button>
+          {image && (
+            <Image
+              source={{ uri: image }}
+              style={{ width: 200, height: 200, alignSelf: 'center' }}
+            />
+          )}
           <LargeTextBox
             value={title}
             textBoxHeight={50}
@@ -208,7 +313,7 @@ export default function Event({ navigation }: { navigation: any }) {
             <Ionicons name="location" size={24} color="#5C3EC8" />
           </Surface>
 
-          <Button
+          {/* <Button
             icon="chevron-right"
             mode="contained"
             style={[styles.buttonStyle, { width: 180, height: 60 }]}
@@ -219,10 +324,18 @@ export default function Event({ navigation }: { navigation: any }) {
             }}
           >
             Choose on Map
-          </Button>
+          </Button> */}
+
+          <TextInput
+            value={map}
+            onChangeText={setMap}
+            placeholder="Add Map"
+            style={styles.mapTextInput}
+          />
 
           <Button
-            rippleColor="green"
+            onPress={handleEventCreation}
+            rippleColor="#5C3EF8"
             mode="contained"
             style={[
               styles.buttonStyle,
@@ -281,7 +394,7 @@ const styles = StyleSheet.create({
 
   underlined: {
     paddingBottom: 5,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.4,
     borderBottomColor: "white",
   },
 
@@ -305,5 +418,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     alignItems: "center",
     marginHorizontal: 10,
+  },
+
+  mapTextInput: {
+    height: 50,
+    backgroundColor: "#1B1B1B",
   },
 });
