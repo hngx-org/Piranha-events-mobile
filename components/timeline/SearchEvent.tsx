@@ -1,19 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { Button, Card, Surface, Text } from "react-native-paper";
 import {
-  StyleSheet,
+  ScrollView,
+  RefreshControl,
   View,
-  Image,
   FlatList,
+  ImageBackground,
   TouchableOpacity,
   TextInput,
-  ImageBackground,
+  StyleSheet,
+  Image
 } from "react-native";
+import {
+  Text,
+  Card,
+  Surface,
+} from "react-native-paper";
+
 import { Entypo, AntDesign, EvilIcons, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+
+
 import axios from "axios";
 import moment from "moment-timezone";
-
+import { EventContextType } from "../../contexts/EventContext";
+import useEventContext from "../../hooks/useEventContext";
 
 interface CardInfo {
   title: string;
@@ -21,98 +30,70 @@ interface CardInfo {
   time: string;
   location: string;
   timeInfo: string;
+  thumbnail: any
 }
 
-export default function SearchEvent({ navigation }: { navigation: any }) {
+export default function SearchEvent({
+  navigation,
+}: {
+  navigation: any;
+}) {
   const [activeText, setActiveText] = useState("Everyone");
 
-  const [eventmain, setEventmain] = useState<CardInfo[] | null>(null);
-  const [statusData, setstatusData] = useState("")
+  const { eventState, eventDispatch } = useEventContext() as EventContextType;
 
+  console.log({ www: eventState });
+
+  console.log("this is me ");
+
+
+
+  const [isSearching, setIsSearching] = useState(false);
+
+  const [eventmain, setEventmain] = useState<CardInfo[] | null>(null);
+  const [statusData, setstatusData] = useState("");
 
   const SERVER_URL = "https://team-piranha.onrender.com";
 
 
 
-  const cardData: CardInfo[] = [
 
-
-
-    {
-      title: "Birthday Party",
-      date: "July 10, 2023",
-      time: " 2 PM - 6 PM",
-      location: "123 Main Street",
-      timeInfo: " 2 months",
-    }
-
-
-  ];
-
-
-
-  const fetchAllEventsFromAPI = async () => {
-    try {
-      const response = await axios.get(
-        "https://team-piranha.onrender.com/api/events"
-      );
-
-
-      console.log({ name: response.data });
-
-      const events = response.data?.data;
-      const status = response.data?.status; // Assuming your API returns event data as JSON
-      // Assuming your API returns event data as JSON
-
-      setstatusData(status)
-      setEventmain(events)
-
-
-      // eventDispatch({ type: "FETCH_ALL_EVENTS", payload: events });
-    } catch (error) {
-      // Handle errors here
-
-      throw error;
-    }
-  };
-
-  // Use useEffect to fetch all events when the component mounts
-  useEffect(() => {
-    fetchAllEventsFromAPI();
-  }, []); // The empty dependency array ensures this effect runs once when the component mounts
 
 
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  // const [filteredCardData, setFilteredCardData] =
-  //   useState<CardInfo[]>(eventmain);
+  const [filteredCardData, setFilteredCardData] = useState<any | null>(
+    eventState?.events
+  );
 
-
-  const [filteredCardData, setFilteredCardData] = useState<CardInfo[] | null>(eventmain);
 
 
 
 
 
   const filterCardData = (query: string) => {
-    const filteredData = eventmain?.filter((item) =>
-      item.title.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredCardData(filteredData);
+    if (query.trim() === "") {
+      setIsSearching(false); // Not searching, show all items
+      setFilteredCardData(eventState?.events);
+    } else {
+      setIsSearching(true); // Searching, show filtered items
+      const filteredData = eventState?.events?.filter((item) =>
+        item.title.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredCardData(filteredData);
+    }
   };
-  const renderItem = ({ item }: { item: CardInfo }) => {
+  const renderItem = ({ item }: { item: any }) => {
+    const startTime = moment(item.time).tz("America/New_York");
+    const endTime = moment(startTime).add(4, "hours"); // Assuming the event duration is 4 hours
 
-    const startTime = moment(item.time).tz('America/New_York');
-    const endTime = moment(startTime).add(4, 'hours'); // Assuming the event duration is 4 hours
-
-    const formattedTimeRange = `${startTime.format('h A')} - ${endTime.format('h A')}`;
-
-
+    const formattedTimeRange = `${startTime.format("h A")} - ${endTime.format(
+      "h A"
+    )}`;
 
     return (
-
-      <Card style={styles.card} >
+      <Card style={styles.card}>
         <Card.Content style={{ position: "relative" }}>
           <View style={{ position: "absolute", right: 20, top: 10 }}>
             <Entypo name="dots-three-horizontal" size={20} color="white" />
@@ -127,11 +108,9 @@ export default function SearchEvent({ navigation }: { navigation: any }) {
             }}
           >
             <Image
-
               source={{
-                uri: `${SERVER_URL}${item?.thumbnail}`
+                uri: `${SERVER_URL}${item?.thumbnail}`,
               }}
-
               style={{ width: 84, height: 84, borderRadius: 50 }}
             />
             <View>
@@ -216,10 +195,61 @@ export default function SearchEvent({ navigation }: { navigation: any }) {
             </View>
           </View>
         </Card.Content>
-      </Card >
-    )
+      </Card>
+    );
+  };
 
-  }
+  const [refreshing, setRefreshing] = useState(false);
+
+
+
+  const fetchAllEventsFromAPI = async () => {
+    try {
+      const response = await axios.get(
+        "https://team-piranha.onrender.com/api/events"
+      );
+      const status = response.data?.status;
+      const events = response.data?.data; // Assuming your API returns event data as JSON
+
+      console.log({ events });
+
+      if (events) {
+        // Sort events by created_at in descending order
+        events.sort((a: any, b: any) => {
+          const dateA: any = new Date(a.created_at);
+          const dateB: any = new Date(b.created_at);
+          return dateB - dateA;
+        });
+
+        setEventmain(events)
+
+      }
+
+      setstatusData(status)
+
+      eventDispatch({ type: "FETCH_ALL_EVENTS", payload: events });
+    } catch (error) {
+      // Handle errors here
+
+      throw error;
+    }
+  };
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    fetchAllEventsFromAPI();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000); // Simulate a delay
+  };
+
+  // Use useEffect to fetch all events when the component mounts
+  useEffect(() => {
+    fetchAllEventsFromAPI();
+  }, []); // The empty dependency array ensures this effect runs once when the component mounts
+
+
+
 
 
   return (
@@ -245,7 +275,6 @@ export default function SearchEvent({ navigation }: { navigation: any }) {
               style={{
                 fontWeight: "700",
                 fontSize: 24,
-                paddingLeft: "5%",
                 color: "white",
               }}
             >
@@ -278,8 +307,6 @@ export default function SearchEvent({ navigation }: { navigation: any }) {
             <EvilIcons name="search" size={35} color="white" />
           </View>
 
-          {/* <TextInput style={{ color: "white", width: "80%", }} placeholder="Search" /> */}
-
           <TextInput
             style={{ color: "#B0B0B0", width: "80%" }}
             placeholder="Search"
@@ -291,16 +318,7 @@ export default function SearchEvent({ navigation }: { navigation: any }) {
           />
         </View>
 
-        {/* <View style={{ flex: 1, paddingHorizontal: "5%" }}>
-          <FlatList
-            data={filteredCardData}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => index.toString()}
-            showsVerticalScrollIndicator={false}
-          />
-        </View> */}
-
-
+        {/* 
         <View style={{ flex: 1, paddingHorizontal: "5%" }}>
           {filteredCardData && filteredCardData.length > 0 ? (
             <FlatList
@@ -308,22 +326,85 @@ export default function SearchEvent({ navigation }: { navigation: any }) {
               renderItem={renderItem}
               keyExtractor={(item, index) => index.toString()}
               showsVerticalScrollIndicator={false}
+
+              refreshControl={
+                <RefreshControl refreshing={false} onRefresh={handleRefresh} />
+              }
+
             />
           ) : (
-            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <View
+              style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+            >
               {statusData === "success" ? (
                 <View style={{ justifyContent: "center", alignItems: "center" }}>
-                  <MaterialCommunityIcons
-                    name="flask-empty-minus-outline"
-                    size={24}
-                    color="white"
-                  />
+
+                  <TouchableOpacity onPress={handleRefresh}>
+
+                    <MaterialCommunityIcons
+                      name="flask-empty-minus-outline"
+                      size={24}
+                      color="white"
+                    />
+
+                  </TouchableOpacity>
+
                   <Text style={{ color: "white" }}>No events found</Text>
                 </View>
               ) : (
                 <Text style={{ color: "white" }}>Loading</Text>
               )}
             </View>
+          )}
+        </View> */}
+
+        <View style={{ flex: 1, paddingHorizontal: "5%" }}>
+          {isSearching ? ( // Display filtered items when searching
+            filteredCardData && filteredCardData.length > 0 ? (
+              <FlatList
+                data={filteredCardData}
+                renderItem={renderItem}
+                keyExtractor={(item, index) => index.toString()}
+                showsVerticalScrollIndicator={false}
+              // refreshControl={
+              //   <RefreshControl refreshing={false} onRefresh={handleRefresh} />
+              // }
+              />
+            ) : (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {statusData === "success" ? (
+                  <View
+                    style={{ justifyContent: "center", alignItems: "center" }}
+                  >
+                    <TouchableOpacity onPress={handleRefresh}>
+                      <MaterialCommunityIcons
+                        name="flask-empty-minus-outline"
+                        size={24}
+                        color="white"
+                      />
+                    </TouchableOpacity>
+                    <Text style={{ color: "white" }}>No events found click to refresh</Text>
+                  </View>
+                ) : (
+                  <Text style={{ color: "white" }}>Loading</Text>
+                )}
+              </View>
+            )
+          ) : (
+            // Display all items initially
+            <FlatList
+              data={eventState?.events}
+              renderItem={renderItem}
+              keyExtractor={(item, index) => index.toString()}
+              showsVerticalScrollIndicator={false}
+              refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
+            />
           )}
         </View>
       </ImageBackground>
@@ -342,24 +423,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 10,
   },
-  activeButton: {
-    borderBottomColor: "#571FCD",
-    borderBottomWidth: 2,
-    color: "#33313E",
-  },
-  inactiveButton: {
-    color: "#84838B",
-  },
-  headerText: {
-    fontWeight: "700",
-    fontSize: 14,
-  },
-  borderLine: {
-    borderBottomWidth: 1,
-    borderBottomColor: "#E6DDF8",
-    marginBottom: 10,
-  },
-
   customIcon: {
     color: "red",
     fontWeight: "700",
