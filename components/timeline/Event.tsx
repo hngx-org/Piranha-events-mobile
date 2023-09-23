@@ -112,7 +112,7 @@ export default function Event({ navigation }: { navigation: any }) {
       end_time: endDate.toISOString(),
       owner: 1,
       group: 2,
-      thumbnail: `/images/${image?.substring(104)}`,
+      thumbnail: imageObj1,
     },  {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${getToken().then((data) => data)}`
@@ -127,11 +127,24 @@ export default function Event({ navigation }: { navigation: any }) {
       end_time: endDate.toISOString(),
       owner: 1,
       group: 2,
-      thumbnail:`/images/${image?.substring(104)}`,
+      thumbnail: imageObj1,
     })
 
     console.log(res.result, res.isSuccess);
   };
+
+  // const createFormData = (uri) => {
+  //   const fileName = uri.split('/').pop();
+  //   const fileType = fileName.split('.').pop();
+  //   const formData = new FormData();
+  //   formData.append('file', { 
+  //     uri, 
+  //     name: fileName, 
+  //     type: `image/${fileType}` 
+  //   });
+    
+  //   return formData;
+  // }
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -147,9 +160,9 @@ export default function Event({ navigation }: { navigation: any }) {
     if (!result.canceled) {
       setImage(result.assets[0].uri);
       const imageObj = {
-        name: result?.assets[0]?.uri.split("/")[image?.uri?.split("/").length - 1],
+        name: result?.assets[0]?.uri.split("/").pop(),
         uri: result?.assets[0]?.uri,
-        type: `${result?.assets[0]?.type}/jpeg`,
+        type: `image/${name.split('.').pop()}`,
       };
       setImageObj1(imageObj)
     }

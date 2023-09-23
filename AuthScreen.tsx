@@ -21,7 +21,7 @@ const Stack = createNativeStackNavigator<StackParamsList1>();
 export default function AuthScreen() {
   return (
     <NavigationContainer>
-      <SignedOut>
+      <SignedIn>
         <Stack.Navigator
           initialRouteName="Home"
           screenOptions={{ headerShown: false }}
@@ -30,15 +30,15 @@ export default function AuthScreen() {
           <Stack.Screen name="InsideGroup" component={InsideGroup} />
           <Stack.Screen name="AddNewGroup" component={AddNewGroup} />
         </Stack.Navigator>
-      </SignedOut>
-      <SignedIn>
+      </SignedIn>
+      <SignedOut>
         <Stack.Navigator
           initialRouteName="SignInWithGoogle"
           screenOptions={{ headerShown: false }}
         >
           <Stack.Screen name="SignInWithGoogle" component={SignInWithGoogle} />
         </Stack.Navigator>
-      </SignedIn>
+      </SignedOut>
     </NavigationContainer>
   );
 }
