@@ -9,7 +9,7 @@ import {
   TextInput,
   ImageBackground,
 } from "react-native";
-import { Entypo, AntDesign, EvilIcons, Ionicons } from "@expo/vector-icons";
+import { Entypo, AntDesign, EvilIcons, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import moment from "moment-timezone";
@@ -25,7 +25,9 @@ interface CardInfo {
 
 export default function SearchEvent({ navigation }: { navigation: any }) {
   const [activeText, setActiveText] = useState("Everyone");
-  const [eventmain, setEventmain] = useState(null)
+
+  const [eventmain, setEventmain] = useState<CardInfo[] | null>(null);
+  const [statusData, setstatusData] = useState("")
 
 
   const SERVER_URL = "https://team-piranha.onrender.com";
@@ -42,7 +44,7 @@ export default function SearchEvent({ navigation }: { navigation: any }) {
       time: " 2 PM - 6 PM",
       location: "123 Main Street",
       timeInfo: " 2 months",
-    },
+    }
 
 
   ];
@@ -54,10 +56,17 @@ export default function SearchEvent({ navigation }: { navigation: any }) {
       const response = await axios.get(
         "https://team-piranha.onrender.com/api/events"
       );
-      const events = response.data?.data; // Assuming your API returns event data as JSON
 
 
+      console.log({ name: response.data });
+
+      const events = response.data?.data;
+      const status = response.data?.status; // Assuming your API returns event data as JSON
+      // Assuming your API returns event data as JSON
+
+      setstatusData(status)
       setEventmain(events)
+
 
       // eventDispatch({ type: "FETCH_ALL_EVENTS", payload: events });
     } catch (error) {
@@ -76,11 +85,18 @@ export default function SearchEvent({ navigation }: { navigation: any }) {
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [filteredCardData, setFilteredCardData] =
-    useState<CardInfo[]>(eventmain);
+  // const [filteredCardData, setFilteredCardData] =
+  //   useState<CardInfo[]>(eventmain);
+
+
+  const [filteredCardData, setFilteredCardData] = useState<CardInfo[] | null>(eventmain);
+
+
+
+
 
   const filterCardData = (query: string) => {
-    const filteredData = eventmain.filter((item) =>
+    const filteredData = eventmain?.filter((item) =>
       item.title.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredCardData(filteredData);
@@ -275,13 +291,40 @@ export default function SearchEvent({ navigation }: { navigation: any }) {
           />
         </View>
 
-        <View style={{ flex: 1, paddingHorizontal: "5%" }}>
+        {/* <View style={{ flex: 1, paddingHorizontal: "5%" }}>
           <FlatList
             data={filteredCardData}
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
             showsVerticalScrollIndicator={false}
           />
+        </View> */}
+
+
+        <View style={{ flex: 1, paddingHorizontal: "5%" }}>
+          {filteredCardData && filteredCardData.length > 0 ? (
+            <FlatList
+              data={filteredCardData}
+              renderItem={renderItem}
+              keyExtractor={(item, index) => index.toString()}
+              showsVerticalScrollIndicator={false}
+            />
+          ) : (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+              {statusData === "success" ? (
+                <View style={{ justifyContent: "center", alignItems: "center" }}>
+                  <MaterialCommunityIcons
+                    name="flask-empty-minus-outline"
+                    size={24}
+                    color="white"
+                  />
+                  <Text style={{ color: "white" }}>No events found</Text>
+                </View>
+              ) : (
+                <Text style={{ color: "white" }}>Loading</Text>
+              )}
+            </View>
+          )}
         </View>
       </ImageBackground>
     </Surface>

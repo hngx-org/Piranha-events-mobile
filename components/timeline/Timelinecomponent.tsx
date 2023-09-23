@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
-import { Entypo, AntDesign, EvilIcons, Ionicons } from "@expo/vector-icons";
+import { Entypo, AntDesign, EvilIcons, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { colors } from "../../utils/styles";
 import { EventContext, IEventProp } from "../../contexts/EventContext";
@@ -37,8 +37,10 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
   // const { eventState, eventDispatch } = useContext(EventContext) as IEventProp
   const { user } = useUser();
 
-  const [eventmain, setEventmain] = useState(null)
+  const [eventmain, setEventmain] = useState<CardInfo[] | null>(null);
+  const [statusData, setstatusData] = useState("")
 
+  console.log({ eventmain });
 
 
   const GetToken = async () => {
@@ -63,9 +65,13 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
       const response = await axios.get(
         "https://team-piranha.onrender.com/api/events"
       );
-      const events = response.data?.data; // Assuming your API returns event data as JSON
 
 
+      const events = response.data?.data;
+      const status = response.data?.status; // Assuming your API returns event data as JSON
+      // Assuming your API returns event data as JSON
+
+      setstatusData(status)
       setEventmain(events)
 
       // eventDispatch({ type: "FETCH_ALL_EVENTS", payload: events });
@@ -314,23 +320,34 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
         </View>
 
         <View style={{ flex: 1 }}>
-
-
-          {eventmain && <FlatList
-            data={eventmain}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => index.toString()}
-            showsVerticalScrollIndicator={false}
-          />
-
-
-
-          }
-
-
+          {eventmain && eventmain.length > 0 ? (
+            <FlatList
+              data={eventmain}
+              renderItem={renderItem}
+              keyExtractor={(item, index) => index.toString()}
+              showsVerticalScrollIndicator={false}
+            />
+          ) : (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+              {statusData === "success" ? (
+                <View style={{ justifyContent: "center", alignItems: "center" }}>
+                  <MaterialCommunityIcons
+                    name="flask-empty-minus-outline"
+                    size={24}
+                    color="white"
+                  />
+                  <Text style={{ color: "white" }}>No events found</Text>
+                </View>
+              ) : (
+                <Text style={{ color: "white" }}>Loading</Text>
+              )}
+            </View>
+          )}
         </View>
+
+
       </ImageBackground>
-    </Surface>
+    </Surface >
   );
 }
 
