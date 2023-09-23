@@ -33,10 +33,12 @@ interface CardInfo {
   time: string;
   location: string;
   timeInfo: string;
+  thumbnail: string;
 }
 
 export default function Timelinecomponent({ navigation }: { navigation: any }) {
   const [activeText, setActiveText] = useState("Everyone");
+
   // const { eventState, eventDispatch } = useEventContext() as EventContextType;
   const { eventState, eventDispatch } = useEventContext() as EventContextType;
   const [refreshing, setRefreshing] = useState(false);
@@ -49,22 +51,22 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
 
 
 
+
   const GetToken = async () => {
     const res = await postRequest(endPoints.auth.login, {
       email: user?.emailAddresses[0].emailAddress,
       pass_id: user?.id,
     });
+
+
     await AsyncStorage.setItem("token", res?.result?.data.data.token);
   };
 
   useEffect(() => {
     GetToken();
   }, []);
-  const contextValue = useEventContext() as any;
-  // const { eventState, eventDispatch } =
-  //   contextValue !== null
-  //     ? contextValue
-  //     : { eventState: null, eventDispatch: null };
+
+
 
   // const fetchAllEventsFromAPI = async () => {
   //   try {
@@ -98,6 +100,7 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
   //   }
   // };
 
+
   const fetchAllEventsFromAPI = async () => {
     try {
       const response = await axios.get(
@@ -118,9 +121,11 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
 
         setEventmain(events)
 
+
       }
 
       setstatusData(status)
+
 
       eventDispatch({ type: "FETCH_ALL_EVENTS", payload: events });
     } catch (error) {
@@ -143,10 +148,24 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
     fetchAllEventsFromAPI();
   }, []); // The empty dependency array ensures this effect runs once when the component mounts
 
+  console.log(eventState)
+
+  // const cardData: CardInfo[] = [
 
 
 
+  //   {
+  //     title: "Birthday Party",
+  //     date: "July 10, 2023",
+  //     time: " 2 PM - 6 PM",
+  //     location: "123 Main Street",
+  //     timeInfo: " 2 months",
+  //   }
+  //   // Add more card objects as needed
+  // ];
 
+
+  const renderItem = ({ item }: { item: any }) => {
 
   function getEventStatus(start_time, end_time) {
     const currentTime = moment();
@@ -178,6 +197,7 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
   ];
 
   const renderItem = ({ item }: { item: any }) => {
+
 
 
     const startTime = moment(item.time).tz("Africa/Lagos");
@@ -444,6 +464,8 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
               </View>
             )}
           </View> */}
+
+
 
 
         <View style={{ flex: 1 }}>
