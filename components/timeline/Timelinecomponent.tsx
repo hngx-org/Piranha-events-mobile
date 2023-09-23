@@ -35,7 +35,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import useEventContext from "../../hooks/useEventContext";
 
 export const SERVER_URL = "https://team-piranha.onrender.com";
-// uri: 'https://team-piranha.onrender.com/images/heendeflogo.jpg'
 
 interface CardInfo {
   title: string;
@@ -43,12 +42,10 @@ interface CardInfo {
   time: string;
   location: string;
   timeInfo: string;
-  thumbnail: string;
 }
 
 export default function Timelinecomponent({ navigation }: { navigation: any }) {
   const [activeText, setActiveText] = useState("Everyone");
-
   const { eventState, eventDispatch } = useEventContext() as EventContextType;
   const [refreshing, setRefreshing] = useState(false);
 
@@ -62,7 +59,6 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
       email: user?.emailAddresses[0].emailAddress,
       pass_id: user?.id,
     });
-
     await AsyncStorage.setItem("token", res?.result?.data.data.token);
   };
 
@@ -109,7 +105,6 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
     }, 2000); // Simulate a delay
   };
 
-  // Use useEffect to fetch all events when the component mounts
   useEffect(() => {
     fetchAllEventsFromAPI();
   }, []); // The empty dependency array ensures this effect runs once when the component mounts
@@ -125,9 +120,8 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
       return "Live";
     } else if (currentTime.isBefore(startTime)) {
       const daysUntilStart = startTime.diff(currentTime, "days");
-      return `Starts in ${daysUntilStart} day${
-        daysUntilStart === 1 ? "" : "s"
-      }`;
+      return `Starts in ${daysUntilStart} day${daysUntilStart === 1 ? "" : "s"
+        }`;
     } else if (currentTime.isAfter(endTime)) {
       return "Ended";
     } else {
@@ -414,7 +408,6 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: "13%",
     flex: 1,
-    // backgroundColor: "#0f0f0f",
     backgroundColor: colors.dark,
   },
   card: {
