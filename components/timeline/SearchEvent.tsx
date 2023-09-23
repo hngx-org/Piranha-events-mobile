@@ -30,6 +30,7 @@ interface CardInfo {
   time: string;
   location: string;
   timeInfo: string;
+  thumbnail: any
 }
 
 export default function SearchEvent({
@@ -54,15 +55,7 @@ export default function SearchEvent({
 
   const SERVER_URL = "https://team-piranha.onrender.com";
 
-  const cardData: CardInfo[] = [
-    {
-      title: "Birthday Party",
-      date: "July 10, 2023",
-      time: " 2 PM - 6 PM",
-      location: "123 Main Street",
-      timeInfo: " 2 months",
-    },
-  ];
+
 
 
 
@@ -91,7 +84,7 @@ export default function SearchEvent({
       setFilteredCardData(filteredData);
     }
   };
-  const renderItem = ({ item }: { item: CardInfo }) => {
+  const renderItem = ({ item }: { item: any }) => {
     const startTime = moment(item.time).tz("America/New_York");
     const endTime = moment(startTime).add(4, "hours"); // Assuming the event duration is 4 hours
 
@@ -222,9 +215,9 @@ export default function SearchEvent({
 
       if (events) {
         // Sort events by created_at in descending order
-        events.sort((a, b) => {
-          const dateA = new Date(a.created_at);
-          const dateB = new Date(b.created_at);
+        events.sort((a: any, b: any) => {
+          const dateA: any = new Date(a.created_at);
+          const dateB: any = new Date(b.created_at);
           return dateB - dateA;
         });
 
