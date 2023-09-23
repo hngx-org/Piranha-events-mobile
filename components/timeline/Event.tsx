@@ -343,21 +343,12 @@ export default function Event({ navigation }: { navigation: any }) {
             <Ionicons name="location" size={24} color="#5C3EC8" />
           </Surface>
 
-          {/* <Button
-            icon="chevron-right"
-            mode="contained"
-            style={[styles.buttonStyle, { width: 180, height: 60 }]}
-            theme={{ roundness: 3 }}
-            contentStyle={{
-              flexDirection: "row-reverse",
-              alignItems: "center",
-            }}
-          >
-            Choose on Map
-          </Button> */}
+        
 
           <TextInput
             value={map}
+            textColor="white"
+            placeholderTextColor={"white"}
             onChangeText={setMap}
             placeholder="Add Map"
             style={styles.mapTextInput}
