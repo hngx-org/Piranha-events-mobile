@@ -5,7 +5,7 @@ let globalHeaders = {
 };
 
 
-export const getRequest = async (endPoint: string) => {
+export const getRequest = async (endPoint: string, headers: any = globalHeaders) => {
   try {
     const result = await axiosInstance.get(endPoint, { headers });
 

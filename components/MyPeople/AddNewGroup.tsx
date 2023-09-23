@@ -59,8 +59,10 @@ const AddNewGroup = () => {
     });
 
     if (!result.canceled) {
+      const uriSplit = result?.assets[0]?.uri.split("/");
+      console.log(uriSplit);
       const imageObj = {
-        name: result?.assets[0]?.uri.split("/")[newGroupInfo.image?.uri?.split("/").length - 1],
+        name: result?.assets[0]?.uri.split("/")[uriSplit.length - 1],
         uri: result?.assets[0]?.uri,
         type: `${result?.assets[0]?.type}/jpeg`,
       };
@@ -74,6 +76,9 @@ const AddNewGroup = () => {
     Object.keys(newGroupInfo).map((key) => {
       return formData.append(key, newGroupInfo[key as keyof typeof newGroupInfo]);
     });
+
+    console.log(newGroupInfo.image);
+    console.log(formData);
 
     const res = await postRequest(endPoints.groups.create, formData, {
       "content-type": "multipart/form-data",
@@ -93,7 +98,9 @@ const AddNewGroup = () => {
     if (response.isSuccess !== null && response.isSuccess) {
       setToastObj({ message: "", type: "error", text1: "Group Created Successfully" });
       setShowToast(true);
-      navigation.goBack()
+      setTimeout(() => {
+        navigation.goBack();
+      }, 2000);
     }
 
     if (response?.result !== null) {
@@ -177,7 +184,7 @@ const AddNewGroup = () => {
         </View>
 
         <Button mode="contained" onPress={() => onSendInvite()} style={styles.submitButton}>
-          Send Invitation
+          Send Invite
         </Button>
       </ScrollView>
 
