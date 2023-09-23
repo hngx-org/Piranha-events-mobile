@@ -4,6 +4,7 @@ let globalHeaders = {
   "content-type": "application/json",
 };
 
+
 export const getRequest = async (endPoint: string) => {
   try {
     const result = await axiosInstance.get(endPoint);
@@ -14,7 +15,9 @@ export const getRequest = async (endPoint: string) => {
   }
 };
 
+
 export const postRequest = async (endPoint: string, payload: any, headers: any = globalHeaders) => {
+
   try {
     const result = await axiosInstance.post(endPoint, payload, { headers });
 
