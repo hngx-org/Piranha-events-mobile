@@ -7,6 +7,8 @@ import {
   FlatList,
   TouchableOpacity,
   ImageBackground,
+  ScrollView,
+  RefreshControl
 } from "react-native";
 import { Entypo, AntDesign, EvilIcons, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -34,6 +36,9 @@ interface CardInfo {
 
 export default function Timelinecomponent({ navigation }: { navigation: any }) {
   const [activeText, setActiveText] = useState("Everyone");
+
+  const [refreshing, setRefreshing] = useState(false);
+
   // const { eventState, eventDispatch } = useContext(EventContext) as IEventProp
   const { user } = useUser();
 
@@ -74,12 +79,23 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
       setstatusData(status)
       setEventmain(events)
 
+      console.log({ name: response.data });
+
+
       // eventDispatch({ type: "FETCH_ALL_EVENTS", payload: events });
     } catch (error) {
       // Handle errors here
 
       throw error;
     }
+  };
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    fetchAllEventsFromAPI();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000); // Simulate a delay
   };
 
   // Use useEffect to fetch all events when the component mounts
@@ -265,6 +281,10 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
           </View>
         </View>
 
+        {/* <ScrollView
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
+        > */}
+
         <View
           style={{
             flexDirection: "row",
@@ -319,6 +339,33 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
           </View>
         </View>
 
+        {/* <View style={{ flex: 1 }}>
+            {eventmain && eventmain.length > 0 ? (
+              <FlatList
+                data={eventmain}
+                renderItem={renderItem}
+                keyExtractor={(item, index) => index.toString()}
+                showsVerticalScrollIndicator={false}
+              />
+            ) : (
+              <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                {statusData === "success" ? (
+                  <View style={{ justifyContent: "center", alignItems: "center" }}>
+                    <MaterialCommunityIcons
+                      name="flask-empty-minus-outline"
+                      size={24}
+                      color="white"
+                    />
+                    <Text style={{ color: "white" }}>No events found</Text>
+                  </View>
+                ) : (
+                  <Text style={{ color: "white" }}>Loading</Text>
+                )}
+              </View>
+            )}
+          </View> */}
+
+
         <View style={{ flex: 1 }}>
           {eventmain && eventmain.length > 0 ? (
             <FlatList
@@ -326,11 +373,15 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
               renderItem={renderItem}
               keyExtractor={(item, index) => index.toString()}
               showsVerticalScrollIndicator={false}
+              refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
+
             />
           ) : (
-            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <View
+              style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+            >
               {statusData === "success" ? (
-                <View style={{ justifyContent: "center", alignItems: "center" }}>
+                <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                   <MaterialCommunityIcons
                     name="flask-empty-minus-outline"
                     size={24}
@@ -345,6 +396,8 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
           )}
         </View>
 
+
+        {/* </ScrollView> */}
 
       </ImageBackground>
     </Surface >
