@@ -1,5 +1,11 @@
 import { Surface, Text, Button, TextInput } from "react-native-paper";
-import { StyleSheet, ImageBackground, View, ScrollView, Image } from "react-native";
+import {
+  StyleSheet,
+  ImageBackground,
+  View,
+  ScrollView,
+  Image,
+} from "react-native";
 import LargeTextBox from "../LargeTextBox";
 import { useState } from "react";
 import {
@@ -14,14 +20,13 @@ import { postRequest } from "../../network/requests";
 import { endPoints } from "../../network/api";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { EventContextType } from "../../contexts/EventContext";
 
 let token: any;
 
-
 const getToken = async () => {
   try {
-    const value = await AsyncStorage.getItem('token');
+    const value = await AsyncStorage.getItem("token");
     if (value !== null) {
       console.log(12, value);
       return value.toString();
@@ -31,20 +36,18 @@ const getToken = async () => {
   }
 };
 
-
-
 // const background = require("../assets/images/background_image.jpg");
 // const otherBackground = require("../assets/settings/bgImage.png");
 export default function Event({ navigation }: { navigation: any }) {
   const [image, setImage] = useState<any>(null);
   const [imageObj1, setImageObj1] = useState<any>(null);
-  const context = useEventContext();
+  const {eventDispatch} = useEventContext() as EventContextType;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [map, setMap] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  console.log(context?.eventState.events);
+  // console.log(context?.eventState.events);
 
   const startOnChange = (
     event: DateTimePickerEvent,
@@ -101,22 +104,29 @@ export default function Event({ navigation }: { navigation: any }) {
   };
 
   const handleEventCreation = async () => {
+    const formData = new FormData();
 
-
-    
-    const res = await postRequest(endPoints.events.createEvent, {
+    const requiredInfo = {
       title,
       description,
       location: map,
       start_time: startDate.toISOString(),
       end_time: endDate.toISOString(),
       owner: 1,
-      group: 2,
+      group: 1,
       thumbnail: imageObj1,
-    },  {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${getToken().then((data) => data)}`
-        
+    };
+
+    Object.keys(requiredInfo).map((key) => {
+      return formData.append(
+        key,
+        requiredInfo[key as keyof typeof requiredInfo]
+      );
+    });
+
+    const res = await postRequest(endPoints.events.createEvent, formData, {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${getToken().then((data) => data)}`,
     });
 
     console.log({
@@ -126,23 +136,40 @@ export default function Event({ navigation }: { navigation: any }) {
       start_time: startDate.toISOString(),
       end_time: endDate.toISOString(),
       owner: 1,
-      group: 2,
+      group: 1,
       thumbnail: imageObj1,
-    })
+    });
 
-    console.log(res.result, res.isSuccess);
+    if(res.isSuccess){
+       eventDispatch({type: "ADD_NEW_EVENT", payload: 
+        {
+          title,
+          description,
+          location: map,
+          start_time: startDate.toISOString(),
+          end_time: endDate.toISOString(),
+          owner: 1,
+          group: 1,
+          image: image,
+        }
+       })
+       handleTimelineNavigation();
+    }
+    
+    console.log(142, res.result, res.isSuccess);
+    
   };
 
   // const createFormData = (uri) => {
   //   const fileName = uri.split('/').pop();
   //   const fileType = fileName.split('.').pop();
   //   const formData = new FormData();
-  //   formData.append('file', { 
-  //     uri, 
-  //     name: fileName, 
-  //     type: `image/${fileType}` 
+  //   formData.append('file', {
+  //     uri,
+  //     name: fileName,
+  //     type: `image/${fileType}`
   //   });
-    
+
   //   return formData;
   // }
 
@@ -159,17 +186,20 @@ export default function Event({ navigation }: { navigation: any }) {
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
-      const imageObj = {
-        name: result?.assets[0]?.uri.split("/").pop(),
-        uri: result?.assets[0]?.uri,
-        type: `image/${name.split('.').pop()}`,
-      };
-      setImageObj1(imageObj)
+
+      const fileName = result?.assets[0]?.uri.split("/").pop();
+      // uri: result?.assets[0]?.uri,
+      const fileType = fileName?.split(".").pop();
+      setImageObj1({
+        uri: result?.assets[0].uri,
+        name: fileName,
+        type: `image/${fileType}`,
+      });
     }
   };
 
-  console.log(image?.substring(104));
-  console.log(imageObj1);
+  // console.log(image?.substring(104));
+  console.log(184, imageObj1);
 
   return (
     <Surface style={styles.container}>
@@ -200,12 +230,12 @@ export default function Event({ navigation }: { navigation: any }) {
           }}
         >
           <Button onPress={pickImage} icon="camera">
-               Pick Image
-            </Button>
+            Pick Image
+          </Button>
           {image && (
             <Image
               source={{ uri: image }}
-              style={{ width: 200, height: 200, alignSelf: 'center' }}
+              style={{ width: 200, height: 200, alignSelf: "center" }}
             />
           )}
           <LargeTextBox
