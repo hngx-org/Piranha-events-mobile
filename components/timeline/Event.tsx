@@ -47,6 +47,7 @@ export default function Event({ navigation }: { navigation: any }) {
   const [map, setMap] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [loading, setLoading] = useState(false);
   // console.log(context?.eventState.events);
 
   const startOnChange = (
