@@ -184,7 +184,7 @@ const AddNewGroup = () => {
         </View>
 
         <Button mode="contained" onPress={() => onSendInvite()} style={styles.submitButton}>
-          Send Invite
+          Create group
         </Button>
       </ScrollView>
 
@@ -192,6 +192,7 @@ const AddNewGroup = () => {
     </Wrapper>
   );
 };
+
 
 export default AddNewGroup;
 
