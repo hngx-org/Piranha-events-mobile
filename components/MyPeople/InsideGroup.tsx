@@ -14,6 +14,8 @@ const InsideGroup = ({ route }) => {
   const groupName = route?.params?.id;
   const userInfo = route?.params?.userAuth;
 
+  console.log(userInfo)
+
   const [events, setEvents] = useState([]);
   const [isLoadingEvents, setIsLoadingEvents] = useState<boolean>(false);
 
@@ -24,17 +26,20 @@ const InsideGroup = ({ route }) => {
   const getEvents = async () => {
     setIsLoadingEvents(true);
 
-    const res = await getRequest(endPoints.events.eventsList, { Authorization: `Bearer ${userInfo?.token}` });
+    console.log(endPoints.groups.groupEvent(groupName))
+    const res = await getRequest(endPoints.groups.groupEvent(groupName), { Authorization: `Bearer ${userInfo?.token}` });
 
     if (res.isSuccess) {
       console.log("success");
       setIsLoadingEvents(false);
-      setEvents(res?.result?.data?.data);
+      // setEvents(res?.result?.data?.data);
       // console.log(res?.result?.data?.data)
     }
 
     if (!res.isSuccess) {
       setIsLoadingEvents(false);
+      // console.log(res?.result?.response, Object.keys(res?.result))
+      console.log('failure')
     }
   };
 

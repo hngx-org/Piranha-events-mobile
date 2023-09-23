@@ -18,6 +18,8 @@ const MyPeopleItem = ({
 }) => {
   const navigation = useNavigation();
 
+  console.log(group)
+
   const imageUrl = `${SERVER_URL}${group.image}`;
 
   return (

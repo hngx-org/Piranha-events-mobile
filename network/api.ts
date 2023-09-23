@@ -62,6 +62,7 @@ export const endPoints = {
     addMember: (groupId: string, memberId: string) =>
       `/groups/${groupId}/members/${memberId}/`,
     create: "/group/",
+    groupEvent: (groupId: string) => `/group/${groupId}/events/`,
     getMembers: (groupId: string) => `/groups/${groupId}/members/`,
   },
 
