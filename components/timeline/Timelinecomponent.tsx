@@ -33,6 +33,7 @@ import { endPoints } from "../../network/api";
 import { useUser } from "@clerk/clerk-expo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useEventContext from "../../hooks/useEventContext";
+import { UserContext, UserContextProps } from "../../contexts/UserContext";
 
 export const SERVER_URL = "https://team-piranha.onrender.com";
 
@@ -337,8 +338,7 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
                 {
                   borderColor: "#9d7ae8",
 
-                  backgroundColor:
-                    activeText === "Everyone" ? "#9d7ae8" : "transparent", // Set background color based on activeText
+                  backgroundColor: activeText === "Everyone" ? "#9d7ae8" : "transparent", // Set background color based on activeText
                 },
               ]}
               labelStyle={{ color: "#FFFFFF" }} // Set text color based on activeText
@@ -352,8 +352,7 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
               style={[
                 {
                   borderColor: "#9d7ae8",
-                  backgroundColor:
-                    activeText === "Friends" ? "#9d7ae8" : "transparent", // Set background color based on activeText
+                  backgroundColor: activeText === "Friends" ? "#9d7ae8" : "transparent", // Set background color based on activeText
                 },
               ]}
               labelStyle={{ color: "#FFFFFF" }} // Set text color based on activeText
@@ -362,9 +361,7 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
             </Button>
           </View>
           <View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("CreateEvent")}
-            >
+            <TouchableOpacity onPress={() => navigation.navigate("CreateEvent")}>
               <AntDesign name="pluscircle" size={40} color="#9d7ae8" />
             </TouchableOpacity>
           </View>

@@ -42,8 +42,8 @@ export const axiosInstance = axios.create({
 
 export const endPoints = {
   comments: {
-    createCommentImage: (commentId: string) => `/comments/${commentId}/images`,
-    likeComment: (commentId: string) => `/comments/${commentId}/likes`,
+    createCommentImage: (commentId: string) => `/comments/${commentId}/images/`,
+    likeComment: (commentId: string) => `/comments/${commentId}/likes/`,
   },
 
   events: {
@@ -57,28 +57,29 @@ export const endPoints = {
   },
 
   groups: {
-    getById: (groupId: string) => `/groups/${groupId}`,
-    getForUser: (userId: string) => `/groups/${userId}`,
+    getById: (groupId: string) => `/groups/${groupId}/`,
+    getForUser: (userId: number) => `/group/user/${userId}/`,
     addMember: (groupId: string, memberId: string) =>
-      `/groups/${groupId}/members/${memberId}`,
+      `/groups/${groupId}/members/${memberId}/`,
     create: "/group/",
+    groupEvent: (groupId: string) => `/group/${groupId}/events/`,
     getMembers: (groupId: string) => `/groups/${groupId}/members/`,
   },
 
   images: {
-    getImages: "/images",
-    createImage: "/images",
-    getImageById: (imageId: string) => `/images/${imageId}`,
-    putImage: (imageId: string) => `/images/${imageId}`,
-    patchImage: (imageId: string) => `/images/${imageId}`,
-    deleteImage: (imageId: string) => `/images/${imageId}`,
+    getImages: "/images/",
+    createImage: "/images/",
+    getImageById: (imageId: string) => `/images/${imageId}/`,
+    putImage: (imageId: string) => `/images/${imageId}/`,
+    patchImage: (imageId: string) => `/images/${imageId}/`,
+    deleteImage: (imageId: string) => `/images/${imageId}/`,
   },
 
   users: {
-    getUserById: (userId: string) => `/users/${userId}`,
+    getUserById: (userId: string) => `/users/${userId}/`,
     putUserById: (userId: string) => `/users/${userId}/update`,
     addUserToEvent: (userId: string, eventId: string) =>
-      `/users/${userId}/interests/${eventId}`,
+      `/users/${userId}/interests/${eventId}/`,
   },
 
   auth: {
