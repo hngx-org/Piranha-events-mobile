@@ -11,8 +11,9 @@ import EmptyList from "./EmptyList";
 
 const InsideGroup = ({ route }) => {
   const navigation = useNavigation();
-  const groupName = route?.params?.id;
+  const groupId = route?.params?.id;
   const userInfo = route?.params?.userAuth;
+  const groupName = route?.params?.name;
 
   console.log(userInfo)
 
@@ -26,8 +27,8 @@ const InsideGroup = ({ route }) => {
   const getEvents = async () => {
     setIsLoadingEvents(true);
 
-    console.log(endPoints.groups.groupEvent(groupName))
-    const res = await getRequest(endPoints.groups.groupEvent(groupName), { Authorization: `Bearer ${userInfo?.token}` });
+    console.log(29, endPoints.groups.groupEvent(groupId))
+    const res = await getRequest(endPoints.groups.groupEvent(groupId), { Authorization: `Bearer ${userInfo?.token}` });
 
     if (res.isSuccess) {
       console.log("success");
@@ -39,13 +40,15 @@ const InsideGroup = ({ route }) => {
     if (!res.isSuccess) {
       setIsLoadingEvents(false);
       // console.log(res?.result?.response, Object.keys(res?.result))
-      console.log('failure')
+      console.log(42, 'failure')
     }
+
+    console.log(res);
   };
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    getGroups();
+    // getGroups();
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
@@ -56,6 +59,8 @@ const InsideGroup = ({ route }) => {
       getEvents();
     }
   }, [events?.length]);
+
+  console.log(60, events);
 
   return (
     <Wrapper propStyle={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 29 }}>

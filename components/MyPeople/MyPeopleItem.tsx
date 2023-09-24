@@ -18,13 +18,13 @@ const MyPeopleItem = ({
 }) => {
   const navigation = useNavigation();
 
-  console.log(group)
+  console.log(21, group)
 
   const imageUrl = `${SERVER_URL}${group.image}`;
 
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate("InsideGroup", { id: group.name, userAuth })}
+      onPress={() => navigation.navigate("InsideGroup", { id: group?.id, name: group?.name, userAuth })}
       style={[styles.container, { marginRight: index % 2 === 0 ? "10%" : 0 }]}
     >
       <View style={styles.imageWrapper}>
