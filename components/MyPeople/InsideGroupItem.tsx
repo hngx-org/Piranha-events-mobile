@@ -10,19 +10,14 @@ const InsideGroupItem = ({ event, index }: { event: any; index: number }) => {
 
   const commenters = ["", ""];
 
-  console.log(event)
-
   const startTime = new Date(event?.start_time);
   const endTime = new Date(event?.start_time);
 
-
-  const formattedDateTime = startTime.toLocaleString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
+  const formattedDateTime = startTime.toLocaleString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
   });
-
-  console.log(formattedDateTime)
 
   function format12Hour(hour) {
     // Determine AM or PM
@@ -144,7 +139,8 @@ const InsideGroupItem = ({ event, index }: { event: any; index: number }) => {
         }}
       />
 
-      <View
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Comments")}
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
@@ -201,7 +197,7 @@ const InsideGroupItem = ({ event, index }: { event: any; index: number }) => {
             resizeMode="contain"
           />
         </View>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };

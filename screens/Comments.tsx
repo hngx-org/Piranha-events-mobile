@@ -40,7 +40,7 @@ const randomComments = [
 
 ];
 
-export default function App() {
+export default function Comments() {
 
 
     const reply = () => {

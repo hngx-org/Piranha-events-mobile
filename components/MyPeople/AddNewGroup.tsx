@@ -20,10 +20,7 @@ type RequestResponse = {
 const AddNewGroup = () => {
   const navigation = useNavigation();
 
-  const user = useContext<UserContextProps | null>(UserContext);
-  const userInfo = user?.userInfo;
-
-  console.log(userInfo, '++++++++++=')
+  const {GetUser, userInfo} = useContext<UserContextProps | null>(UserContext);
 
   const [response, setResponse] = useState<RequestResponse>({ result: null, isSuccess: null });
   const [showToast, setShowToast] = useState<boolean>(false);
@@ -90,6 +87,12 @@ const AddNewGroup = () => {
     console.log(res?.result, userInfo?.token);
     setResponse(res);
   };
+
+  useEffect(() => {
+    if(!userInfo?.id){
+      GetUser()
+    }
+  }, [userInfo?.id])
 
   useEffect(() => {
     if (response.isSuccess !== null && !response.isSuccess) {

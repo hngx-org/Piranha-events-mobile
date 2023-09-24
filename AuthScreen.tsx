@@ -7,11 +7,13 @@ import InsideGroup from "./components/MyPeople/InsideGroup";
 import React from "react";
 import { SignedIn, SignedOut } from "@clerk/clerk-expo";
 import SignInWithGoogle from "./screens/SignInWithGoogle";
+import Comments from "./screens/Comments";
 
 export type StackParamsList1 = {
   Home: undefined;
   InsideGroup: undefined;
   AddNewGroup: undefined;
+  Comments: undefined;
   SignInWithGoogle?: undefined;
 };
 
@@ -29,6 +31,7 @@ export default function AuthScreen() {
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="InsideGroup" component={InsideGroup} />
           <Stack.Screen name="AddNewGroup" component={AddNewGroup} />
+          <Stack.Screen name="Comments" component={Comments} />
         </Stack.Navigator>
       </SignedIn>
       <SignedOut>
