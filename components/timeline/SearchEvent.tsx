@@ -249,9 +249,6 @@ export default function SearchEvent({
   }, []); // The empty dependency array ensures this effect runs once when the component mounts
 
 
-
-
-
   return (
     <Surface style={styles.container}>
       <ImageBackground
@@ -318,45 +315,7 @@ export default function SearchEvent({
           />
         </View>
 
-        {/* 
-        <View style={{ flex: 1, paddingHorizontal: "5%" }}>
-          {filteredCardData && filteredCardData.length > 0 ? (
-            <FlatList
-              data={filteredCardData}
-              renderItem={renderItem}
-              keyExtractor={(item, index) => index.toString()}
-              showsVerticalScrollIndicator={false}
 
-              refreshControl={
-                <RefreshControl refreshing={false} onRefresh={handleRefresh} />
-              }
-
-            />
-          ) : (
-            <View
-              style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-            >
-              {statusData === "success" ? (
-                <View style={{ justifyContent: "center", alignItems: "center" }}>
-
-                  <TouchableOpacity onPress={handleRefresh}>
-
-                    <MaterialCommunityIcons
-                      name="flask-empty-minus-outline"
-                      size={24}
-                      color="white"
-                    />
-
-                  </TouchableOpacity>
-
-                  <Text style={{ color: "white" }}>No events found</Text>
-                </View>
-              ) : (
-                <Text style={{ color: "white" }}>Loading</Text>
-              )}
-            </View>
-          )}
-        </View> */}
 
         <View style={{ flex: 1, paddingHorizontal: "5%" }}>
           {isSearching ? ( // Display filtered items when searching

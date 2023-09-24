@@ -33,6 +33,7 @@ import { endPoints } from "../../network/api";
 import { useUser } from "@clerk/clerk-expo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useEventContext from "../../hooks/useEventContext";
+import { UserContext, UserContextProps } from "../../contexts/UserContext";
 
 export const SERVER_URL = "https://team-piranha.onrender.com";
 
@@ -111,6 +112,10 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
 
   console.log(eventState);
 
+
+
+
+
   function getEventStatus(start_time: string, end_time: string) {
     const currentTime = moment();
     const startTime = moment(start_time);
@@ -118,10 +123,11 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
 
     if (currentTime.isBetween(startTime, endTime)) {
       return "Live";
+    } else if (currentTime.isBefore(startTime) && !currentTime.isAfter(endTime)) {
+      return "Starts in 0 days";
     } else if (currentTime.isBefore(startTime)) {
       const daysUntilStart = startTime.diff(currentTime, "days");
-      return `Starts in ${daysUntilStart} day${daysUntilStart === 1 ? "" : "s"
-        }`;
+      return `Starts in ${daysUntilStart} day${daysUntilStart === 1 ? "" : "s"}`;
     } else if (currentTime.isAfter(endTime)) {
       return "Ended";
     } else {
@@ -129,14 +135,21 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
     }
   }
 
-  const renderItem = ({ item }: { item: any }) => {
-    const startTime = moment(item.time).tz("Africa/Lagos");
-    const endTime = moment(startTime).add(4, "hours"); // Assuming the event duration is 4 hours
 
-    const formattedTimeRange = `${startTime.format("h A")} - ${endTime.format(
-      "h A"
-    )}`;
+  function formatEventTimes(start_time: string, end_time: string) {
+    const startTime = moment(start_time);
+    const endTime = moment(end_time);
+
+    const formattedStartTime = startTime.format("h:mm A");
+    const formattedEndTime = endTime.format("h:mm A");
+
+    return `${formattedStartTime} - ${formattedEndTime}`;
+  }
+  const renderItem = ({ item }: { item: any }) => {
+
+    const eventTime = formatEventTimes(item.start_time, item.end_time);
     const eventStatus = getEventStatus(item.start_time, item.end_time);
+
 
     return (
       <Card style={styles.card}>
@@ -212,7 +225,9 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
                   }}
                   numberOfLines={1}
                 >
-                  {formattedTimeRange}
+                  {eventTime}
+
+
                 </Text>
               </View>
             </View>
@@ -323,8 +338,7 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
                 {
                   borderColor: "#9d7ae8",
 
-                  backgroundColor:
-                    activeText === "Everyone" ? "#9d7ae8" : "transparent", // Set background color based on activeText
+                  backgroundColor: activeText === "Everyone" ? "#9d7ae8" : "transparent", // Set background color based on activeText
                 },
               ]}
               labelStyle={{ color: "#FFFFFF" }} // Set text color based on activeText
@@ -338,8 +352,7 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
               style={[
                 {
                   borderColor: "#9d7ae8",
-                  backgroundColor:
-                    activeText === "Friends" ? "#9d7ae8" : "transparent", // Set background color based on activeText
+                  backgroundColor: activeText === "Friends" ? "#9d7ae8" : "transparent", // Set background color based on activeText
                 },
               ]}
               labelStyle={{ color: "#FFFFFF" }} // Set text color based on activeText
@@ -348,9 +361,7 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
             </Button>
           </View>
           <View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("CreateEvent")}
-            >
+            <TouchableOpacity onPress={() => navigation.navigate("CreateEvent")}>
               <AntDesign name="pluscircle" size={40} color="#9d7ae8" />
             </TouchableOpacity>
           </View>
