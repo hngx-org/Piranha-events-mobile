@@ -1,4 +1,12 @@
-import { Surface, Text, Button, TextInput, List } from "react-native-paper";
+import {
+  Surface,
+  Text,
+  Button,
+  TextInput,
+  List,
+  Snackbar,
+  Portal,
+} from "react-native-paper";
 import {
   StyleSheet,
   ImageBackground,
@@ -43,6 +51,7 @@ const getToken = async () => {
 // const background = require("../assets/images/background_image.jpg");
 // const otherBackground = require("../assets/settings/bgImage.png");
 export default function Event({ navigation }: { navigation: any }) {
+  const [visible, setVisible] = useState(false);
   const { user, GetUser, userInfo } = useContext(
     UserContext
   ) as UserContextProp;
@@ -61,7 +70,6 @@ export default function Event({ navigation }: { navigation: any }) {
   const onChange = (value: any) => {
     setSelectedValue(value);
   };
-  
 
   const startOnChange = (
     event: DateTimePickerEvent,
@@ -117,62 +125,79 @@ export default function Event({ navigation }: { navigation: any }) {
     navigation.navigate("Timeline", { screen: "Home" });
   };
 
+  const onToggleSnackBar = () => setVisible(!visible);
+
+  const onDismissSnackBar = () => setVisible(false);
+
   const handleEventCreation = async () => {
-    setLoading(true);
-    const formData = new FormData();
+    if (
+      title &&
+      description &&
+      map &&
+      start_time &&
+      end_time &&
+      userInfo?.id &&
+      selectedValue &&
+      imageObj1
+    ) {
+      setLoading(true);
+      const formData = new FormData();
 
-    const requiredInfo = {
-      title,
-      description,
-      location: map,
-      start_time: startDate.toISOString(),
-      end_time: endDate.toISOString(),
-      owner: userInfo?.id,
-      group: selectedValue,
-      thumbnail: imageObj1,
-    };
+      const requiredInfo = {
+        title,
+        description,
+        location: map,
+        start_time: startDate.toISOString(),
+        end_time: endDate.toISOString(),
+        owner: userInfo?.id,
+        group: selectedValue,
+        thumbnail: imageObj1,
+      };
 
-    Object.keys(requiredInfo).map((key) => {
-      return formData.append(
-        key,
-        requiredInfo[key as keyof typeof requiredInfo]
-      );
-    });
-
-    const res = await postRequest(endPoints.events.createEvent, formData, {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${getToken().then((data) => data)}`,
-    });
-
-    console.log({
-      title,
-      description,
-      location: map,
-      start_time: startDate.toISOString(),
-      end_time: endDate.toISOString(),
-      owner: userInfo?.id,
-      group: selectedValue,
-      thumbnail: imageObj1,
-    });
-
-    if (res.isSuccess) {
-      eventDispatch({
-        type: "ADD_NEW_EVENT",
-        payload: {
-          title,
-          description,
-          location: map,
-          start_time: startDate.toISOString(),
-          end_time: endDate.toISOString(),
-          owner: userInfo?.id,
-          group: selectedValue,
-          image: image,
-        },
+      Object.keys(requiredInfo).map((key) => {
+        return formData.append(
+          key,
+          requiredInfo[key as keyof typeof requiredInfo]
+        );
       });
-      handleTimelineNavigation();
-    }
 
-    console.log(142, res.result, res.isSuccess);
+      const res = await postRequest(endPoints.events.createEvent, formData, {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${getToken().then((data) => data)}`,
+      });
+
+      console.log({
+        title,
+        description,
+        location: map,
+        start_time: startDate.toISOString(),
+        end_time: endDate.toISOString(),
+        owner: userInfo?.id,
+        group: selectedValue,
+        thumbnail: imageObj1,
+      });
+
+      if (res.isSuccess) {
+        eventDispatch({
+          type: "ADD_NEW_EVENT",
+          payload: {
+            title,
+            description,
+            location: map,
+            start_time: startDate.toISOString(),
+            end_time: endDate.toISOString(),
+            owner: userInfo?.id,
+            group: selectedValue,
+            image: image,
+          },
+        });
+        handleTimelineNavigation();
+      }
+
+      console.log(142, res.result, res.isSuccess);
+    } else {
+      setVisible(true);
+    }
   };
 
   const pickImage = async () => {
@@ -200,13 +225,10 @@ export default function Event({ navigation }: { navigation: any }) {
     }
   };
 
-  // console.log(206, value?.user.emailAddresses[0].id);
-
-  // console.log(image?.substring(104));
   console.log(184, imageObj1);
 
-  // const { userInfo, GetUser } = useContext(UserContext) as UserContextProps;
-  const { groups } = useGroupContext();
+  const { groups, getGroups, setResponse, setGroups, response } =
+    useGroupContext();
   const modifiedGroups = groups.map((group) => ({
     label: group.name,
     value: group.id,
@@ -218,9 +240,29 @@ export default function Event({ navigation }: { navigation: any }) {
     }
   }, []);
 
+  useEffect(() => {
+    if (groups.length === 0) {
+      getGroups();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (response.isSuccess !== null && !response.isSuccess) {
+      setResponse({ result: null, isSuccess: null });
+    }
+
+    if (response.isSuccess !== null && response.isSuccess) {
+      setGroups(response?.result?.data?.data);
+      setResponse({ result: null, isSuccess: null });
+    }
+  }, [response?.isSuccess]);
+
   console.log(215, userInfo?.id);
   console.log(221, modifiedGroups);
   console.log(222, selectedValue);
+  console.log(250, groups);
+  console.log(251, response);
+
   return (
     <Surface style={styles.container}>
       <ImageBackground
@@ -360,10 +402,10 @@ export default function Event({ navigation }: { navigation: any }) {
           {/* <RNPickerSelect /> */}
 
           <DropDownPicker
-            containerStyle={{ backgroundColor: "#1B1B1B", color: "white"}}
+            containerStyle={{ backgroundColor: "#1B1B1B", color: "white" }}
             style={[styles.mapTextInput]}
             textStyle={{ color: "#5C3EC8" }}
-            labelStyle={{ color: "black" }}
+            labelStyle={{ color: "#5C3EC8" }}
             open={open}
             value={selectedValue}
             items={modifiedGroups}
@@ -393,24 +435,59 @@ export default function Event({ navigation }: { navigation: any }) {
             style={styles.mapTextInput}
           />
 
-          <Button
-            onPress={handleEventCreation}
-            rippleColor="#5C3EF8"
-            mode="contained"
-            style={[
-              styles.buttonStyle,
-              {
-                height: 50,
-                backgroundColor: "#5C3EC8",
-                justifyContent: "center",
-                borderRadius: 5,
-                marginTop: 30,
-              },
-            ]}
-            theme={{ roundness: 0 }}
-          >
-            {loading ? "Loading..." : "Create event"}
-          </Button>
+          {loading ? (
+            <Button
+              onPress={handleEventCreation}
+              rippleColor="#5C3EF8"
+              mode="contained"
+              style={[
+                styles.buttonStyle,
+                {
+                  height: 50,
+                  backgroundColor: "#5C3EC8",
+                  justifyContent: "center",
+                  borderRadius: 5,
+                  marginTop: 30,
+                },
+              ]}
+              theme={{ roundness: 0 }}
+              icon="loading"
+            >
+              Loading
+            </Button>
+          ) : (
+            <Button
+              onPress={handleEventCreation}
+              rippleColor="#5C3EF8"
+              mode="contained"
+              style={[
+                styles.buttonStyle,
+                {
+                  height: 50,
+                  backgroundColor: "#5C3EC8",
+                  justifyContent: "center",
+                  borderRadius: 5,
+                  marginTop: 30,
+                },
+              ]}
+              theme={{ roundness: 0 }}
+            >
+              Create event
+            </Button>
+          )}
+          <Portal>
+            <Snackbar
+              style={{ height: 70 }}
+              duration={3000}
+              visible={visible}
+              onDismiss={onDismissSnackBar}
+              action={{
+                label: "Close",
+              }}
+            >
+              Please enter all required credentials first.
+            </Snackbar>
+          </Portal>
         </ScrollView>
       </ImageBackground>
     </Surface>
