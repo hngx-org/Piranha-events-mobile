@@ -1,4 +1,4 @@
-import { Surface, Text, Button, TextInput } from "react-native-paper";
+import { Surface, Text, Button, TextInput, List } from "react-native-paper";
 import {
   StyleSheet,
   ImageBackground,
@@ -22,6 +22,8 @@ import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { EventContextType } from "../../contexts/EventContext";
 import { UserContext, UserContextProps } from "../../contexts/UserContext";
+import { Group, useGroupContext } from "../../contexts/GroupsContext";
+import RNPickerSelect from "react-native-picker-select";
 
 let token: any;
 
@@ -40,17 +42,20 @@ const getToken = async () => {
 // const background = require("../assets/images/background_image.jpg");
 // const otherBackground = require("../assets/settings/bgImage.png");
 export default function Event({ navigation }: { navigation: any }) {
-
   const value = useContext(UserContext);
   const [image, setImage] = useState<any>(null);
   const [imageObj1, setImageObj1] = useState<any>(null);
-  const {eventDispatch} = useEventContext() as EventContextType;
+  const { eventDispatch } = useEventContext() as EventContextType;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [map, setMap] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [loading, setLoading] = useState(false);
+  const [selectedValue, setSelectedValue] = useState<Group | null>(null);
+  const onChange = (value: any) => {
+    setSelectedValue(value);
+  };
   // console.log(context?.eventState.events);
 
   const startOnChange = (
@@ -144,9 +149,10 @@ export default function Event({ navigation }: { navigation: any }) {
       thumbnail: imageObj1,
     });
 
-    if(res.isSuccess){
-       eventDispatch({type: "ADD_NEW_EVENT", payload: 
-        {
+    if (res.isSuccess) {
+      eventDispatch({
+        type: "ADD_NEW_EVENT",
+        payload: {
           title,
           description,
           location: map,
@@ -155,16 +161,13 @@ export default function Event({ navigation }: { navigation: any }) {
           owner: 1,
           group: 1,
           image: image,
-        }
-       })
-       handleTimelineNavigation();
+        },
+      });
+      handleTimelineNavigation();
     }
-    
-    console.log(142, res.result, res.isSuccess);
-    
-  };
 
-  
+    console.log(142, res.result, res.isSuccess);
+  };
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -191,25 +194,25 @@ export default function Event({ navigation }: { navigation: any }) {
     }
   };
 
-
   console.log(206, value?.user.emailAddresses[0].id);
 
   // console.log(image?.substring(104));
   console.log(184, imageObj1);
 
-
-  const {userInfo, GetUser} = useContext(UserContext) as UserContextProps;
-  
+  const { userInfo, GetUser } = useContext(UserContext) as UserContextProps;
+  const { groups } = useGroupContext();
+  const modifiedGroups = groups.map((group) => ({
+    label: group.name,
+    value: group.id,
+  }));
 
   useEffect(() => {
-    if(!userInfo?.id){
+    if (!userInfo?.id) {
       GetUser();
     }
   }, []);
 
-
   console.log(userInfo?.id);
-
 
   return (
     <Surface style={styles.container}>
@@ -342,6 +345,11 @@ export default function Event({ navigation }: { navigation: any }) {
             </Surface>
           </Surface>
 
+          {/* <RNPickerSelect
+            items={modifiedGroups}
+            value={selectedValue}
+            onValueChange={onChange}
+          /> */}
           <Surface
             style={[
               styles.rowContainer,
@@ -352,8 +360,6 @@ export default function Event({ navigation }: { navigation: any }) {
             <Text style={styles.title}>Location</Text>
             <Ionicons name="location" size={24} color="#5C3EC8" />
           </Surface>
-
-        
 
           <TextInput
             value={map}

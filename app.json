@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "cover",
-      "backgroundColor": "black"
+      "backgroundColor": "#000000"
     },
     "plugins": [
       [
@@ -35,6 +35,10 @@
       "favicon": "./assets/favicon.png"
     },
     "scheme": "piranha event",
-    "extra": {}
+    "extra": {
+      "eas": {
+        "projectId": "bfac8091-8415-46bf-a354-756fd9faebbf"
+      }
+    }
   }
 }

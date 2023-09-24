@@ -33,9 +33,9 @@ const UserContextProvider = ({ children }: UserContextProviderProps) => {
 
   const [userInfo, setUserInfo] = useState<any>();
 
-  // if (!isLoaded || !isSignedIn) {
-  //   return null;
-  // }
+  if (!isLoaded) {
+    return null;
+  }
 
   const GetUser = async () => {
     const res = await postRequest(endPoints.auth.login, {

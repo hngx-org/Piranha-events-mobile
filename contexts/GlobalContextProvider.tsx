@@ -3,6 +3,7 @@ import UserContextProvider from "./UserContext";
 import EventContextProvider from "./EventContext";
 import { ClerkProvider } from "@clerk/clerk-expo";
 import * as SecureStore from "expo-secure-store";
+import GroupContextProvider from "./GroupsContext";
 
 export const tokenCache = {
   async getToken(key: string) {
@@ -22,12 +23,21 @@ export const tokenCache = {
 };
 
 //All context providers will be parented by this GlobalContextProvider
-export default function GlobalContextProvider({ children }: { children: ReactNode }) {
+export default function GlobalContextProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
   return (
     <>
-      <ClerkProvider tokenCache={tokenCache} publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY as string}>
+      <ClerkProvider
+        tokenCache={tokenCache}
+        publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY as string}
+      >
         <UserContextProvider>
-          <EventContextProvider>{children}</EventContextProvider>
+          <GroupContextProvider>
+            <EventContextProvider>{children}</EventContextProvider>
+          </GroupContextProvider>
         </UserContextProvider>
       </ClerkProvider>
     </>
