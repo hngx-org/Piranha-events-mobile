@@ -23,7 +23,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { EventContextType } from "../../contexts/EventContext";
 import { UserContext, UserContextProps } from "../../contexts/UserContext";
 import { Group, useGroupContext } from "../../contexts/GroupsContext";
-import RNPickerSelect from "react-native-picker-select";
+// import RNPickerSelect from "react-native-picker-select";
+import DropDownPicker from "react-native-dropdown-picker";
 
 let token: any;
 
@@ -42,7 +43,9 @@ const getToken = async () => {
 // const background = require("../assets/images/background_image.jpg");
 // const otherBackground = require("../assets/settings/bgImage.png");
 export default function Event({ navigation }: { navigation: any }) {
-  const value = useContext(UserContext);
+  const { user, GetUser, userInfo } = useContext(
+    UserContext
+  ) as UserContextProp;
   const [image, setImage] = useState<any>(null);
   const [imageObj1, setImageObj1] = useState<any>(null);
   const { eventDispatch } = useEventContext() as EventContextType;
@@ -52,11 +55,13 @@ export default function Event({ navigation }: { navigation: any }) {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState<Group | null>(null);
+
   const onChange = (value: any) => {
     setSelectedValue(value);
   };
-  // console.log(context?.eventState.events);
+  
 
   const startOnChange = (
     event: DateTimePickerEvent,
@@ -113,6 +118,7 @@ export default function Event({ navigation }: { navigation: any }) {
   };
 
   const handleEventCreation = async () => {
+    setLoading(true);
     const formData = new FormData();
 
     const requiredInfo = {
@@ -121,8 +127,8 @@ export default function Event({ navigation }: { navigation: any }) {
       location: map,
       start_time: startDate.toISOString(),
       end_time: endDate.toISOString(),
-      owner: 1,
-      group: 1,
+      owner: userInfo?.id,
+      group: selectedValue,
       thumbnail: imageObj1,
     };
 
@@ -145,7 +151,7 @@ export default function Event({ navigation }: { navigation: any }) {
       start_time: startDate.toISOString(),
       end_time: endDate.toISOString(),
       owner: userInfo?.id,
-      group: 1,
+      group: selectedValue,
       thumbnail: imageObj1,
     });
 
@@ -158,8 +164,8 @@ export default function Event({ navigation }: { navigation: any }) {
           location: map,
           start_time: startDate.toISOString(),
           end_time: endDate.toISOString(),
-          owner: 1,
-          group: 1,
+          owner: userInfo?.id,
+          group: selectedValue,
           image: image,
         },
       });
@@ -194,12 +200,12 @@ export default function Event({ navigation }: { navigation: any }) {
     }
   };
 
-  console.log(206, value?.user.emailAddresses[0].id);
+  // console.log(206, value?.user.emailAddresses[0].id);
 
   // console.log(image?.substring(104));
   console.log(184, imageObj1);
 
-  const { userInfo, GetUser } = useContext(UserContext) as UserContextProps;
+  // const { userInfo, GetUser } = useContext(UserContext) as UserContextProps;
   const { groups } = useGroupContext();
   const modifiedGroups = groups.map((group) => ({
     label: group.name,
@@ -212,8 +218,9 @@ export default function Event({ navigation }: { navigation: any }) {
     }
   }, []);
 
-  console.log(userInfo?.id);
-
+  console.log(215, userInfo?.id);
+  console.log(221, modifiedGroups);
+  console.log(222, selectedValue);
   return (
     <Surface style={styles.container}>
       <ImageBackground
@@ -350,6 +357,22 @@ export default function Event({ navigation }: { navigation: any }) {
             value={selectedValue}
             onValueChange={onChange}
           /> */}
+          {/* <RNPickerSelect /> */}
+
+          <DropDownPicker
+            containerStyle={{ backgroundColor: "#1B1B1B", color: "white"}}
+            style={[styles.mapTextInput]}
+            textStyle={{ color: "#5C3EC8" }}
+            labelStyle={{ color: "black" }}
+            open={open}
+            value={selectedValue}
+            items={modifiedGroups}
+            setOpen={setOpen}
+            setValue={setSelectedValue}
+            onChangeValue={onChange}
+            placeholderTextColor="white"
+            placeholder={"Choose a group."}
+          />
           <Surface
             style={[
               styles.rowContainer,
@@ -386,7 +409,7 @@ export default function Event({ navigation }: { navigation: any }) {
             ]}
             theme={{ roundness: 0 }}
           >
-            Create event
+            {loading ? "Loading..." : "Create event"}
           </Button>
         </ScrollView>
       </ImageBackground>
