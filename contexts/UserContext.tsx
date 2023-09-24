@@ -1,4 +1,10 @@
-import React, { createContext, useState, ReactNode, useEffect, useContext } from "react";
+import React, {
+  createContext,
+  useState,
+  ReactNode,
+  useEffect,
+  useContext,
+} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Google from "expo-auth-session/providers/google";
 import { AuthSessionResult } from "expo-auth-session";
@@ -25,11 +31,11 @@ export const useUserContext = () => useContext(UserContext) as UserContextProps;
 const UserContextProvider = ({ children }: UserContextProviderProps) => {
   const { isLoaded, isSignedIn, user } = useUser();
 
-  const [userInfo, setUserInfo] = useState();
+  const [userInfo, setUserInfo] = useState<any>();
 
-  if (!isLoaded || !isSignedIn) {
-    return null;
-  }
+  // if (!isLoaded || !isSignedIn) {
+  //   return null;
+  // }
 
   const GetUser = async () => {
     const res = await postRequest(endPoints.auth.login, {
@@ -39,12 +45,6 @@ const UserContextProvider = ({ children }: UserContextProviderProps) => {
 
     setUserInfo(res?.result?.data.data);
   };
-
-  // useEffect(() => {
-  //   if(!userInfo?.id){
-  //     GetUser();
-  //   }
-  // }, []);
 
   const value = { user, GetUser, userInfo };
   // const value = { user, GetUser };

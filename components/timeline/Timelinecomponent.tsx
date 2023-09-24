@@ -50,21 +50,27 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
   const { eventState, eventDispatch } = useEventContext() as EventContextType;
   const [refreshing, setRefreshing] = useState(false);
 
-  const { user } = useUser();
-
   const [eventmain, setEventmain] = useState<CardInfo[] | null>(null);
   const [statusData, setstatusData] = useState("");
 
-  const GetToken = async () => {
-    const res = await postRequest(endPoints.auth.login, {
-      email: user?.emailAddresses[0].emailAddress,
-      pass_id: user?.id,
-    });
-    await AsyncStorage.setItem("token", res?.result?.data.data.token);
-  };
+  const { userInfo, GetUser } = useContext(UserContext) as UserContextProps;
+
+  // const GetToken = async () => {
+  //   const res = await postRequest(endPoints.auth.login, {
+  //     email: user?.emailAddresses[0].emailAddress,
+  //     pass_id: user?.id,
+  //   });
+  //   await AsyncStorage.setItem("token", res?.result?.data.data.token);
+  // };
+
+  // useEffect(() => {
+  //   GetToken();
+  // }, []);
 
   useEffect(() => {
-    GetToken();
+    if (!userInfo?.id) {
+      GetUser();
+    }
   }, []);
 
   const fetchAllEventsFromAPI = async () => {
@@ -112,10 +118,6 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
 
   console.log(eventState);
 
-
-
-
-
   function getEventStatus(start_time: string, end_time: string) {
     const currentTime = moment();
     const startTime = moment(start_time);
@@ -123,18 +125,22 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
 
     if (currentTime.isBetween(startTime, endTime)) {
       return "Live";
-    } else if (currentTime.isBefore(startTime) && !currentTime.isAfter(endTime)) {
+    } else if (
+      currentTime.isBefore(startTime) &&
+      !currentTime.isAfter(endTime)
+    ) {
       return "Starts in 0 days";
     } else if (currentTime.isBefore(startTime)) {
       const daysUntilStart = startTime.diff(currentTime, "days");
-      return `Starts in ${daysUntilStart} day${daysUntilStart === 1 ? "" : "s"}`;
+      return `Starts in ${daysUntilStart} day${
+        daysUntilStart === 1 ? "" : "s"
+      }`;
     } else if (currentTime.isAfter(endTime)) {
       return "Ended";
     } else {
       return "Upcoming";
     }
   }
-
 
   function formatEventTimes(start_time: string, end_time: string) {
     const startTime = moment(start_time);
@@ -146,10 +152,8 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
     return `${formattedStartTime} - ${formattedEndTime}`;
   }
   const renderItem = ({ item }: { item: any }) => {
-
     const eventTime = formatEventTimes(item.start_time, item.end_time);
     const eventStatus = getEventStatus(item.start_time, item.end_time);
-
 
     return (
       <Card style={styles.card}>
@@ -226,8 +230,6 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
                   numberOfLines={1}
                 >
                   {eventTime}
-
-
                 </Text>
               </View>
             </View>
@@ -338,7 +340,8 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
                 {
                   borderColor: "#9d7ae8",
 
-                  backgroundColor: activeText === "Everyone" ? "#9d7ae8" : "transparent", // Set background color based on activeText
+                  backgroundColor:
+                    activeText === "Everyone" ? "#9d7ae8" : "transparent", // Set background color based on activeText
                 },
               ]}
               labelStyle={{ color: "#FFFFFF" }} // Set text color based on activeText
@@ -352,7 +355,8 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
               style={[
                 {
                   borderColor: "#9d7ae8",
-                  backgroundColor: activeText === "Friends" ? "#9d7ae8" : "transparent", // Set background color based on activeText
+                  backgroundColor:
+                    activeText === "Friends" ? "#9d7ae8" : "transparent", // Set background color based on activeText
                 },
               ]}
               labelStyle={{ color: "#FFFFFF" }} // Set text color based on activeText
@@ -361,7 +365,9 @@ export default function Timelinecomponent({ navigation }: { navigation: any }) {
             </Button>
           </View>
           <View>
-            <TouchableOpacity onPress={() => navigation.navigate("CreateEvent")}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("CreateEvent")}
+            >
               <AntDesign name="pluscircle" size={40} color="#9d7ae8" />
             </TouchableOpacity>
           </View>
