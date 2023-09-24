@@ -86,6 +86,8 @@ const MyPeople = () => {
     }
   }, [response?.isSuccess]);
 
+  console.log(89, groups);
+
   return (
     <Wrapper
       propStyle={{

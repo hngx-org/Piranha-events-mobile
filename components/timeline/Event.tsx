@@ -134,8 +134,8 @@ export default function Event({ navigation }: { navigation: any }) {
       title &&
       description &&
       map &&
-      start_time &&
-      end_time &&
+      startDate &&
+      endDate &&
       userInfo?.id &&
       selectedValue &&
       imageObj1
@@ -438,7 +438,6 @@ export default function Event({ navigation }: { navigation: any }) {
           {loading ? (
             <Button
               onPress={handleEventCreation}
-              rippleColor="#5C3EF8"
               mode="contained"
               style={[
                 styles.buttonStyle,
@@ -458,7 +457,6 @@ export default function Event({ navigation }: { navigation: any }) {
           ) : (
             <Button
               onPress={handleEventCreation}
-              rippleColor="#5C3EF8"
               mode="contained"
               style={[
                 styles.buttonStyle,
