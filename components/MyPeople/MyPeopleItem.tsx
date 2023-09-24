@@ -3,20 +3,36 @@ import React from "react";
 import { Text } from "react-native-paper";
 import { appColors } from "../../utils/globalStyles";
 import { useNavigation } from "@react-navigation/native";
+import { SERVER_URL } from "../timeline/Timelinecomponent";
 
-const MyPeopleItem = ({ group, index, id }: { group: any; index: number; id: string | number }) => {
+const MyPeopleItem = ({
+  group,
+  index,
+  id,
+  userAuth,
+}: {
+  group: any;
+  index: number;
+  id: string | number;
+  userAuth: any;
+}) => {
   const navigation = useNavigation();
+
+  console.log(group)
+
+  const imageUrl = `${SERVER_URL}${group.image}`;
 
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate("InsideGroup", { id })}
+      onPress={() => navigation.navigate("InsideGroup", { id: group.name, userAuth })}
       style={[styles.container, { marginRight: index % 2 === 0 ? "10%" : 0 }]}
     >
       <View style={styles.imageWrapper}>
         <Image
-          source={group.image}
+          source={{ uri: imageUrl }}
           style={{
-            width: "100%",
+            width: 200,
+            height: 200,
           }}
           resizeMode="contain"
         />
@@ -26,9 +42,16 @@ const MyPeopleItem = ({ group, index, id }: { group: any; index: number; id: str
         {group?.name}
       </Text>
 
-      <Text variant="bodySmall" style={styles.info}>
-        +{group?.event?.length} events
-      </Text>
+      {group?.event_counts ? (
+        <Text variant="bodySmall" style={styles.info}>
+          +{group?.event_counts} events
+        </Text>
+      ) : null}
+      {group?.members_count ? (
+        <Text variant="bodySmall" style={[styles.info, { color: appColors.purple }]}>
+          {group?.members_count} member(s)
+        </Text>
+      ) : null}
     </TouchableOpacity>
   );
 };

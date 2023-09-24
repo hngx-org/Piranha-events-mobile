@@ -3,6 +3,7 @@ import UserContextProvider from "./UserContext";
 import EventContextProvider from "./EventContext";
 import { ClerkProvider } from "@clerk/clerk-expo";
 import * as SecureStore from "expo-secure-store";
+import GroupContextProvider from "./GroupsContext";
 
 export const tokenCache = {
   async getToken(key: string) {
@@ -33,7 +34,11 @@ export default function GlobalContextProvider({
         tokenCache={tokenCache}
         publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY as string}
       >
-        <EventContextProvider>{children}</EventContextProvider>
+        <UserContextProvider>
+          <GroupContextProvider>
+            <EventContextProvider>{children}</EventContextProvider>
+          </GroupContextProvider>
+        </UserContextProvider>
       </ClerkProvider>
     </>
   );

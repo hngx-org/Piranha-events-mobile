@@ -8,8 +8,8 @@
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "cover",
+      "backgroundColor": "#000000"
     },
     "plugins": [
       [
@@ -19,9 +19,7 @@
         }
       ]
     ],
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -31,17 +29,16 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.dread557.stage3mobile",
-      "permissions": [
-        "android.permission.RECORD_AUDIO"
-      ]
+      "permissions": ["android.permission.RECORD_AUDIO"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "scheme": "piranha event",
     "extra": {
-
-     
+      "eas": {
+        "projectId": "bfac8091-8415-46bf-a354-756fd9faebbf"
+      }
     }
   }
 }

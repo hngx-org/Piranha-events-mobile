@@ -1,35 +1,56 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { Calendar } from "react-native-calendars";
 import moment from "moment";
-import { EventData } from "../../static/data";
-import { Events } from "../../static/data";
 import { colors } from "../../utils/styles";
+import { getRequest } from "../../network/requests";
+import { endPoints } from "../../network/api";
+import { IEvent } from "../../contexts/EventContext";
 
 const CalendarComponent: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string | null>(
     moment().format("YYYY-MM-DD")
   );
-  const [events] = useState<Events[]>(EventData);
+
+  const [events, setEvents] = useState<IEvent[]>([]);
 
   useEffect(() => {
-    const markedDates: {
-      [date: string]: { marked: boolean; dotColor?: string };
-    } = {};
+    const loadEvents = async () => {
+      try {
+        const response: any = await getRequest(endPoints.events.eventsList);
+        const fetchedEvents = response.result.data.data;
+        console.log("Fetched Events:", fetchedEvents);
+        setEvents(fetchedEvents);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    };
 
-    events.forEach((event) => {
-      markedDates[event.date] = {
-        marked: true,
-        dotColor: colors.purple,
-      };
-    });
-
-    setMarkedDates(markedDates);
-  }, [events, selectedDate]);
+    loadEvents();
+  }, []);
 
   const [markedDates, setMarkedDates] = useState<{
     [date: string]: { marked: boolean; dotColor?: string };
   }>({});
+
+  useEffect(() => {
+    if (events && events.length > 0) {
+      const markedDate: {
+        [date: string]: { marked: boolean; dotColor?: string };
+      } = {};
+
+      events.forEach((event) => {
+        const eventDate = moment(event.start_time).format("YYYY-MM-DD");
+        markedDate[eventDate] = {
+          marked: true,
+          dotColor: colors.purple,
+        };
+      });
+      setMarkedDates(markedDate);
+    } else {
+      console.log("No Dates:", "none at all");
+    }
+  }, [events]);
 
   const onDayPress = (day: { dateString: string }) => {
     setSelectedDate(day.dateString);
@@ -40,8 +61,16 @@ const CalendarComponent: React.FC = () => {
     : "";
 
   const renderEventsForDate = () => {
+    if (!Array.isArray(events)) {
+      return (
+        <View style={styles.eventDetails}>
+          <Text style={styles.detailsTxt}>No events for this date.</Text>
+        </View>
+      );
+    }
+
     const eventsForSelectedDate = events.filter(
-      (event) => event.date === selectedDate
+      (event) => moment(event.start_time).format("YYYY-MM-DD") === selectedDate
     );
 
     if (eventsForSelectedDate.length === 0) {
@@ -53,10 +82,10 @@ const CalendarComponent: React.FC = () => {
     }
 
     return (
-      <View style={styles.eventDetails}>
+      <ScrollView style={styles.eventDetails}>
         {eventsForSelectedDate.map((event, index) => (
-          <View key={index}>
-            <Text style={styles.detailsTxt}>{event.name}</Text>
+          <View key={index} style={{ marginBottom: 10 }}>
+            <Text style={styles.detailsTxt}>{event.title}</Text>
             <View
               style={{
                 flexDirection: "row",
@@ -66,11 +95,25 @@ const CalendarComponent: React.FC = () => {
               }}
             >
               <Text style={[styles.detailsSubTxt]}>{event.location}</Text>
-              <Text style={[styles.detailsTxt]}>{event.time}</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text style={[styles.detailsTxt]}>
+                  {moment(event.start_time).format("HH:mm a")}
+                </Text>
+                <Text style={styles.detailsTxt}>-</Text>
+                <Text style={[styles.detailsTxt]}>
+                  {moment(event.end_time).format("HH:mm a")}
+                </Text>
+              </View>
             </View>
           </View>
         ))}
-      </View>
+      </ScrollView>
     );
   };
 
@@ -152,6 +195,7 @@ const styles = StyleSheet.create({
     paddingBottom: 55,
     borderRadius: 20,
     backgroundColor: "#5C3EC8",
+    maxHeight: 200,
   },
   eventView: {
     position: "absolute",

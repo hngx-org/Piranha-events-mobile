@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   welcomeText: {
-    fontSize: 26,
+    fontSize: 27,
     textAlign: "center",
     margin: 30,
     color: "#fff",

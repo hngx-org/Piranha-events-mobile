@@ -1,73 +1,132 @@
-import { FlatList, SafeAreaView, ScrollView, StyleSheet, StatusBar, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import {
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  StatusBar,
+  Text,
+  View,
+} from "react-native";
+import React, { useContext, useEffect, useState } from "react";
 import ScreenHeader from "../components/ScreenHeader";
 import { appImages } from "../assets";
 import MyPeopleItem from "../components/MyPeople/MyPeopleItem";
 import Wrapper from "../components/Wrapper";
 import AddNewGroup from "../components/MyPeople/AddNewGroup";
 import { useNavigation } from "@react-navigation/native";
-import { AntDesign } from '@expo/vector-icons'; 
+import { AntDesign } from "@expo/vector-icons";
 import { StackNavigationType } from "../AuthScreen";
 import { getRequest, postRequest } from "../network/requests";
 import { endPoints } from "../network/api";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  UserContext,
+  UserContextProps,
+  useUserContext,
+} from "../contexts/UserContext";
+import { ToastMessage } from "../components/MyPeople/ToastMessage";
+import EmptyList from "../components/MyPeople/EmptyList";
+import { useGroupContext } from "../contexts/GroupsContext";
 
 const MyPeople = () => {
   const navigation: StackNavigationType = useNavigation();
+  const { groups, setGroups, getGroups, response, setResponse } =
+    useGroupContext();
+  const user = useUserContext();
+  const userInfo = user?.userInfo;
+  const [refreshing, setRefreshing] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
+  const [showToast, setShowToast] = useState<boolean>(false);
+  const [toastObj, setToastObj] = useState<{
+    message: string;
+    type: string;
+    text1: string;
+  }>({
+    message: "",
+    type: "",
+    text1: "",
+  });
 
-  const getGroups = async () => {
-    const res = await getRequest(endPoints.groups, { });
-
-    console.log(res)
-  };
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getGroups();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   useEffect(() => {
-    getGroups()
-  }, [])
+    if (groups.length === 0) {
+      getGroups();
+    }
+  }, []);
 
+  useEffect(() => {
+    if (response.isSuccess !== null && !response.isSuccess) {
+      setToastObj({
+        message: "",
+        type: "error",
+        text1: "Unable to fetch group, pull to refresh",
+      });
+      setShowToast(true);
+      setResponse({ result: null, isSuccess: null });
+      setIsLoading(false);
+    }
 
-
-  const Groups = [
-    {
-      id: 1,
-      name: "Tech Buddies",
-      event: [{ name: "Event 1" }],
-      messages: ["one", "two"],
-      image: appImages.myPeople,
-    },
-    {
-      id: 2,
-      name: "Techies",
-      event: [{ name: "Event 1" }],
-      messages: ["one", "two"],
-      image: appImages.myPeople,
-    },
-    {
-      id: 3,
-      name: "Tech Buddies",
-      event: [{ name: "Event 1" }],
-      messages: ["one", "two"],
-      image: appImages.myPeople,
-    },
-    {
-      id: 4,
-      name: "Techies",
-      event: [{ name: "Event 1" }],
-      messages: ["one", "two"],
-      image: appImages.myPeople,
-    },
-  ];
+    if (response.isSuccess !== null && response.isSuccess) {
+      setToastObj({
+        message: "",
+        type: "success",
+        text1: "Groups Fetched Successfully",
+      });
+      setShowToast(true);
+      setGroups(response?.result?.data?.data);
+      setResponse({ result: null, isSuccess: null });
+      setIsLoading(false);
+    }
+  }, [response?.isSuccess]);
 
   return (
-    <Wrapper propStyle={{ flex: 1, paddingTop: StatusBar.currentHeight, paddingHorizontal: 29 }}>
-      <ScreenHeader title="My People" level={0} onPressTwo={() => navigation.navigate("AddNewGroup")} />
+    <Wrapper
+      propStyle={{
+        flex: 1,
+        paddingTop: StatusBar.currentHeight,
+        paddingHorizontal: 29,
+      }}
+    >
+      <ScreenHeader
+        title="My People"
+        level={0}
+        onPressTwo={() => navigation.navigate("AddNewGroup")}
+      />
 
       <FlatList
-        data={Groups}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        data={groups}
         numColumns={2}
-        renderItem={({ item, index }) => <MyPeopleItem group={item} index={index} id={item.id} />}
+        renderItem={({ item, index }) => (
+          <MyPeopleItem
+            key={item?.name}
+            group={item}
+            index={index}
+            id={item?.id}
+            userAuth={{ id: userInfo?.id, token: userInfo?.token }}
+          />
+        )}
+        ListEmptyComponent={
+          <EmptyList isLoading={isLoading} emptyMesage="No Group found" />
+        }
       />
+
+      {showToast ? (
+        <ToastMessage
+          showToast={showToast}
+          setShowToast={setShowToast}
+          toastObj={toastObj}
+        />
+      ) : null}
     </Wrapper>
   );
 };
