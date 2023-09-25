@@ -33,7 +33,7 @@ const InsideGroup = ({ route }) => {
     if (res.isSuccess) {
       console.log("success");
       setIsLoadingEvents(false);
-      // setEvents(res?.result?.data?.data);
+      setEvents(res?.result?.data?.events);
       // console.log(res?.result?.data?.data)
     }
 
@@ -43,7 +43,7 @@ const InsideGroup = ({ route }) => {
       console.log(42, 'failure')
     }
 
-    console.log(res);
+    console.log(46, res.result.data);
   };
 
   const onRefresh = React.useCallback(() => {
